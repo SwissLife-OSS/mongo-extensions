@@ -1,14 +1,14 @@
 <Project>
 
   <PropertyGroup>
-    <Product>{Placeholder}</Product>-
+    <Product>MongoDB Extensions</Product>
     <Authors>Swiss Life authors and contributors</Authors>
     <Company>Swiss Life</Company>
     <Copyright>Copyright © 2019 Swiss Life</Copyright>
-    <PackageLicenseUrl>https://github.com/SwissLife-OSS/{Placeholder}/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/SwissLife-OSS/{Placeholder}</PackageProjectUrl>
-    <PackageReleaseNotes>Release notes: https://github.com/SwissLife-OSS/{Placeholder}/releases/$(Version)</PackageReleaseNotes>
-    <PackageTags>{Placeholder}</PackageTags>
+    <PackageLicenseUrl>https://github.com/SwissLife-OSS/mongo-extensions/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/SwissLife-OSS/mongo-extensions</PackageProjectUrl>
+    <PackageReleaseNotes>Release notes: https://github.com/SwissLife-OSS/mongo-extensions/releases/$(Version)</PackageReleaseNotes>
+    <PackageTags>MongoDB, Extensions, DbContext</PackageTags>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageIconUrl>https://github.com/SwissLife-OSS/{Placeholder}/raw/master/logo.png</PackageIconUrl>
 	  <IsPackable>false</IsPackable>
@@ -17,7 +17,7 @@
   <PropertyGroup>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <RepositoryUrl>https://github.com/SwissLife-OSS/{Placeholder}.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/SwissLife-OSS/mongo-extensions.git</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>

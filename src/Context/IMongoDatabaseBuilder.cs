@@ -7,8 +7,6 @@ namespace MongoDB.Bootstrapper
 {
     public interface IMongoDatabaseBuilder
     {
-        IMongoDatabaseBuilder Initialize(Action initialization);
-
         IMongoDatabaseBuilder RegisterSerializer<T>(IBsonSerializer<T> serializer);
 
         IMongoDatabaseBuilder RegisterConventionPack(

@@ -10,25 +10,18 @@ namespace MongoDB.Bootstrapper
     internal class MongoDatabaseBuilder : IMongoDatabaseBuilder
     {
         private readonly MongoOptions _mongoOptions;
-        private readonly List<Action> _initializationActions;
+        private readonly List<Action> _registrationActions;
         private readonly List<Action<MongoClientSettings>> _mongoClientSettingsActions;
         private readonly List<Action<IMongoDatabase, Dictionary<Type, object>>> _builderActions;
         
         public MongoDatabaseBuilder(MongoOptions mongoOptions)
         {
             _mongoOptions = mongoOptions;
-            _initializationActions = new List<Action>();
+            _registrationActions = new List<Action>();
             _mongoClientSettingsActions = new List<Action<MongoClientSettings>>();
             _builderActions = new List<Action<IMongoDatabase, Dictionary<Type, object>>>();
         }
-
-        public IMongoDatabaseBuilder Initialize(Action initialization)
-        {
-            _initializationActions.Add(initialization);
-
-            return this;
-        }
-
+        
         public IMongoDatabaseBuilder ConfigureConnection(
             Action<MongoClientSettings> mongoClientSettingsAction)
         {
@@ -93,7 +86,7 @@ namespace MongoDB.Bootstrapper
                 IEnumerable<IConvention> daaadfa = ddaaa.Conventions;
             };
 
-            _initializationActions.Add(initAction);
+            _registrationActions.Add(initAction);
 
             return this;
         }
@@ -106,14 +99,14 @@ namespace MongoDB.Bootstrapper
                 BsonSerializer.RegisterSerializer<T>(serializer);                
             };
 
-            _initializationActions.Add(initAction);
+            _registrationActions.Add(initAction);
 
             return this;
         }
         
         internal MongoDbContextData Build()
         {            
-            _initializationActions.ForEach(init => init());
+            _registrationActions.ForEach(init => init());
 
             var mongoClientSettings = MongoClientSettings
                 .FromConnectionString(_mongoOptions.ConnectionString);

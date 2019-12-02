@@ -9,17 +9,19 @@ namespace MongoDB.Bootstrapper
     {
         private string _collectionName;
         private readonly IMongoDatabase _mongoDatabase;
+        private readonly List<Action> _classMapActions;
         private readonly List<Action<MongoCollectionSettings>> _collectionSettingsActions;
         private readonly List<Action<IMongoCollection<TDocument>>> _collectionConfigurations;
 
         public MongoCollectionBuilder(IMongoDatabase mongoDatabase)
         {
-            _collectionName = typeof(TDocument).Name;
-            _collectionConfigurations = new List<Action<IMongoCollection<TDocument>>>();
-            _collectionSettingsActions = new List<Action<MongoCollectionSettings>>();
-
             _mongoDatabase = mongoDatabase ??
                 throw new ArgumentNullException(nameof(mongoDatabase));
+
+            _collectionName = typeof(TDocument).Name;
+            _classMapActions = new List<Action>();
+            _collectionConfigurations = new List<Action<IMongoCollection<TDocument>>>();
+            _collectionSettingsActions = new List<Action<MongoCollectionSettings>>();            
         }
 
         public IMongoCollectionBuilder<TDocument> WithCollectionName(string collectionName)
@@ -35,10 +37,15 @@ namespace MongoDB.Bootstrapper
         public IMongoCollectionBuilder<TDocument> AddBsonClassMap<TMapDocument>(
             Action<BsonClassMap<TMapDocument>> bsonClassMapAction) where TMapDocument : class
         {
-            if (!BsonClassMap.IsClassMapRegistered(typeof(TMapDocument)))
+            Action classMapAction = () =>
             {
-                BsonClassMap.RegisterClassMap(bsonClassMapAction);
-            }
+                if (!BsonClassMap.IsClassMapRegistered(typeof(TMapDocument)))
+                {
+                    BsonClassMap.RegisterClassMap(bsonClassMapAction);
+                }
+            };
+
+            _classMapActions.Add(classMapAction);
 
             return this;
         }
@@ -61,8 +68,9 @@ namespace MongoDB.Bootstrapper
 
         internal IMongoCollection<TDocument> Build()
         {
-            MongoCollectionSettings mongoCollectionSettings = null;
+            _classMapActions.ForEach(action => action());
 
+            MongoCollectionSettings mongoCollectionSettings = null;
             if (_collectionSettingsActions.Count != 0)
             {
                 mongoCollectionSettings = new MongoCollectionSettings();

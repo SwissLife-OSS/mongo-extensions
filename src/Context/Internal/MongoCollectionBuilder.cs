@@ -21,7 +21,7 @@ namespace MongoDB.Bootstrapper
             _collectionName = typeof(TDocument).Name;
             _classMapActions = new List<Action>();
             _collectionConfigurations = new List<Action<IMongoCollection<TDocument>>>();
-            _collectionSettingsActions = new List<Action<MongoCollectionSettings>>();            
+            _collectionSettingsActions = new List<Action<MongoCollectionSettings>>();
         }
 
         public IMongoCollectionBuilder<TDocument> WithCollectionName(string collectionName)

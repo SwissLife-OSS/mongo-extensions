@@ -18,8 +18,8 @@ namespace MongoDB.Bootstrapper
             _mongoDbContextData = Initialize(mongoOptions);
         }
 
-        public IMongoClient Client => _mongoDbContextData.MongoClient;
-        public IMongoDatabase Database => _mongoDbContextData.MongoDatabase;
+        public IMongoClient Client => _mongoDbContextData.Client;
+        public IMongoDatabase Database => _mongoDbContextData.Database;
         public MongoOptions MongoOptions { get; }
         
         public IMongoCollection<TDocument> CreateCollection<TDocument>() where TDocument : class
@@ -35,7 +35,7 @@ namespace MongoDB.Bootstrapper
 
             OnConfiguring(mongoDatabaseBuilder);
 
-            return mongoDatabaseBuilder.Build();            
+            return mongoDatabaseBuilder.Build();
         }
     }
 }

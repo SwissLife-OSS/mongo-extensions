@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
@@ -10,14 +11,25 @@ namespace MongoDB.Bootstrapper
     internal class MongoDatabaseBuilder : IMongoDatabaseBuilder
     {
         private readonly MongoOptions _mongoOptions;
-        private readonly List<Action> _registrationActions;
+        private readonly List<Action> _registrationConventionActions;
+        private readonly List<Action> _registrationSerializerActions;
         private readonly List<Action<MongoClientSettings>> _mongoClientSettingsActions;
         private readonly List<Action<IMongoDatabase, Dictionary<Type, object>>> _builderActions;
-        
+
+        private static readonly Dictionary<string, Type> _registeredSerializers;
+        private static readonly Dictionary<string, IConventionPack> _registeredConventionPacks;
+
+        static MongoDatabaseBuilder()
+        {
+            _registeredSerializers = new Dictionary<string, Type>();
+            _registeredConventionPacks = new Dictionary<string, IConventionPack>();
+        }
+
         public MongoDatabaseBuilder(MongoOptions mongoOptions)
         {
             _mongoOptions = mongoOptions;
-            _registrationActions = new List<Action>();
+            _registrationConventionActions = new List<Action>();
+            _registrationSerializerActions = new List<Action>();
             _mongoClientSettingsActions = new List<Action<MongoClientSettings>>();
             _builderActions = new List<Action<IMongoDatabase, Dictionary<Type, object>>>();
         }
@@ -33,22 +45,22 @@ namespace MongoDB.Bootstrapper
         public IMongoDatabaseBuilder ConfigureCollection<TDocument>(
             IMongoCollectionConfiguration<TDocument> configuration) where TDocument : class
         {
-            Action<IMongoDatabase, Dictionary<Type, object>> buildAction = (mongoDb, mongoCollectionBuilders) =>
-            {
-                if (mongoCollectionBuilders.ContainsKey(typeof(TDocument)))
+            Action<IMongoDatabase, Dictionary<Type, object>> buildAction =
+                (mongoDb, mongoCollectionBuilders) =>
                 {
-                    throw new Exception($"The mongo collection configuration for " +
-                        $"document type '{typeof(TDocument)}' already exists.");
-                }
+                    if (mongoCollectionBuilders.ContainsKey(typeof(TDocument)))
+                    {
+                        throw new Exception($"The mongo collection configuration for " +
+                            $"document type '{typeof(TDocument)}' already exists.");
+                    }
 
-                var collectionBuilder = new MongoCollectionBuilder<TDocument>(mongoDb);
+                    var collectionBuilder = new MongoCollectionBuilder<TDocument>(mongoDb);
 
-                configuration.Configure(collectionBuilder);
+                    configuration.Configure(collectionBuilder);
+                    collectionBuilder.Build();
 
-                collectionBuilder.Build();
-
-                mongoCollectionBuilders.Add(typeof(TDocument), collectionBuilder);
-            };
+                    mongoCollectionBuilders.Add(typeof(TDocument), collectionBuilder);
+                };
 
             _builderActions.Add(buildAction);
 
@@ -67,26 +79,37 @@ namespace MongoDB.Bootstrapper
         }
 
         public IMongoDatabaseBuilder RegisterConventionPack(
-            string name, IConventionPack conventions, Func<Type, bool> filter)
+            string name, IConventionPack conventionPack, Func<Type, bool> filter)
         {
-            Action initAction = () =>
+            Action registerConvenctionPackAction = () =>
             {
-                // TODO Create a dictionary with the name and type and if the name already exists, then check if the save conventions of the conventionpacks are registered, if not than throw an exception.
-                // Register when name not exist
-                // Register when name exists and the conventions types are the same
-                // Throw exception if the name exist, but conventions are different.
-                //ConventionRegistry.Remove(name);
-                IConventionPack dd = ConventionRegistry.Lookup(typeof(string));
+                if (_registeredConventionPacks
+                    .TryGetValue(name, out IConventionPack registeredConventionPack))
+                {
+                    IEnumerable<string> registeredNames = registeredConventionPack
+                        .Conventions.Select(rcp => rcp.Name);
+                    IEnumerable<string> newNames = conventionPack
+                        .Conventions.Select(cp => cp.Name);
 
-                IEnumerable<IConvention> daa = dd.Conventions;
+                    if (registeredNames.Except(newNames).Any() ||
+                        newNames.Except(registeredNames).Any())
+                    {
+                        throw new Exception($"The convention pack with name '{name}' " +
+                            $"is already registered with different convention packages " +
+                            $"({string.Join(",", registeredNames)}). " +
+                            $"These convention packages differ from the new ones " +
+                            $"({string.Join(", ", newNames)})");
+                    }
 
-                ConventionRegistry.Register(name, conventions, filter);
+                    return;
+                } 
+                
+                _registeredConventionPacks.Add(name, conventionPack);
 
-                IConventionPack ddaaa = ConventionRegistry.Lookup(typeof(string));
-                IEnumerable<IConvention> daaadfa = ddaaa.Conventions;
+                ConventionRegistry.Register(name, conventionPack, filter);
             };
 
-            _registrationActions.Add(initAction);
+            _registrationConventionActions.Add(registerConvenctionPackAction);
 
             return this;
         }
@@ -95,36 +118,76 @@ namespace MongoDB.Bootstrapper
         {
             Action initAction = () =>
             {
-                // TODO Create dictionary with the type and serializer type and if the type does already exist, then check if the serializer type is the same, if not throw exception.
-                BsonSerializer.RegisterSerializer<T>(serializer);                
+                string typeName = typeof(T).ToString();
+                if (_registeredSerializers.TryGetValue(typeName, out Type registeredType))
+                {
+                    if (registeredType != serializer.GetType())
+                    {
+                        throw new BsonSerializationException(
+                            $"There is already another " +
+                            $"serializer registered for type {typeName}. " +
+                            $"Registered serializer is {registeredType.Name}. " +
+                            $"New serializer is {serializer.GetType().Name}");
+                    }
+
+                    return;
+                }
+
+                BsonSerializer.RegisterSerializer(serializer);
+
+                _registeredSerializers.Add(typeof(T).ToString(), serializer.GetType());
             };
 
-            _registrationActions.Add(initAction);
+            _registrationSerializerActions.Add(initAction);
 
             return this;
         }
         
         internal MongoDbContextData Build()
         {            
-            _registrationActions.ForEach(init => init());
+            // register all convention packs
+            _registrationConventionActions.ForEach(registration => registration());
 
+            // register all serializers
+            _registrationSerializerActions.ForEach(registration => registration());
+
+            // create mongo client settings
             var mongoClientSettings = MongoClientSettings
                 .FromConnectionString(_mongoOptions.ConnectionString);
 
+            // set default mongo client settings
+            mongoClientSettings = SetDefaultClientSettings(
+                mongoClientSettings);
+
+            // set specific mongo client settings
             _mongoClientSettingsActions.ForEach(
                 settings => settings(mongoClientSettings));
             
+            // create mongo client
             var mongoClient = new MongoClient(mongoClientSettings);
+
+            // create mongo database
             IMongoDatabase mongoDatabase = mongoClient
                 .GetDatabase(_mongoOptions.DatabaseName);
 
+            // create mongo collection builders
             var mongoCollectionBuilders = new Dictionary<Type, object>();
-
             _builderActions.ForEach(
                 config => config(mongoDatabase, mongoCollectionBuilders));
 
+            // create configured mongo db context
             return new MongoDbContextData(
                 mongoClient, mongoDatabase, mongoCollectionBuilders);
-        }        
+        }
+
+        private MongoClientSettings SetDefaultClientSettings(
+            MongoClientSettings mongoClientSettings)
+        {
+            mongoClientSettings.ReadPreference = ReadPreference.Primary;
+            mongoClientSettings.ReadConcern = ReadConcern.Majority;
+            mongoClientSettings.WriteConcern = WriteConcern.WMajority.With(journal: true);
+
+            return mongoClientSettings;
+        }
     }
 }

@@ -6,7 +6,7 @@ namespace MongoDB.Bootstrapper
     {
         MongoOptions MongoOptions { get; }
         IMongoClient Client { get; }
-        IMongoDatabase Database { get; }        
+        IMongoDatabase Database { get; }
 
         IMongoCollection<TDocument> CreateCollection<TDocument>() where TDocument : class;
     }

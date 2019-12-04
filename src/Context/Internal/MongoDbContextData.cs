@@ -13,14 +13,16 @@ namespace MongoDB.Bootstrapper
             IMongoDatabase mongoDatabase,
             Dictionary<Type, object> mongoCollectionBuilders)
         {
-            //TODO check for nulls
-            MongoClient = mongoClient;
-            MongoDatabase = mongoDatabase;
-            _mongoCollectionBuilders = mongoCollectionBuilders;
+            Client = mongoClient ?? 
+                throw new ArgumentNullException(nameof(mongoClient));
+            Database = mongoDatabase ??
+                throw new ArgumentNullException(nameof(mongoDatabase));
+            _mongoCollectionBuilders = mongoCollectionBuilders ??
+                throw new ArgumentNullException(nameof(mongoCollectionBuilders));
         }
 
-        public IMongoClient MongoClient { get; }
-        public IMongoDatabase MongoDatabase { get; }
+        public IMongoClient Client { get; }
+        public IMongoDatabase Database { get; }
 
         internal IMongoCollection<TDocument> CreateCollection<TDocument>() where TDocument : class
         {
@@ -29,7 +31,7 @@ namespace MongoDB.Bootstrapper
 
             if (collectionBuilder == null)
             {
-                collectionBuilder = new MongoCollectionBuilder<TDocument>(MongoDatabase);
+                collectionBuilder = new MongoCollectionBuilder<TDocument>(Database);
             }
 
             return collectionBuilder.Build();

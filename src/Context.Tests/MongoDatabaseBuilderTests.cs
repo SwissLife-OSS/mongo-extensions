@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using MongoDB.Bootstrapper;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using Squadron;
 using Xunit;
@@ -97,7 +99,7 @@ namespace Context.Tests
 
         #endregion
 
-        #region ConfigureConnection Tests
+        #region RegisterConventionPack Tests
 
         [Fact]
         public void RegisterConventionPack_RegisterOneSpecificConventionPack_RegisteredSuccessfully()
@@ -265,6 +267,99 @@ namespace Context.Tests
             // Assert
             Assert.Throws<ArgumentNullException>(registrationAction);
         }
+
+        #endregion
+
+        #region RegisterSerializer Tests
+
+        [Fact]
+        public void RegisterSerializer_RegisterSpecificSerializer_RegisteredSuccessfully()
+        {
+            // Arrange
+            var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
+            var arrangedSerializer = new SimpleStringRegisteredSerializer();
+            mongoDatabaseBuilder.RegisterSerializer<SimpleString>(arrangedSerializer);
+
+            // Act
+            mongoDatabaseBuilder.Build();
+
+            // Assert
+            IBsonSerializer<SimpleString> registeredSerializer =
+                BsonSerializer.LookupSerializer<SimpleString>();
+
+            Assert.True(registeredSerializer is SimpleStringRegisteredSerializer);
+        }
+
+        [Fact]
+        public void RegisterSerializer_RegisterNoSpecificSerializer_DefaultSerializerRegistered()
+        {
+            // Arrange
+            var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
+            
+            // Act
+            mongoDatabaseBuilder.Build();
+
+            // Assert
+            IBsonSerializer<NoSerializerRegistered> registeredSerializer =
+                BsonSerializer.LookupSerializer<NoSerializerRegistered>();
+
+            Assert.True(registeredSerializer is 
+                BsonClassMapSerializer<NoSerializerRegistered>);
+        }
+
+        [Fact]
+        public void RegisterSerializer_RegisterSameSerializerTwoTimesForSameType_SerializerRegisteredOnce()
+        {
+            // Arrange
+            var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
+            var firstSerializer = new DuplicateRegisteredSerializer();
+            var secondSerializer = new DuplicateRegisteredSerializer();
+            
+            mongoDatabaseBuilder.RegisterSerializer<DuplicateType>(firstSerializer);
+            mongoDatabaseBuilder.RegisterSerializer<DuplicateType>(secondSerializer);
+            
+            // Act
+            mongoDatabaseBuilder.Build();
+
+            // Assert
+            IBsonSerializer<DuplicateType> registeredSerializer =
+                BsonSerializer.LookupSerializer<DuplicateType>();
+
+            Assert.True(registeredSerializer is DuplicateRegisteredSerializer);
+        }
+
+        [Fact]
+        public void RegisterSerializer_RegisterDifferentSerializerTwoTimesForSameType_ThrowsException()
+        {
+            // Arrange
+            var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
+            var originalSerializer = new DuplicateRegisteredSerializer();
+            var differentSerializer = new DifferentRegisteredSerializer();
+
+            mongoDatabaseBuilder.RegisterSerializer<DuplicateType>(originalSerializer);
+            mongoDatabaseBuilder.RegisterSerializer<DuplicateType>(differentSerializer);
+
+            // Act
+            Action registerSerializers = () => mongoDatabaseBuilder.Build();
+
+            // Assert
+            Assert.Throws<BsonSerializationException>(registerSerializers);
+        }
+
+        [Fact]
+        public void RegisterSerializer_RegisterNull_ThrowsException()
+        {
+            // Arrange
+            var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
+            
+            mongoDatabaseBuilder.RegisterSerializer<NullTestType>(null);
+
+            // Act
+            Action registerSerializers = () => mongoDatabaseBuilder.Build();
+
+            // Assert
+            Assert.Throws<ArgumentNullException>(registerSerializers);
+        }
         
         #endregion
 
@@ -302,6 +397,92 @@ namespace Context.Tests
         {
             public DifferingTestConvention3() : base(nameof(DifferingTestConvention3))
             {
+            }
+        }
+
+        private class SimpleString {}
+        private class NoSerializerRegistered {}
+        private class NullTestType {}
+        private class DuplicateType {}
+
+        private class SimpleStringRegisteredSerializer : IBsonSerializer<SimpleString>
+        {
+            public Type ValueType => typeof(string);
+
+            public SimpleString Deserialize(
+                BsonDeserializationContext context, BsonDeserializationArgs args)
+            {
+                return new SimpleString();
+            }
+
+            public void Serialize(
+               BsonSerializationContext context, BsonSerializationArgs args, SimpleString value)
+            {
+            }
+
+            public void Serialize(
+                BsonSerializationContext context, BsonSerializationArgs args, object value)
+            {
+            }
+
+            object IBsonSerializer.Deserialize(
+                BsonDeserializationContext context, BsonDeserializationArgs args)
+            {
+                return string.Empty;
+            }
+        }
+
+        private class DuplicateRegisteredSerializer : IBsonSerializer<DuplicateType>
+        {
+            public Type ValueType => typeof(string);
+
+            public DuplicateType Deserialize(
+                BsonDeserializationContext context, BsonDeserializationArgs args)
+            {
+                return new DuplicateType();
+            }
+
+            public void Serialize(
+               BsonSerializationContext context, BsonSerializationArgs args, DuplicateType value)
+            {
+            }
+
+            public void Serialize(
+                BsonSerializationContext context, BsonSerializationArgs args, object value)
+            {
+            }
+
+            object IBsonSerializer.Deserialize(
+                BsonDeserializationContext context, BsonDeserializationArgs args)
+            {
+                return string.Empty;
+            }
+        }
+
+        private class DifferentRegisteredSerializer : IBsonSerializer<DuplicateType>
+        {
+            public Type ValueType => typeof(string);
+
+            public DuplicateType Deserialize(
+                BsonDeserializationContext context, BsonDeserializationArgs args)
+            {
+                return new DuplicateType();
+            }
+
+            public void Serialize(
+               BsonSerializationContext context, BsonSerializationArgs args, DuplicateType value)
+            {
+            }
+
+            public void Serialize(
+                BsonSerializationContext context, BsonSerializationArgs args, object value)
+            {
+            }
+
+            object IBsonSerializer.Deserialize(
+                BsonDeserializationContext context, BsonDeserializationArgs args)
+            {
+                return string.Empty;
             }
         }
 

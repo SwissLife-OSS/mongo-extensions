@@ -15,14 +15,14 @@ namespace MongoDB.Bootstrapper
 
     public static class MongoOptionsExtension 
     {
-        public static MongoOptions<TMongoDBContext> Validate<TMongoDBContext>(
-            this MongoOptions<TMongoDBContext> mongoOptions) where TMongoDBContext : IMongoDbContext
+        public static MongoOptions Validate(
+            this MongoOptions mongoOptions)
         {
             if (mongoOptions == null)
             {
                 throw new Exception(
-                    $"The MongoDB options could not be found " +
-                    $"within the configuration section.");
+                    $"The MongoDB options for could not be found " +
+                    $"within the configuration section or the options are null.");
             }
 
             if (string.IsNullOrEmpty(mongoOptions.ConnectionString))
@@ -31,7 +31,7 @@ namespace MongoDB.Bootstrapper
                     $"The connection string of the MongoDB configuration " +
                     $"could not be found within the configuration section. " +
                     $"Please verify that this section contains the " +
-                    $"{nameof(MongoOptions<TMongoDBContext>.ConnectionString)} field.");
+                    $"{nameof(MongoOptions.ConnectionString)} field.");
             }
 
             if (string.IsNullOrEmpty(mongoOptions.DatabaseName))
@@ -40,7 +40,7 @@ namespace MongoDB.Bootstrapper
                     $"The database name of the MongoDB configuration " +
                     $"could not be found within the section " +
                     $"Please verify that this section contains the " +
-                    $"{nameof(MongoOptions<TMongoDBContext>.DatabaseName)} field.");
+                    $"{nameof(MongoOptions.DatabaseName)} field.");
             }
 
             return mongoOptions;

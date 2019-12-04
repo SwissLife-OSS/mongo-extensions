@@ -13,6 +13,8 @@ namespace MongoDB.Bootstrapper
             if(mongoOptions == null)
                 throw new ArgumentNullException(nameof(mongoOptions));
 
+            mongoOptions.Validate();
+
             MongoOptions = mongoOptions;
 
             _mongoDbContextData = Initialize(mongoOptions);

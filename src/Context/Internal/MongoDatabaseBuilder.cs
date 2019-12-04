@@ -16,10 +16,12 @@ namespace MongoDB.Bootstrapper
         private readonly List<Action<MongoClientSettings>> _mongoClientSettingsActions;
         private readonly List<Action<IMongoDatabase, Dictionary<Type, object>>> _builderActions;
 
+        private static readonly Dictionary<string, Type> _registeredSerializers;
         private static readonly Dictionary<string, IConventionPack> _registeredConventionPacks;
-        
+
         static MongoDatabaseBuilder()
         {
+            _registeredSerializers = new Dictionary<string, Type>();
             _registeredConventionPacks = new Dictionary<string, IConventionPack>();
         }
 
@@ -43,22 +45,22 @@ namespace MongoDB.Bootstrapper
         public IMongoDatabaseBuilder ConfigureCollection<TDocument>(
             IMongoCollectionConfiguration<TDocument> configuration) where TDocument : class
         {
-            Action<IMongoDatabase, Dictionary<Type, object>> buildAction = (mongoDb, mongoCollectionBuilders) =>
-            {
-                if (mongoCollectionBuilders.ContainsKey(typeof(TDocument)))
+            Action<IMongoDatabase, Dictionary<Type, object>> buildAction =
+                (mongoDb, mongoCollectionBuilders) =>
                 {
-                    throw new Exception($"The mongo collection configuration for " +
-                        $"document type '{typeof(TDocument)}' already exists.");
-                }
+                    if (mongoCollectionBuilders.ContainsKey(typeof(TDocument)))
+                    {
+                        throw new Exception($"The mongo collection configuration for " +
+                            $"document type '{typeof(TDocument)}' already exists.");
+                    }
 
-                var collectionBuilder = new MongoCollectionBuilder<TDocument>(mongoDb);
+                    var collectionBuilder = new MongoCollectionBuilder<TDocument>(mongoDb);
 
-                configuration.Configure(collectionBuilder);
+                    configuration.Configure(collectionBuilder);
+                    collectionBuilder.Build();
 
-                collectionBuilder.Build();
-
-                mongoCollectionBuilders.Add(typeof(TDocument), collectionBuilder);
-            };
+                    mongoCollectionBuilders.Add(typeof(TDocument), collectionBuilder);
+                };
 
             _builderActions.Add(buildAction);
 
@@ -89,7 +91,6 @@ namespace MongoDB.Bootstrapper
                     IEnumerable<string> newNames = conventionPack
                         .Conventions.Select(cp => cp.Name);
 
-                    // different convention pack names are not allowed for same registration name
                     if (registeredNames.Except(newNames).Any() ||
                         newNames.Except(registeredNames).Any())
                     {
@@ -117,8 +118,24 @@ namespace MongoDB.Bootstrapper
         {
             Action initAction = () =>
             {
-                // TODO Create dictionary with the type and serializer type and if the type does already exist, then check if the serializer type is the same, if not throw exception.
-                BsonSerializer.RegisterSerializer<T>(serializer);
+                string typeName = typeof(T).ToString();
+                if (_registeredSerializers.TryGetValue(typeName, out Type registeredType))
+                {
+                    if (registeredType != serializer.GetType())
+                    {
+                        throw new BsonSerializationException(
+                            $"There is already another " +
+                            $"serializer registered for type {typeName}. " +
+                            $"Registered serializer is {registeredType.Name}. " +
+                            $"New serializer is {serializer.GetType().Name}");
+                    }
+
+                    return;
+                }
+
+                BsonSerializer.RegisterSerializer(serializer);
+
+                _registeredSerializers.Add(typeof(T).ToString(), serializer.GetType());
             };
 
             _registrationSerializerActions.Add(initAction);

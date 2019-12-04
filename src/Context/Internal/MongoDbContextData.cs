@@ -13,7 +13,6 @@ namespace MongoDB.Bootstrapper
             IMongoDatabase mongoDatabase,
             Dictionary<Type, object> mongoCollectionBuilders)
         {
-            
             Client = mongoClient ?? 
                 throw new ArgumentNullException(nameof(mongoClient));
             Database = mongoDatabase ??

@@ -2,7 +2,7 @@ using System;
 using MongoDB.Driver;
 
 
-namespace MongoDB.Bootstrapper
+namespace MongoDB.Extensions.Context
 {
     public abstract class MongoDbContext : IMongoDbContext
     {

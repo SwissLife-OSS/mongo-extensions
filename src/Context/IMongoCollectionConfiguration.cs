@@ -1,4 +1,4 @@
-namespace MongoDB.Bootstrapper
+namespace MongoDB.Extensions.Context
 {
     public interface IMongoCollectionConfiguration<TDocument> where TDocument : class
     {

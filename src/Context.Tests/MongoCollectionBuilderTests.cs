@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Context.Tests.Helpers;
-using MongoDB.Bootstrapper;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using MongoDB.Extensions.Context.Tests.Helpers;
 using Squadron;
 using Xunit;
 
-namespace Context.Tests
+namespace MongoDB.Extensions.Context.Tests
 {
     public class MongoCollectionBuilderTests : IClassFixture<MongoResource>
     {

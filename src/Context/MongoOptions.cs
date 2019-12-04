@@ -1,6 +1,6 @@
 using System;
 
-namespace MongoDB.Bootstrapper
+namespace MongoDB.Extensions.Context
 {
     public class MongoOptions<TMongoDBContext>
         : MongoOptions where TMongoDBContext : IMongoDbContext

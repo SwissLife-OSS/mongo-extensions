@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using MongoDB.Extensions.Context;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DataAccess
 {
-    public class ServiceCollectionExtensions
+    public static class ServiceCollectionExtensions
     {
         private static IServiceCollection AddShopDatabase(
             this IServiceCollection services, IConfiguration configuration)
         {
-            MongoOptions dbOptions = configuration
-                .GetSection(Wellknown.Configuration.Sections.Database)
-                .Get<MongoOptions<IDocuStoreDbContext>>()
+            //MongoOptions dbOptions = configuration
+            //    .GetSection(Wellknown.Configuration.Sections.Database)
+            //    .Get<MongoOptions<IDocuStoreDbContext>>()
 
             return services;
         }

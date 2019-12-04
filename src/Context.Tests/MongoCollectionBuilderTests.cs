@@ -138,7 +138,7 @@ namespace MongoDB.Extensions.Context.Tests
             var mongoCollectionBuilder = new MongoCollectionBuilder<Order>(_mongoDatabase);
             
             // Act
-            mongoCollectionBuilder.WithMongoCollectionSettings(mongoCollectionSettings =>
+            mongoCollectionBuilder.WithCollectionSettings(mongoCollectionSettings =>
             {
                 mongoCollectionSettings.WriteConcern = WriteConcern.Unacknowledged;
                 mongoCollectionSettings.ReadConcern = ReadConcern.Linearizable;
@@ -178,7 +178,7 @@ namespace MongoDB.Extensions.Context.Tests
             var mongoCollectionSettings = new MongoCollectionSettings();
 
             // Act
-            mongoCollectionBuilder.WithMongoCollectionSettings(mongoCollectionSettings => { });
+            mongoCollectionBuilder.WithCollectionSettings(mongoCollectionSettings => { });
             IMongoCollection <Order> result = mongoCollectionBuilder.Build();
 
             // Assert
@@ -199,7 +199,7 @@ namespace MongoDB.Extensions.Context.Tests
             var mongoCollectionBuilder = new MongoCollectionBuilder<Order>(_mongoDatabase);
 
             // Act
-            mongoCollectionBuilder.WithMongoCollectionConfiguration(mongoCollection =>
+            mongoCollectionBuilder.WithCollectionConfiguration(mongoCollection =>
             {
                 mongoCollection.Indexes.CreateOne(new CreateIndexModel<Order>(
                     Builders<Order>.IndexKeys.Ascending(order => order.Name),

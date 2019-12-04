@@ -14,8 +14,8 @@ namespace DataAccess
                 .Get<MongoOptions>();
 
             services.AddSingleton<MongoOptions>(sp => shopDbOptions);
-            services.AddSingleton<ShopDbContext>();
-            services.AddSingleton<ProductRepository>();
+            services.AddSingleton<SimpleBlogDbContext>();
+            services.AddSingleton<BlogRepository>();
 
             return services;
         }

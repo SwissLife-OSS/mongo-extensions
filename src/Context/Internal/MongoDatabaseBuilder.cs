@@ -56,7 +56,7 @@ namespace MongoDB.Extensions.Context
 
                     var collectionBuilder = new MongoCollectionBuilder<TDocument>(mongoDb);
 
-                    configuration.Configure(collectionBuilder);
+                    configuration.OnConfiguring(collectionBuilder);
                     collectionBuilder.Build();
 
                     mongoCollectionBuilders.Add(typeof(TDocument), collectionBuilder);

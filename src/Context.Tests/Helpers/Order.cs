@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Context.Tests.Helpers
+namespace MongoDB.Extensions.Context.Tests.Helpers
 {
     public class Order
     {

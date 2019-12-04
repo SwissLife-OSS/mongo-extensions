@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using MongoDB.Driver;
 
-namespace MongoDB.Bootstrapper
+namespace MongoDB.Extensions.Context
 {
     internal class MongoDbContextData
     {

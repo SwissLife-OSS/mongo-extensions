@@ -1,3 +1,3 @@
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Context.Tests")]
+[assembly: InternalsVisibleTo("MongoDB.Extensions.Context.Tests")]

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 
-namespace MongoDB.Bootstrapper
+namespace MongoDB.Extensions.Context
 {
     public interface IMongoCollectionBuilder<TDocument>
     {

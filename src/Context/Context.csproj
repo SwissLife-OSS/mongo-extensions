@@ -6,7 +6,7 @@
     <AssemblyName>MongoDB.Extensions.Context</AssemblyName>
     <RootNamespace>MongoDB.Extensions.Context</RootNamespace>
     <PackageId>MongoDB.Extensions.Context</PackageId>
-    <IsPackable>false</IsPackable>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

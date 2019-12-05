@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Extensions.Context;
 
 namespace DataAccess
 {
@@ -8,9 +9,13 @@ namespace DataAccess
         private static IServiceCollection AddShopDatabase(
             this IServiceCollection services, IConfiguration configuration)
         {
-            //MongoOptions dbOptions = configuration
-            //    .GetSection(Wellknown.Configuration.Sections.Database)
-            //    .Get<MongoOptions<IDocuStoreDbContext>>()
+            MongoOptions shopDbOptions = configuration
+                .GetSection("Shop:Database")
+                .Get<MongoOptions>();
+
+            services.AddSingleton<MongoOptions>(sp => shopDbOptions);
+            services.AddSingleton<SimpleBlogDbContext>();
+            services.AddSingleton<BlogRepository>();
 
             return services;
         }

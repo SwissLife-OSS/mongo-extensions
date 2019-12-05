@@ -50,7 +50,7 @@ namespace MongoDB.Extensions.Context
             return this;
         }
 
-        public IMongoCollectionBuilder<TDocument> WithMongoCollectionSettings(
+        public IMongoCollectionBuilder<TDocument> WithCollectionSettings(
             Action<MongoCollectionSettings> collectionSettings)
         {
             _collectionSettingsActions.Add(collectionSettings);
@@ -58,7 +58,7 @@ namespace MongoDB.Extensions.Context
             return this;
         }
 
-        public IMongoCollectionBuilder<TDocument> WithMongoCollectionConfiguration(
+        public IMongoCollectionBuilder<TDocument> WithCollectionConfiguration(
             Action<IMongoCollection<TDocument>> collectionConfiguration)
         {
             _collectionConfigurations.Add(collectionConfiguration);

@@ -4,17 +4,17 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Extensions.Context;
 
-namespace DataAccess
+namespace SimpleBlog.DataAccess
 {
     internal class UserCollectionConfiguration : IMongoCollectionConfiguration<User>
     {
-        public void Configure(IMongoCollectionBuilder<User> mongoCollectionBuilder)
+        public void OnConfiguring(IMongoCollectionBuilder<User> mongoCollectionBuilder)
         {
             mongoCollectionBuilder
                 .WithCollectionName("users")
                 .AddBsonClassMap<User>(ConfigureUserClassMap())
-                .WithMongoCollectionSettings(ConfigureCollectionSettings())
-                .WithMongoCollectionConfiguration(ConfigureIndexes());
+                .WithCollectionSettings(ConfigureCollectionSettings())
+                .WithCollectionConfiguration(ConfigureIndexes());
         }
 
         private static Action<MongoCollectionSettings> ConfigureCollectionSettings()
@@ -57,7 +57,6 @@ namespace DataAccess
             return cm =>
             {
                 cm.AutoMap();
-                cm.MapIdMember(c => c.Id);
             };
         }
     }

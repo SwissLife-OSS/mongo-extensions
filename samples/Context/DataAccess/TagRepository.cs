@@ -1,34 +1,41 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using Tag = Models.Tag;
 
-namespace DataAccess
+namespace SimpleBlog.DataAccess
 {
-    public class TagRepository
+    public class TagRepository : ITagRepository
     {
-        private InsertOneOptions _insertOneOptions;
+        private InsertManyOptions _insertManyOptions;
         private IMongoCollection<Tag> _mongoCollection;
-        
-        public TagRepository(SimpleBlogDbContext simpleBlogDbContext)
+
+        public TagRepository(ISimpleBlogDbContext simpleBlogDbContext)
         {
             if (simpleBlogDbContext == null)
                 throw new ArgumentNullException(nameof(simpleBlogDbContext));
 
             _mongoCollection = simpleBlogDbContext.CreateCollection<Tag>();
 
-            _insertOneOptions = new InsertOneOptions()
+            _insertManyOptions = new InsertManyOptions()
             {
-                BypassDocumentValidation = false
+                BypassDocumentValidation = false,
+                IsOrdered = false
             };
         }
-        
-        public async Task AddTagAsync(
-            Tag tag, CancellationToken cancellationToken)
+
+        public async Task TryAddTagsAsync(
+            IEnumerable<Tag> tags, CancellationToken cancellationToken)
         {
-            await _mongoCollection
-                .InsertOneAsync(tag, _insertOneOptions, cancellationToken);
+            //FilterDefinition<Tag> filter = Builders<Tag>.Filter
+            //    .Eq(t => t.Name, tenantName);
+
+            //Builders<Tag>.Update.SetOnInsert()
+
+            //await _mongoCollection
+            //    .UpdateManyAsync(tags, _insertManyOptions, cancellationToken);
         }
     }
 }

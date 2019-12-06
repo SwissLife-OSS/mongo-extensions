@@ -2,9 +2,9 @@
 using MongoDB.Driver;
 using MongoDB.Extensions.Context;
 
-namespace DataAccess
+namespace SimpleBlog.DataAccess
 {
-    public class SimpleBlogDbContext : MongoDbContext
+    public class SimpleBlogDbContext : MongoDbContext, ISimpleBlogDbContext
     {
         public SimpleBlogDbContext(MongoOptions mongoOptions) : base(mongoOptions)
         {
@@ -22,5 +22,9 @@ namespace DataAccess
                 .ConfigureCollection(new BlogCollectionConfiguration())
                 .ConfigureCollection(new TagCollectionConfiguration());
         }
+    }
+
+    public interface ISimpleBlogDbContext : IMongoDbContext
+    {
     }
 }

@@ -1,0 +1,21 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:59489/",
+      "sslPort": 0
+    }
+  },
+  "profiles": {
+    "Host": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:59490/swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:59490/"
+    }
+  }
+}

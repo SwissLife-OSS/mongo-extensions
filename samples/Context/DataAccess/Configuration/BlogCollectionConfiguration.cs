@@ -1,23 +1,24 @@
-﻿using Models;
+﻿using System;
+using Models;
 using MongoDB.Driver;
 using MongoDB.Extensions.Context;
 
-namespace DataAccess
+namespace SimpleBlog.DataAccess
 {
     internal class BlogCollectionConfiguration : IMongoCollectionConfiguration<Blog>
     {
-        public void Configure(IMongoCollectionBuilder<Blog> mongoCollectionBuilder)
+        public void OnConfiguring(IMongoCollectionBuilder<Blog> mongoCollectionBuilder)
         {
             mongoCollectionBuilder
                 .WithCollectionName("blogs")
                 .AddBsonClassMap<Blog>(cm =>
                 {
                     cm.AutoMap();
-                    cm.MapIdMember<string>(c => c.Id);
+                    cm.MapIdMember<Guid>(c => c.Id);
                 })
-                .WithMongoCollectionSettings(settings => settings.ReadConcern = ReadConcern.Majority)
-                .WithMongoCollectionSettings(settings => settings.ReadPreference = ReadPreference.Nearest)
-                .WithMongoCollectionConfiguration(collection =>
+                .WithCollectionSettings(settings => settings.ReadConcern = ReadConcern.Majority)
+                .WithCollectionSettings(settings => settings.ReadPreference = ReadPreference.Nearest)
+                .WithCollectionConfiguration(collection =>
                 {
                     var timestampIndex = new CreateIndexModel<Blog>(
                         Builders<Blog>.IndexKeys.Ascending(blog => blog.TimeStamp),

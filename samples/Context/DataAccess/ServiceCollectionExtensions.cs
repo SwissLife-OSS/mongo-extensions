@@ -2,20 +2,21 @@
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Extensions.Context;
 
-namespace DataAccess
+namespace SimpleBlog.DataAccess
 {
     public static class ServiceCollectionExtensions
     {
-        private static IServiceCollection AddShopDatabase(
+        public static IServiceCollection AddBlogDatabase(
             this IServiceCollection services, IConfiguration configuration)
         {
-            MongoOptions shopDbOptions = configuration
-                .GetSection("Shop:Database")
-                .Get<MongoOptions>();
+            MongoOptions blogDbOptions = configuration
+                .GetMongoOptions(WellKnown.Path.SimpleBlogDB);
 
-            services.AddSingleton<MongoOptions>(sp => shopDbOptions);
-            services.AddSingleton<SimpleBlogDbContext>();
-            services.AddSingleton<BlogRepository>();
+            services.AddSingleton(blogDbOptions);
+            services.AddSingleton<ISimpleBlogDbContext, SimpleBlogDbContext>();
+            services.AddSingleton<IBlogRepository, BlogRepository>();
+            services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddSingleton<ITagRepository, TagRepository>();
 
             return services;
         }

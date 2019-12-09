@@ -170,7 +170,7 @@ namespace MongoDB.Extensions.Context.Tests
             Assert.True(result.Settings.AssignIdOnInsert);
         }
 
-        #if NETCOREAPP3_1
+
         [Fact]
         public void WithMongoCollectionSettings_DefaultCollectionSettingsConfigured_DefaultMongoCollectionSettingsSet()
         {
@@ -179,7 +179,7 @@ namespace MongoDB.Extensions.Context.Tests
             var mongoCollectionSettings = new MongoCollectionSettings();
 
             // Act
-            mongoCollectionBuilder.WithCollectionSettings(mongoCollectionSettings => { });
+            mongoCollectionBuilder.WithCollectionSettings(sd => { });
             IMongoCollection <Order> result = mongoCollectionBuilder.Build();
 
             // Assert
@@ -188,10 +188,10 @@ namespace MongoDB.Extensions.Context.Tests
             Assert.Equal(ReadPreference.Primary, result.Settings.ReadPreference);
             Assert.True(result.Settings.AssignIdOnInsert);
         }
-        #endif
-#endregion
 
-#region WithMongoCollectionConfiguration Tests
+        #endregion
+
+        #region WithMongoCollectionConfiguration Tests
 
         [Fact]
         public void WithMongoCollectionConfiguration_ChangeCollectionConfiguration_MongoCollectionConfigurationChangedSuccessfully()
@@ -212,9 +212,9 @@ namespace MongoDB.Extensions.Context.Tests
             // 
             List<BsonDocument> indexes = result.Indexes.List().ToList();
             Assert.Equal("_id_", indexes.First().GetElement("name").Value.ToString());
-            Assert.Equal("Name_1".ToLower(), indexes.Last().GetElement("name").Value.ToString().ToLower());
+            Assert.Equal("Name_1", indexes.Last().GetElement("name").Value.ToString(), ignoreCase: true);
         }
 
-#endregion
+        #endregion
     }
 }

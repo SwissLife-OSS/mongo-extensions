@@ -7,6 +7,11 @@ namespace SimpleBlog.DataAccess
 {
     public interface ITagRepository
     {
-        Task TryAddTagsAsync(IEnumerable<Tag> newTags, CancellationToken cancellationToken = default);
+        Task TryAddTagsAsync(
+            IEnumerable<string> newTags, 
+            CancellationToken cancellationToken = default);
+
+        Task<IEnumerable<Tag>> GetTagsAsync(
+            CancellationToken cancellationToken = default);
     }
 }

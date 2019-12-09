@@ -1,5 +1,8 @@
-﻿using MongoDB.Bson.Serialization.Serializers;
+﻿using System;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
+using MongoDB.Driver.Core.Events;
 using MongoDB.Extensions.Context;
 
 namespace SimpleBlog.DataAccess

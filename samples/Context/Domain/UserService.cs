@@ -15,6 +15,22 @@ namespace SimpleBlog.Domain
             _userRepository = userRepository;
         }
 
+        public async Task EnsureUserAsync(
+            string userId, CancellationToken cancellationToken = default)
+        {
+            User user = await _userRepository.GetUserAsync(userId, cancellationToken);
+
+            if(user == null)
+            {
+                await RegisterUserAsync(new User()
+                {
+                    UserId = userId,
+                    Email = $"{userId}@UnknownEmail.ch",
+                    Nickname = $"UnknownNickName-{userId}"
+                });
+            }
+        }
+
         public async Task RegisterUserAsync(
             User newUser, CancellationToken cancellationToken = default)
         {

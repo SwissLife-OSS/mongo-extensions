@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Models;
@@ -40,10 +41,18 @@ namespace SimpleBlog.Domain
             };
 
             await _blogRepository.AddBlogAsync(blog, cancellationToken);
-
             await _userRepository.AttachBlogToUserAsync(blog.UserId, blog.Id, cancellationToken);
-
             await _tagRepository.TryAddTagsAsync(blogPost.Tags, cancellationToken);
+        }
+
+        public async Task<IEnumerable<Tag>> GetAllTagsAsync(CancellationToken cancellationToken)
+        {
+            return await _tagRepository.GetTagsAsync(cancellationToken);
+        }
+
+        public async Task<IEnumerable<Blog>> GetAllBlogsAsync(CancellationToken cancellationToken)
+        {
+            return await _blogRepository.GetBlogsAsync(cancellationToken);
         }
     }
 }

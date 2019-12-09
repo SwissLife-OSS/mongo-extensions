@@ -6,6 +6,7 @@ namespace SimpleBlog.Domain
 {
     public interface IUserService
     {
+        Task EnsureUserAsync(string userId, CancellationToken cancellationToken = default);
         Task RegisterUserAsync(User newUser, CancellationToken cancellationToken = default);
     }
 }

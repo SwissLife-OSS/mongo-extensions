@@ -57,6 +57,7 @@ namespace SimpleBlog.DataAccess
             return cm =>
             {
                 cm.AutoMap();
+                cm.MapIdMember<string>(u => u.UserId);
             };
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
@@ -9,7 +10,6 @@ namespace SimpleBlog.DataAccess
 {
     public class TagRepository : ITagRepository
     {
-        private InsertManyOptions _insertManyOptions;
         private IMongoCollection<Tag> _mongoCollection;
 
         public TagRepository(ISimpleBlogDbContext simpleBlogDbContext)
@@ -18,24 +18,32 @@ namespace SimpleBlog.DataAccess
                 throw new ArgumentNullException(nameof(simpleBlogDbContext));
 
             _mongoCollection = simpleBlogDbContext.CreateCollection<Tag>();
+        }
 
-            _insertManyOptions = new InsertManyOptions()
-            {
-                BypassDocumentValidation = false,
-                IsOrdered = false
-            };
+        public async Task<IEnumerable<Tag>> GetTagsAsync(
+            CancellationToken cancellationToken)
+        {
+            var findOptions = new FindOptions<Tag>();
+
+            IAsyncCursor<Tag> result = await _mongoCollection.FindAsync<Tag>(
+                Builders<Tag>.Filter.Empty, findOptions, cancellationToken);
+
+            return await result.ToListAsync();
         }
 
         public async Task TryAddTagsAsync(
-            IEnumerable<Tag> tags, CancellationToken cancellationToken)
+            IEnumerable<string> tags, CancellationToken cancellationToken)
         {
-            //FilterDefinition<Tag> filter = Builders<Tag>.Filter
-            //    .Eq(t => t.Name, tenantName);
+            var bulkWriteOptions = new BulkWriteOptions();
 
-            //Builders<Tag>.Update.SetOnInsert()
+            IEnumerable<UpdateOneModel<Tag>> bulkWrites = 
+                tags.Select(tag => new UpdateOneModel<Tag>(
+                    Builders<Tag>.Filter.Eq(t => t.Name, tag), 
+                    Builders<Tag>.Update.Inc<int>(t => t.Count, 1))
+                    { IsUpsert = true });
 
-            //await _mongoCollection
-            //    .UpdateManyAsync(tags, _insertManyOptions, cancellationToken);
+            await _mongoCollection
+                .BulkWriteAsync(bulkWrites, bulkWriteOptions, cancellationToken);
         }
     }
 }

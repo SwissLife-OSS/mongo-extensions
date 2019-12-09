@@ -7,7 +7,7 @@ namespace Models
     {
         public string Titel { get; set; }
         public string Text { get; set; }
-        public IEnumerable<Tag> Tags { get; set; }
+        public IEnumerable<string> Tags { get; set; }
         public string UserId { get; set; }
     }
 
@@ -17,7 +17,7 @@ namespace Models
         public string Titel { get; set; }
         public string Text { get; set; }
         public DateTime TimeStamp { get; set; }
-        public IEnumerable<Tag> Tags { get; set; }
+        public IEnumerable<string> Tags { get; set; }
         public string UserId { get; set; }
     }
 }

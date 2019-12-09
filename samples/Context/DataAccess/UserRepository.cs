@@ -24,8 +24,19 @@ namespace SimpleBlog.DataAccess
             };
         }
 
+        public async Task<User> GetUserAsync(
+            string userId, CancellationToken cancellationToken= default)
+        {
+            FilterDefinition<User> filter = Builders<User>.Filter
+                .Eq<string>(user => user.UserId, userId);
+            
+            return await _mongoCollection
+                .Find<User>(filter)
+                .SingleOrDefaultAsync(cancellationToken);
+        }
+
         public async Task AddUserAsync(
-            User user, CancellationToken cancellationToken)
+            User user, CancellationToken cancellationToken = default)
         {
             await _mongoCollection
                 .InsertOneAsync(user, _insertOneOptions, cancellationToken);
@@ -34,7 +45,16 @@ namespace SimpleBlog.DataAccess
         public async Task AttachBlogToUserAsync(
             string userId, Guid blogId, CancellationToken cancellationToken = default)
         {
-            //await _mongoCollection.UpdateOneAsync()
+            UpdateDefinition<User> update = Builders<User>.Update
+                .AddToSet(u => u.Posts, blogId);
+
+            var updateOptions = new UpdateOptions()
+            {
+                IsUpsert = true
+            };
+
+            await _mongoCollection.UpdateOneAsync<User>(
+                user => user.UserId == userId, update, updateOptions, cancellationToken);
         }
     }
 }

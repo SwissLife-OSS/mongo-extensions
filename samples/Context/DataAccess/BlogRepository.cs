@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Models;
@@ -29,6 +30,17 @@ namespace SimpleBlog.DataAccess
         {
             await _mongoCollection
                 .InsertOneAsync(blog, _insertOneOptions, cancellationToken);
+        }
+
+        public async Task<IEnumerable<Blog>> GetBlogsAsync(
+            CancellationToken cancellationToken = default)
+        {
+            var findOptions = new FindOptions<Blog>();
+
+            IAsyncCursor<Blog> result = await _mongoCollection.FindAsync<Blog>(
+                Builders<Blog>.Filter.Empty, findOptions, cancellationToken);
+
+            return await result.ToListAsync();
         }
     }
 }

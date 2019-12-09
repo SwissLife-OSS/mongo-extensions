@@ -10,7 +10,11 @@ namespace SimpleBlog.DataAccess
         public void OnConfiguring(IMongoCollectionBuilder<Tag> mongoCollectionBuilder)
         {
             mongoCollectionBuilder
-                .AddBsonClassMap<Tag>(cm => cm.AutoMap())
+                .AddBsonClassMap<Tag>(cm => 
+                {
+                    cm.AutoMap();
+                    cm.SetIgnoreExtraElements(true);
+                })
                 .WithCollectionSettings(setting =>
                 {
                     setting.ReadPreference = ReadPreference.Nearest;

@@ -2,9 +2,9 @@
 
 **MongoDB.Extensions provides a set of utility libraries for MongoDB.**
 
-MongoDB.Extensions provides several libraries to extend and simplify the MongoDB bootstrapping and transaction functionalities.
+MongoDB.Extensions provides several libraries to extend and simplify some MongoDB functionalities like bootstrapping and transactions.
 
-The MongoDB.Extension.Context library provides a bootstrapping context, which can be used to initialize the MongoDB connections, databases and collections in a proper and easy way.
+The MongoDB.Extension.Context library provides a bootstrapping context, which is used to initialize the MongoDB connections, databases and collections in a specific and proper way.
 
 ## Features
 
@@ -13,7 +13,7 @@ The MongoDB.Extension.Context library provides a bootstrapping context, which ca
 
 ## Getting Started - MongoDB Bootstrapping
 
-To get started with MongoDB bootstrapping, we have prepared a complete example at[SimpleBlog](https://swisslife-oss.github.io/mongo-extensions/samples/), which is a small REST web-service with the used MongoDB bootstrapping context.
+To get started with MongoDB bootstrapping, we have prepared a complete example at [SimpleBlog](https://swisslife-oss.github.io/mongo-extensions/samples/), which is a small REST web-service with the used MongoDB bootstrapping context.
 
 ### Install
 
@@ -36,11 +36,14 @@ public class SimpleBlogDbContext : MongoDbContext
 
     protected override void OnConfiguring(IMongoDatabaseBuilder mongoDatabaseBuilder)
     {
+        .
+        .
+        .
     }
 }
 ```
 
-In the OnConfiguring method, the MongoDatabaseBuilder is injected. Use this builder to configure your MongoDB connection, database and collections.
+In the OnConfiguring method, the MongoDatabaseBuilder is injected. Use this builder to configure your MongoDB connection, database, collections, convention packs, serializer... etc.
 
 ```csharp
 protected override void OnConfiguring(IMongoDatabaseBuilder mongoDatabaseBuilder)
@@ -55,8 +58,8 @@ protected override void OnConfiguring(IMongoDatabaseBuilder mongoDatabaseBuilder
 }
 ```
 
-To configure the Collections of your MongoDB database, create a class with the interface ```IMongoCollectionConfiguration<TDocument>``` and
-register it in the MongoDatabaseBuilder ```.ConfigureCollection(new TagCollectionConfiguration())```. Configure the collection settings via the injected MongoCollectionBuilder.
+To configure a collection of your MongoDB database, create a class with the interface ```IMongoCollectionConfiguration<TDocument>``` and
+register it in the MongoDatabaseBuilder ```.ConfigureCollection(new TagCollectionConfiguration())``` of your MongoDbContext. Configure the collection settings via the injected MongoCollectionBuilder...
 
 ```csharp
 public class TagCollectionConfiguration : IMongoCollectionConfiguration<Tag>
@@ -89,7 +92,7 @@ public class TagCollectionConfiguration : IMongoCollectionConfiguration<Tag>
 
 ### Register MongoDB Context
 
-To use your MongoDB Context, register it in your DI-Container.
+To use your MongoDB bootstrapping context, register it in your DI-Container.
 Example:
 
 ```csharp
@@ -106,7 +109,7 @@ Example:
         }
 ```
 
-When the MongoDBContext is used the first time, then all the Serializers, BsonClassMaps, ConventionPacks, Connection, Database and Collections will be initialized according your configuration.
+When the MongoDBContext is used the first time, then the connection, database and collections, serializers, classMaps, convention packs etc. will be initialized and configured according your configuration.
 
 ### Use MongoDB Context
 The MongoDbContext contains the configured MongoDB client, database and collections. Therefore we should use always the MongoDbContext to get the client, database or a collection, because they are configured correctly.
@@ -129,7 +132,6 @@ public abstract class MongoDbContext : IMongoDbContext
 ```
 
 In the following Repository class example, we use the MongoDbContext to get the configured MongoDB collection.
-To get a proper configured collection, we use the MongoDbContext.
 
 ```csharp
 public class TagRepository : ITagRepository
@@ -159,6 +161,8 @@ public class TagRepository : ITagRepository
         .
         .
 ```
+
+A full MongoDB bootstrapping example can be found in our [SimpleBlog](https://swisslife-oss.github.io/mongo-extensions/samples/) web-application.
 
 ## Community
 

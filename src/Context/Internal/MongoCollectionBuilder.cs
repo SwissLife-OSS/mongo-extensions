@@ -10,7 +10,6 @@ namespace MongoDB.Extensions.Context
         private string _collectionName;
         private readonly IMongoDatabase _mongoDatabase;
         private readonly List<Action> _classMapActions;
-        private readonly List<Action<CreateCollectionOptions>> _createCollectionOptionsActions;
         private readonly List<Action<MongoCollectionSettings>> _collectionSettingsActions;
         private readonly List<Action<IMongoCollection<TDocument>>> _collectionConfigurations;
 
@@ -26,7 +25,6 @@ namespace MongoDB.Extensions.Context
             _classMapActions = new List<Action>();
             _collectionConfigurations = new List<Action<IMongoCollection<TDocument>>>();
             _collectionSettingsActions = new List<Action<MongoCollectionSettings>>();
-            _createCollectionOptionsActions = new List<Action<CreateCollectionOptions>>();
         }
 
         public IMongoCollectionBuilder<TDocument> WithCollectionName(string collectionName)
@@ -43,14 +41,6 @@ namespace MongoDB.Extensions.Context
             Action<BsonClassMap<TMapDocument>> bsonClassMapAction) where TMapDocument : class
         {
             _classMapActions.Add(() => RegisterClassMapSync(bsonClassMapAction));
-
-            return this;
-        }
-        
-        public IMongoCollectionBuilder<TDocument> WithCreateCollectionOptions(
-            Action<CreateCollectionOptions> createCollectionOptions)
-        {
-            _createCollectionOptionsActions.Add(createCollectionOptions);
 
             return this;
         }
@@ -74,9 +64,7 @@ namespace MongoDB.Extensions.Context
         internal IMongoCollection<TDocument> Build()
         {
             _classMapActions.ForEach(action => action());
-
-            CreateMongoCollection();
-
+            
             IMongoCollection<TDocument> mongoCollection = GetMongoCollection();
 
             _collectionConfigurations.ForEach(configuration => configuration(mongoCollection));
@@ -93,16 +81,6 @@ namespace MongoDB.Extensions.Context
 
             return _mongoDatabase
                 .GetCollection<TDocument>(_collectionName, mongoCollectionSettings);
-        }
-
-        private void CreateMongoCollection()
-        {
-            var createCollectionOptions = new CreateCollectionOptions();
-
-            _createCollectionOptionsActions
-                    .ForEach(configure => configure(createCollectionOptions));
-
-            _mongoDatabase.CreateCollection(_collectionName, createCollectionOptions);
         }
 
         private void RegisterClassMapSync<TMapDocument>(

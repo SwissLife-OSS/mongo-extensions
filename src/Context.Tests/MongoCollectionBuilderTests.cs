@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
@@ -188,54 +187,6 @@ namespace MongoDB.Extensions.Context.Tests
             Assert.Equal(ReadConcern.Majority, result.Settings.ReadConcern);
             Assert.Equal(ReadPreference.Primary, result.Settings.ReadPreference);
             Assert.True(result.Settings.AssignIdOnInsert);
-        }
-
-        #endregion
-        
-        #region WithMongoCollectionSettings Tests
-
-        [Fact]
-        public async Task WithCreateCollectionOptions_SetCappedCollectionOptions_MongoCollectionOptionsChangedToCappedSuccessfully()
-        {
-            // Arrange
-            var mongoCollectionBuilder = new MongoCollectionBuilder<Order>(_mongoDatabase);
-
-            // Act
-            mongoCollectionBuilder.WithCreateCollectionOptions(createCollectionOptions =>
-            {
-                createCollectionOptions.Capped = true;
-                createCollectionOptions.MaxSize = 1;
-                createCollectionOptions.MaxDocuments = 1;
-            });
-            IMongoCollection<Order> result = mongoCollectionBuilder.Build();
-
-            // Assert
-            var command = new BsonDocumentCommand<BsonDocument>(new BsonDocument
-            {
-                {"collstats", nameof(Order)}
-            });
-
-            BsonDocument stats = await _mongoDatabase.RunCommandAsync(command);
-            Assert.True(stats["capped"].AsBoolean);
-        }
-
-        [Fact]
-        public async Task WithCreateCollectionOptions_NoCappedCollectionOptions_DefaultMongoCollectionSettingsSet()
-        {
-            // Arrange
-            var mongoCollectionBuilder = new MongoCollectionBuilder<Order>(_mongoDatabase);
-
-            // Act
-            IMongoCollection<Order> result = mongoCollectionBuilder.Build();
-
-            // Assert
-            var command = new BsonDocumentCommand<BsonDocument>(new BsonDocument
-            {
-                {"collstats", nameof(Order)}
-            });
-
-            BsonDocument stats = await _mongoDatabase.RunCommandAsync(command);
-            Assert.False(stats["capped"].AsBoolean);
         }
 
         #endregion

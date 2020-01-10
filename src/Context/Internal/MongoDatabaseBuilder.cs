@@ -88,6 +88,21 @@ namespace MongoDB.Extensions.Context
             return this;
         }
 
+        public IMongoDatabaseBuilder RegisterDefaultConventionPack(Func<Type, bool> filter)
+        {
+            var conventionPack = new ConventionPack
+            {
+                new EnumRepresentationConvention(BsonType.String),
+                new ImmutablePocoConvention(),
+                new IgnoreExtraElementsConvention(true)
+            };
+
+            _registrationConventionActions.Add(
+                () => RegisterConventions("DefaultConventions", conventionPack, filter));
+
+            return this;
+        }
+
         public IMongoDatabaseBuilder RegisterSerializer<T>(IBsonSerializer<T> serializer)
         {
             _registrationSerializerActions.Add(

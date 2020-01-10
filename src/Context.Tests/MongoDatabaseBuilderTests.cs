@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MongoDB.Bson;
@@ -264,6 +264,27 @@ namespace MongoDB.Extensions.Context.Tests
 
             // Assert
             Assert.Throws<ArgumentNullException>(registrationAction);
+        }
+
+        [Fact]
+        public void RegisterDefaultConventionPack_RegisteredSuccessfully()
+        {
+            // Arrange
+            var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
+            mongoDatabaseBuilder.RegisterDefaultConventionPack(t => true);
+
+            // Act
+            MongoDbContextData result = mongoDatabaseBuilder.Build();
+
+            // Assert
+            IEnumerable<IConvention> conventions = ConventionRegistry.Lookup(typeof(string)).Conventions;
+            int enumRepConvention = conventions.Count(convention => convention.Name == "EnumRepresentation");
+            int immutablePoco = conventions.Count(convention => convention.Name == "ImmutablePoco");
+            int ignoreExtraElements = conventions.Count(convention => convention.Name == "IgnoreExtraElements");
+
+            Assert.Equal(1, enumRepConvention);
+            Assert.Equal(1, immutablePoco);
+            Assert.Equal(1, ignoreExtraElements);
         }
 
         #endregion

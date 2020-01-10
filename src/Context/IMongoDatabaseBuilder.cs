@@ -12,6 +12,8 @@ namespace MongoDB.Extensions.Context
         IMongoDatabaseBuilder RegisterConventionPack(
             string name, IConventionPack conventions, Func<Type, bool> filter);
 
+        IMongoDatabaseBuilder RegisterDefaultConventionPack(Func<Type, bool> filter);
+
         IMongoDatabaseBuilder RegisterCamelCaseConventionPack();
 
         IMongoDatabaseBuilder ConfigureCollection<TDocument>(

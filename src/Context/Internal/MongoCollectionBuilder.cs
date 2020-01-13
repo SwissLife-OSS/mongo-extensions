@@ -40,7 +40,17 @@ namespace MongoDB.Extensions.Context
         public IMongoCollectionBuilder<TDocument> AddBsonClassMap<TMapDocument>(
             Action<BsonClassMap<TMapDocument>> bsonClassMapAction) where TMapDocument : class
         {
-            _classMapActions.Add(() => RegisterClassMapSync(bsonClassMapAction));
+            _classMapActions.Add(() => 
+                RegisterClassMapSync<TMapDocument>(bsonClassMapAction));
+
+            return this;
+        }
+
+        public IMongoCollectionBuilder<TDocument> AddBsonClassMap<TMapDocument>() 
+            where TMapDocument : class
+        {
+            _classMapActions.Add(() => 
+                RegisterClassMapSync<TMapDocument>());
 
             return this;
         }
@@ -91,6 +101,18 @@ namespace MongoDB.Extensions.Context
                 if (!BsonClassMap.IsClassMapRegistered(typeof(TMapDocument)))
                 {
                     BsonClassMap.RegisterClassMap(bsonClassMapAction);
+                }
+            }
+        }
+
+        private void RegisterClassMapSync<TMapDocument>()
+            where TMapDocument : class
+        {
+            lock (_lockObject)
+            {
+                if (!BsonClassMap.IsClassMapRegistered(typeof(TMapDocument)))
+                {
+                    BsonClassMap.RegisterClassMap<TMapDocument>();
                 }
             }
         }

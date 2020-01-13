@@ -121,10 +121,31 @@ namespace MongoDB.Extensions.Context.Tests
             // Assert
             Assert.True(BsonClassMap.IsClassMapRegistered(typeof(Order)));
         }
-        
+
+        [Fact]
+        public void AddBsonClassMap_AddNewBsonClassMapWithoutParameter_BsonClassMapIsRegistered()
+        {
+            // Arrange
+            var mongoCollectionBuilder = 
+                new MongoCollectionBuilder<ItemWithoutSpecificClassMap>(_mongoDatabase);
+
+            // Act
+            mongoCollectionBuilder.AddBsonClassMap<ItemWithoutSpecificClassMap>();
+            IMongoCollection<ItemWithoutSpecificClassMap> result = mongoCollectionBuilder.Build();
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.True(BsonClassMap.IsClassMapRegistered(typeof(ItemWithoutSpecificClassMap)));
+        }
+
         private class ItemClassMapNotRegistered
         {
             public int Id { get; set; }
+        }
+
+        private class ItemWithoutSpecificClassMap
+        {
+            public int Name { get; set; }
         }
 
         #endregion

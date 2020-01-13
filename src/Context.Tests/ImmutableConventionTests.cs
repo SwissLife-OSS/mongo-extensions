@@ -167,6 +167,131 @@ namespace MongoDB.Extensions.Context.Tests
             }
         }
 
+        public class AbstractImmutableWithVirtualBasePropertyCase : IClassFixture<MongoResource>
+        {
+            private MongoDbContextData _context;
+
+            public AbstractImmutableWithVirtualBasePropertyCase(MongoResource mongoResource)
+            {
+                _context = CreateContext(mongoResource);
+            }
+
+            [Fact]
+            public async Task ApplyConvention_SerializeSuccessful()
+            {
+                // Arrange
+                IMongoCollection<A> collection = _context.CreateCollection<A>();
+
+                // Act
+                await collection.InsertOneAsync(new B("a", "b"));
+
+                // Assert
+                B result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync() as B;
+                result.MatchSnapshot();
+            }
+
+            public abstract class A
+            {
+                protected A(string _a)
+                {
+                    _A = _a;
+                }
+
+                public virtual string _A { get; }
+            }
+
+            public class B : A
+            {
+                public B(string _a, string _b)
+                    : base(_a)
+                {
+                    _B = _b;
+                }
+
+                public string _B { get; }
+            }
+        }
+
+        public class AbstractImmutableWithNullableVirtualBasePropertyCase : IClassFixture<MongoResource>
+        {
+            private MongoDbContextData _context;
+
+            public AbstractImmutableWithNullableVirtualBasePropertyCase(MongoResource mongoResource)
+            {
+                _context = CreateContext(mongoResource);
+            }
+
+            [Fact]
+            public async Task ApplyConvention_SerializeSuccessful()
+            {
+                // Arrange
+                IMongoCollection<A> collection = _context.CreateCollection<A>();
+
+                // Act
+                await collection.InsertOneAsync(new B("b"));
+
+                // Assert
+                B result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync() as B;
+                result.MatchSnapshot();
+            }
+
+            public abstract class A
+            {
+                public virtual string? _A { get; }
+            }
+
+            public class B : A
+            {
+                public B(string _b)
+                {
+                    _B = _b;
+                }
+
+                public string _B { get; }
+            }
+        }
+
+        public class AbstractImmutableWithVirtualBasePropertyOverriddenCase : IClassFixture<MongoResource>
+        {
+            private MongoDbContextData _context;
+
+            public AbstractImmutableWithVirtualBasePropertyOverriddenCase(MongoResource mongoResource)
+            {
+                _context = CreateContext(mongoResource);
+            }
+
+            [Fact(Skip = "Case to be covered")]
+            public async Task ApplyConvention_SerializeSuccessful()
+            {
+                // Arrange
+                IMongoCollection<A> collection = _context.CreateCollection<A>();
+
+                // Act
+                await collection.InsertOneAsync(new B("a", "b"));
+
+                // Assert
+                B result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync() as B;
+                result.MatchSnapshot();
+            }
+
+            public abstract class A
+            {
+                public virtual string? _A { get; }
+            }
+
+            public class B : A
+            {
+                public B(string _a, string _b)
+                {
+                    _A = _a;
+                    _B = _b;
+                }
+
+                public override string _A { get; }
+                public string _B { get; }
+            }
+        }
+
         private static MongoDbContextData CreateContext(MongoResource mongoResource)
         {
             var mongoOptions = new MongoOptions()

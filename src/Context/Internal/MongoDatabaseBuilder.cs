@@ -92,10 +92,18 @@ namespace MongoDB.Extensions.Context
         {
             var conventionPack = new ConventionPack
             {
+                new NamedIdMemberConvention(new string[3] { "Id", "id", "_id" }),
                 new EnumRepresentationConvention(BsonType.String),
-                new ImmutablePocoConvention(),
-                new IgnoreExtraElementsConvention(true)
+                new ImmutableConvention(),
+                new IgnoreExtraElementsConvention(true),
+                new StringObjectIdIdGeneratorConvention(),
+                new LookupIdGeneratorConvention()
             };
+
+            _registrationConventionActions.Add(
+                () => ConventionRegistry.Remove("__defaults__"));
+            _registrationConventionActions.Add(
+                () => ConventionRegistry.Remove("__attributes__"));
 
             _registrationConventionActions.Add(
                 () => RegisterConventions("DefaultConventions", conventionPack, filter));

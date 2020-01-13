@@ -6,18 +6,18 @@ using MongoDB.Bson.Serialization.Conventions;
 
 namespace MongoDB.Extensions.Context
 {
-    public class ImmutablePocoConvention
+    public class ImmutableConvention
         : ConventionBase
         , IClassMapConvention
     {
         private readonly BindingFlags _bindingFlags;
 
-        public ImmutablePocoConvention()
+        public ImmutableConvention()
             : this(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
         {
         }
 
-        public ImmutablePocoConvention(BindingFlags bindingFlags)
+        public ImmutableConvention(BindingFlags bindingFlags)
         {
             _bindingFlags = bindingFlags;
         }

@@ -2,7 +2,7 @@
   <Import Project="$(CCResourceProjectProps)" Condition="Exists('$(CCResourceProjectProps)')" />
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <AssemblyName>MongoDB.Extensions.Context</AssemblyName>
     <RootNamespace>MongoDB.Extensions.Context</RootNamespace>
     <PackageId>MongoDB.Extensions.Context</PackageId>

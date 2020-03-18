@@ -8,7 +8,7 @@ The MongoDB.Extension.Context library provides a bootstrapping context, which is
 
 ## Features
 
-- [x] MongoDB Bootstrapping
+- [x] MongoDB Bootstrapping Context
 - [ ] MongoDB Transactions (InProgress)
 
 ## Getting Started - MongoDB Bootstrapping

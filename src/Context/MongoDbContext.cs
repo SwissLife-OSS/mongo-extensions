@@ -6,18 +6,27 @@ namespace MongoDB.Extensions.Context
 {
     public abstract class MongoDbContext : IMongoDbContext
     {
-        private readonly MongoDbContextData _mongoDbContextData;
+        private MongoDbContextData _mongoDbContextData;
 
-        public MongoDbContext(MongoOptions mongoOptions)
+        private readonly object _lockObject = new object();
+
+        public MongoDbContext(MongoOptions mongoOptions) : this(mongoOptions, true)
         {
-            if(mongoOptions == null)
+        }
+
+        public MongoDbContext(MongoOptions mongoOptions, bool enableAutoInitialize)
+        {
+            if (mongoOptions == null)
                 throw new ArgumentNullException(nameof(mongoOptions));
 
             mongoOptions.Validate();
 
             MongoOptions = mongoOptions;
 
-            _mongoDbContextData = Initialize(mongoOptions);
+            if(enableAutoInitialize)
+            {
+                Initialize(mongoOptions);
+            }
         }
 
         public IMongoClient Client => _mongoDbContextData.Client;
@@ -31,13 +40,22 @@ namespace MongoDB.Extensions.Context
         
         protected abstract void OnConfiguring(IMongoDatabaseBuilder mongoDatabaseBuilder);
 
-        private MongoDbContextData Initialize(MongoOptions mongoOptions)
+        protected void Initialize(MongoOptions mongoOptions)
         {
-            var mongoDatabaseBuilder = new MongoDatabaseBuilder(mongoOptions);
+            if(_mongoDbContextData == null)
+            {
+                lock (_lockObject)
+                {
+                    if (_mongoDbContextData == null)
+                    {
+                        var mongoDatabaseBuilder = new MongoDatabaseBuilder(mongoOptions);
 
-            OnConfiguring(mongoDatabaseBuilder);
+                        OnConfiguring(mongoDatabaseBuilder);
 
-            return mongoDatabaseBuilder.Build();
+                        _mongoDbContextData = mongoDatabaseBuilder.Build();
+                    }
+                }
+            }
         }
     }
 }

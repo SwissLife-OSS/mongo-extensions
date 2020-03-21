@@ -358,6 +358,24 @@ namespace MongoDB.Extensions.Context.Tests
             // Assert
             Assert.Throws<ArgumentNullException>(registerSerializers);
         }
+
+        #endregion
+
+        #region DisableTableScan Tests
+
+        [Fact]
+        public void DisableTableScan_SetMongoServerTableScanToDisabled_MongoServerTableScanIsDisabled()
+        {
+            // Arrange
+            var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
+
+            // Act
+            mongoDatabaseBuilder.ConfigureDatabase(db => db.Client.DisableTableScan());
+            MongoDbContextData result = mongoDatabaseBuilder.Build();
+
+            // Assert
+            Assert.True(result.Client.IsTableScanDisabled());
+        }
         
         #endregion
 

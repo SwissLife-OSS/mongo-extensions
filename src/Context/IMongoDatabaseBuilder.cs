@@ -13,11 +13,13 @@ namespace MongoDB.Extensions.Context
             string name, IConventionPack conventions, Func<Type, bool> filter);
 
         IMongoDatabaseBuilder RegisterCamelCaseConventionPack();
-
+        
         IMongoDatabaseBuilder ConfigureCollection<TDocument>(
             IMongoCollectionConfiguration<TDocument> configuration) where TDocument : class;
 
         IMongoDatabaseBuilder ConfigureConnection(
             Action<MongoClientSettings> mongoClientSettingsAction);
+
+        IMongoDatabaseBuilder ConfigureDatabase(Action<IMongoDatabase> configureDatabase);
     }
 }

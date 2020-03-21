@@ -24,7 +24,8 @@ namespace MongoDB.Extensions.Context
         public IMongoClient Client { get; }
         public IMongoDatabase Database { get; }
 
-        internal IMongoCollection<TDocument> CreateCollection<TDocument>() where TDocument : class
+        internal IMongoCollection<TDocument> CreateCollection<TDocument>() 
+            where TDocument : class
         {
             MongoCollectionBuilder<TDocument> collectionBuilder =
                 TryGetCollectionBuilder<TDocument>();
@@ -37,7 +38,8 @@ namespace MongoDB.Extensions.Context
             return collectionBuilder.Build();
         }
 
-        private MongoCollectionBuilder<TDocument> TryGetCollectionBuilder<TDocument>() where TDocument : class
+        private MongoCollectionBuilder<TDocument> TryGetCollectionBuilder<TDocument>() 
+            where TDocument : class
         {
             MongoCollectionBuilder<TDocument> collectionBuilder = null;
 

@@ -14,6 +14,7 @@ namespace MongoDB.Extensions.Context
         private readonly List<Action> _registrationConventionActions;
         private readonly List<Action> _registrationSerializerActions;
         private readonly List<Action<MongoClientSettings>> _mongoClientSettingsActions;
+        private readonly List<Action<IMongoDatabase>> _databaseConfigurationActions;
         private readonly List<Action<IMongoDatabase, Dictionary<Type, object>>> _builderActions;
 
         private static readonly object _lockObject = new object();
@@ -32,6 +33,7 @@ namespace MongoDB.Extensions.Context
             _registrationConventionActions = new List<Action>();
             _registrationSerializerActions = new List<Action>();
             _mongoClientSettingsActions = new List<Action<MongoClientSettings>>();
+            _databaseConfigurationActions = new List<Action<IMongoDatabase>>();
             _builderActions = new List<Action<IMongoDatabase, Dictionary<Type, object>>>();
         }
         
@@ -119,6 +121,13 @@ namespace MongoDB.Extensions.Context
             return this;
         }
 
+        public IMongoDatabaseBuilder ConfigureDatabase(Action<IMongoDatabase> configureDatabase)
+        {
+            _databaseConfigurationActions.Add(configureDatabase);
+
+            return this;
+        }
+
         internal MongoDbContextData Build()
         {
             // synchronize registration
@@ -149,6 +158,9 @@ namespace MongoDB.Extensions.Context
             // create mongo database
             IMongoDatabase mongoDatabase = mongoClient
                 .GetDatabase(_mongoOptions.DatabaseName);
+
+            // configure mongo database
+            _databaseConfigurationActions.ForEach(configure => configure(mongoDatabase));
 
             // create mongo collection builders
             var mongoCollectionBuilders = new Dictionary<Type, object>();

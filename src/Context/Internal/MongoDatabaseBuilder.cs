@@ -94,7 +94,7 @@ namespace MongoDB.Extensions.Context
         {
             var conventionPack = new ConventionPack
             {
-                new NamedIdMemberConvention(new string[3] { "Id", "id", "_id" }),
+                new NamedIdMemberConvention("Id", "id", "_id"),
                 new EnumRepresentationConvention(BsonType.String),
                 new ImmutableConvention(),
                 new IgnoreExtraElementsConvention(true),

@@ -266,7 +266,7 @@ namespace MongoDB.Extensions.Context.Tests
             Assert.Throws<ArgumentNullException>(registrationAction);
         }
 
-        [Fact(Skip="TODO")]
+        [Fact]
         public void RegisterDefaultConventionPack_RegisteredSuccessfully()
         {
             // Arrange
@@ -277,14 +277,20 @@ namespace MongoDB.Extensions.Context.Tests
             MongoDbContextData result = mongoDatabaseBuilder.Build();
 
             // Assert
-            IEnumerable<IConvention> conventions = ConventionRegistry.Lookup(typeof(string)).Conventions;
-            int enumRepConvention = conventions.Count(convention => convention.Name == "EnumRepresentation");
-            int immutablePoco = conventions.Count(convention => convention.Name == "ImmutablePoco");
+            IEnumerable<IConvention> conventions = ConventionRegistry.Lookup(typeof(string)).Conventions.ToArray();
+            int namedIdMember = conventions.Count(convention => convention.Name == "NamedIdMember");
+            int enumRepresentation = conventions.Count(convention => convention.Name == "EnumRepresentation");
+            int immutable = conventions.Count(convention => convention.Name == "Immutable");
             int ignoreExtraElements = conventions.Count(convention => convention.Name == "IgnoreExtraElements");
+            int stringObjectIdIdGenerator = conventions.Count(convention => convention.Name == "StringObjectIdIdGenerator");
+            int lookupIdGenerator = conventions.Count(convention => convention.Name == "LookupIdGenerator");
 
-            Assert.Equal(1, enumRepConvention);
-            Assert.Equal(1, immutablePoco);
+            Assert.Equal(1, namedIdMember);
+            Assert.Equal(1, enumRepresentation);
+            Assert.Equal(1, immutable);
             Assert.Equal(1, ignoreExtraElements);
+            Assert.Equal(1, stringObjectIdIdGenerator);
+            Assert.Equal(1, lookupIdGenerator);
         }
 
         #endregion

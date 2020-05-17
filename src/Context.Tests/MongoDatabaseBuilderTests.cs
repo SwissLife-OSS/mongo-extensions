@@ -267,30 +267,43 @@ namespace MongoDB.Extensions.Context.Tests
         }
 
         [Fact]
+        public void RegisterImmutableConventionPack_RegisteredSuccessfully()
+        {
+            // Arrange
+            var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
+            mongoDatabaseBuilder.RegisterImmutableConventionPack();
+
+            // Act
+            mongoDatabaseBuilder.Build();
+
+            // Assert
+            IEnumerable<IConvention> conventions = ConventionRegistry.Lookup(typeof(string)).Conventions;
+            int immutable = conventions.OfType<ImmutableConvention>().Count();
+            int ignoreExtraElements = conventions.OfType<IgnoreExtraElementsConvention>().Count();
+
+            Assert.Equal(1, immutable);
+            Assert.Equal(2, ignoreExtraElements);
+        }
+
+        [Fact]
         public void RegisterDefaultConventionPack_RegisteredSuccessfully()
         {
             // Arrange
             var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
-            mongoDatabaseBuilder.RegisterDefaultConventionPack(t => true);
+            mongoDatabaseBuilder.RegisterDefaultConventionPack();
 
             // Act
             MongoDbContextData result = mongoDatabaseBuilder.Build();
 
             // Assert
-            IEnumerable<IConvention> conventions = ConventionRegistry.Lookup(typeof(string)).Conventions.ToArray();
-            int namedIdMember = conventions.Count(convention => convention.Name == "NamedIdMember");
-            int enumRepresentation = conventions.Count(convention => convention.Name == "EnumRepresentation");
-            int immutable = conventions.Count(convention => convention.Name == "Immutable");
-            int ignoreExtraElements = conventions.Count(convention => convention.Name == "IgnoreExtraElements");
-            int stringObjectIdIdGenerator = conventions.Count(convention => convention.Name == "StringObjectIdIdGenerator");
-            int lookupIdGenerator = conventions.Count(convention => convention.Name == "LookupIdGenerator");
+            IEnumerable<IConvention> conventions = ConventionRegistry.Lookup(typeof(string)).Conventions;
+            int enumRepresentation = conventions.OfType<EnumRepresentationConvention>().Count(c => c.Representation == BsonType.String);
+            int immutable = conventions.OfType<ImmutableConvention>().Count();
+            int ignoreExtraElements = conventions.OfType<IgnoreExtraElementsConvention>().Count();
 
-            Assert.Equal(1, namedIdMember);
             Assert.Equal(1, enumRepresentation);
             Assert.Equal(1, immutable);
-            Assert.Equal(1, ignoreExtraElements);
-            Assert.Equal(1, stringObjectIdIdGenerator);
-            Assert.Equal(1, lookupIdGenerator);
+            Assert.Equal(2, ignoreExtraElements);
         }
 
         #endregion

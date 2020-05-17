@@ -6,7 +6,7 @@ using MongoDB.Bson.Serialization.Conventions;
 
 namespace MongoDB.Extensions.Context
 {
-    public class ImmutableConvention
+    internal class ImmutableConvention
         : ConventionBase
         , IClassMapConvention
     {

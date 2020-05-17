@@ -90,25 +90,26 @@ namespace MongoDB.Extensions.Context
             return this;
         }
 
-        public IMongoDatabaseBuilder RegisterDefaultConventionPack(Func<Type, bool> filter)
+        public IMongoDatabaseBuilder RegisterDefaultConventionPack()
         {
             var conventionPack = new ConventionPack
             {
-                new NamedIdMemberConvention("Id", "id", "_id"),
                 new EnumRepresentationConvention(BsonType.String),
                 new ImmutableConvention(),
-                new IgnoreExtraElementsConvention(true),
-                new StringObjectIdIdGeneratorConvention(),
-                new LookupIdGeneratorConvention()
+                new IgnoreExtraElementsConvention(true)
             };
+            RegisterConventionPack("Default", conventionPack, t => true);
 
-            _registrationConventionActions.Add(
-                () => ConventionRegistry.Remove("__defaults__"));
-            _registrationConventionActions.Add(
-                () => ConventionRegistry.Remove("__attributes__"));
+            return this;
+        }
 
-            _registrationConventionActions.Add(
-                () => RegisterConventions("DefaultConventions", conventionPack, filter));
+        public IMongoDatabaseBuilder RegisterImmutableConventionPack()
+        {
+            RegisterConventionPack("Immutable", new ConventionPack
+            {
+                new ImmutableConvention(),
+                new IgnoreExtraElementsConvention(true)
+            }, t => true);
 
             return this;
         }

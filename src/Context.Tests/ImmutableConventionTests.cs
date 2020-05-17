@@ -300,7 +300,7 @@ namespace MongoDB.Extensions.Context.Tests
                 DatabaseName = mongoResource.CreateDatabase().DatabaseNamespace.DatabaseName
             };
             var builder = new MongoDatabaseBuilder(mongoOptions);
-            builder.RegisterDefaultConventionPack(f => true);
+            builder.RegisterImmutableConventionPack();
             return builder.Build();
         }
     }

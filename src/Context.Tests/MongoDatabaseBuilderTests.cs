@@ -117,11 +117,8 @@ namespace MongoDB.Extensions.Context.Tests
 
             // Assert
             IEnumerable<IConvention> conventions = ConventionRegistry.Lookup(typeof(string)).Conventions;
-            int enumRepConvention = conventions.Count(convention => convention.Name == "EnumRepresentation");
-            int camelCaseConvention = conventions.Count(convention => convention.Name == "CamelCaseElementName");
-
-            Assert.Equal(1, enumRepConvention);
-            Assert.Equal(1, camelCaseConvention);
+            Assert.NotNull(conventions.OfType<EnumRepresentationConvention>().FirstOrDefault(c => c.Representation == BsonType.String));
+            Assert.NotNull(conventions.OfType<CamelCaseElementNameConvention>().FirstOrDefault());
         }
 
         [Fact]
@@ -278,11 +275,8 @@ namespace MongoDB.Extensions.Context.Tests
 
             // Assert
             IEnumerable<IConvention> conventions = ConventionRegistry.Lookup(typeof(string)).Conventions;
-            int immutable = conventions.OfType<ImmutableConvention>().Count();
-            int ignoreExtraElements = conventions.OfType<IgnoreExtraElementsConvention>().Count();
-
-            Assert.Equal(1, immutable);
-            Assert.Equal(2, ignoreExtraElements);
+            Assert.NotNull(conventions.OfType<ImmutableConvention>().FirstOrDefault());
+            Assert.NotNull(conventions.OfType<IgnoreExtraElementsConvention>().FirstOrDefault());
         }
 
         [Fact]
@@ -297,13 +291,9 @@ namespace MongoDB.Extensions.Context.Tests
 
             // Assert
             IEnumerable<IConvention> conventions = ConventionRegistry.Lookup(typeof(string)).Conventions;
-            int enumRepresentation = conventions.OfType<EnumRepresentationConvention>().Count(c => c.Representation == BsonType.String);
-            int immutable = conventions.OfType<ImmutableConvention>().Count();
-            int ignoreExtraElements = conventions.OfType<IgnoreExtraElementsConvention>().Count();
-
-            Assert.Equal(1, enumRepresentation);
-            Assert.Equal(1, immutable);
-            Assert.Equal(2, ignoreExtraElements);
+            Assert.NotNull(conventions.OfType<EnumRepresentationConvention>().FirstOrDefault(c => c.Representation == BsonType.String));
+            Assert.NotNull(conventions.OfType<IgnoreExtraElementsConvention>().FirstOrDefault());
+            Assert.NotNull(conventions.OfType<ImmutableConvention>().FirstOrDefault());
         }
 
         #endregion

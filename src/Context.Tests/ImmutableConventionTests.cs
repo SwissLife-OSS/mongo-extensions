@@ -10,7 +10,7 @@ namespace MongoDB.Extensions.Context.Tests
     {
         public class SimpleImmutableCase : IClassFixture<MongoResource>
         {
-            private MongoDbContextData _context;
+            private readonly MongoDbContextData _context;
 
             public SimpleImmutableCase(MongoResource mongoResource)
             {
@@ -44,7 +44,7 @@ namespace MongoDB.Extensions.Context.Tests
 
         public class SimpleImmutableWithInterfaceCase : IClassFixture<MongoResource>
         {
-            private MongoDbContextData _context;
+            private readonly MongoDbContextData _context;
 
             public SimpleImmutableWithInterfaceCase(MongoResource mongoResource)
             {
@@ -83,7 +83,7 @@ namespace MongoDB.Extensions.Context.Tests
 
         public class AbstractImmutableWithBasePropertyCase : IClassFixture<MongoResource>
         {
-            private MongoDbContextData _context;
+            private readonly MongoDbContextData _context;
 
             public AbstractImmutableWithBasePropertyCase(MongoResource mongoResource)
             {
@@ -128,7 +128,7 @@ namespace MongoDB.Extensions.Context.Tests
 
         public class AbstractImmutableWithAbstractBasePropertyCase : IClassFixture<MongoResource>
         {
-            private MongoDbContextData _context;
+            private readonly MongoDbContextData _context;
 
             public AbstractImmutableWithAbstractBasePropertyCase(MongoResource mongoResource)
             {
@@ -169,7 +169,7 @@ namespace MongoDB.Extensions.Context.Tests
 
         public class AbstractImmutableWithVirtualBasePropertyCase : IClassFixture<MongoResource>
         {
-            private MongoDbContextData _context;
+            private readonly MongoDbContextData _context;
 
             public AbstractImmutableWithVirtualBasePropertyCase(MongoResource mongoResource)
             {
@@ -214,7 +214,7 @@ namespace MongoDB.Extensions.Context.Tests
 
         public class AbstractImmutableWithNullableVirtualBasePropertyCase : IClassFixture<MongoResource>
         {
-            private MongoDbContextData _context;
+            private readonly MongoDbContextData _context;
 
             public AbstractImmutableWithNullableVirtualBasePropertyCase(MongoResource mongoResource)
             {
@@ -253,7 +253,7 @@ namespace MongoDB.Extensions.Context.Tests
 
         public class AbstractImmutableWithVirtualBasePropertyOverriddenCase : IClassFixture<MongoResource>
         {
-            private MongoDbContextData _context;
+            private readonly MongoDbContextData _context;
 
             public AbstractImmutableWithVirtualBasePropertyOverriddenCase(MongoResource mongoResource)
             {
@@ -294,7 +294,7 @@ namespace MongoDB.Extensions.Context.Tests
 
         private static MongoDbContextData CreateContext(MongoResource mongoResource)
         {
-            var mongoOptions = new MongoOptions()
+            var mongoOptions = new MongoOptions
             {
                 ConnectionString = mongoResource.ConnectionString,
                 DatabaseName = mongoResource.CreateDatabase().DatabaseNamespace.DatabaseName

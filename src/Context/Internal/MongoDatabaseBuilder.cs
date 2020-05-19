@@ -90,6 +90,30 @@ namespace MongoDB.Extensions.Context
             return this;
         }
 
+        public IMongoDatabaseBuilder RegisterDefaultConventionPack()
+        {
+            var conventionPack = new ConventionPack
+            {
+                new EnumRepresentationConvention(BsonType.String),
+                new ImmutableConvention(),
+                new IgnoreExtraElementsConvention(true)
+            };
+            RegisterConventionPack("Default", conventionPack, t => true);
+
+            return this;
+        }
+
+        public IMongoDatabaseBuilder RegisterImmutableConventionPack()
+        {
+            RegisterConventionPack("Immutable", new ConventionPack
+            {
+                new ImmutableConvention(),
+                new IgnoreExtraElementsConvention(true)
+            }, t => true);
+
+            return this;
+        }
+
         public IMongoDatabaseBuilder RegisterSerializer<T>(IBsonSerializer<T> serializer)
         {
             _registrationSerializerActions.Add(

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MongoDB.Bson;
@@ -75,7 +75,7 @@ namespace MongoDB.Extensions.Context.Tests
             // Assert
             Assert.Equal(ReadPreference.Primary, result.Client.Settings.ReadPreference);
             Assert.Equal(ReadConcern.Majority, result.Client.Settings.ReadConcern);
-            Assert.Equal(WriteConcern.WMajority.With(journal: true), 
+            Assert.Equal(WriteConcern.WMajority.With(journal: true),
                          result.Client.Settings.WriteConcern);
         }
 
@@ -104,7 +104,7 @@ namespace MongoDB.Extensions.Context.Tests
         {
             // Arrange
             var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
-            
+
             mongoDatabaseBuilder.RegisterConventionPack(
                 "camelCase", new ConventionPack
                 {
@@ -117,11 +117,8 @@ namespace MongoDB.Extensions.Context.Tests
 
             // Assert
             IEnumerable<IConvention> conventions = ConventionRegistry.Lookup(typeof(string)).Conventions;
-            int enumRepConvention = conventions.Count(convention => convention.Name == "EnumRepresentation");
-            int camelCaseConvention = conventions.Count(convention => convention.Name == "CamelCaseElementName");
-
-            Assert.Equal(1, enumRepConvention);
-            Assert.Equal(1, camelCaseConvention);
+            Assert.NotNull(conventions.OfType<EnumRepresentationConvention>().FirstOrDefault(c => c.Representation == BsonType.String));
+            Assert.NotNull(conventions.OfType<CamelCaseElementNameConvention>().FirstOrDefault());
         }
 
         [Fact]
@@ -218,7 +215,7 @@ namespace MongoDB.Extensions.Context.Tests
         {
             // Arrange
             var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
-            
+
             // Act
             MongoDbContextData result = mongoDatabaseBuilder.Build();
 
@@ -230,7 +227,7 @@ namespace MongoDB.Extensions.Context.Tests
             Assert.Equal(0, enumRepConvention);
             Assert.Equal(0, camelCaseConvention);
         }
-        
+
         [Fact]
         public void RegisterConventionPack_NullConventionPackRegistered_ThrowsException()
         {
@@ -266,6 +263,39 @@ namespace MongoDB.Extensions.Context.Tests
             Assert.Throws<ArgumentNullException>(registrationAction);
         }
 
+        [Fact]
+        public void RegisterImmutableConventionPack_RegisteredSuccessfully()
+        {
+            // Arrange
+            var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
+            mongoDatabaseBuilder.RegisterImmutableConventionPack();
+
+            // Act
+            mongoDatabaseBuilder.Build();
+
+            // Assert
+            IEnumerable<IConvention> conventions = ConventionRegistry.Lookup(typeof(string)).Conventions;
+            Assert.NotNull(conventions.OfType<ImmutableConvention>().FirstOrDefault());
+            Assert.NotNull(conventions.OfType<IgnoreExtraElementsConvention>().FirstOrDefault());
+        }
+
+        [Fact]
+        public void RegisterDefaultConventionPack_RegisteredSuccessfully()
+        {
+            // Arrange
+            var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
+            mongoDatabaseBuilder.RegisterDefaultConventionPack();
+
+            // Act
+            MongoDbContextData result = mongoDatabaseBuilder.Build();
+
+            // Assert
+            IEnumerable<IConvention> conventions = ConventionRegistry.Lookup(typeof(string)).Conventions;
+            Assert.NotNull(conventions.OfType<EnumRepresentationConvention>().FirstOrDefault(c => c.Representation == BsonType.String));
+            Assert.NotNull(conventions.OfType<IgnoreExtraElementsConvention>().FirstOrDefault());
+            Assert.NotNull(conventions.OfType<ImmutableConvention>().FirstOrDefault());
+        }
+
         #endregion
 
         #region RegisterSerializer Tests
@@ -293,7 +323,7 @@ namespace MongoDB.Extensions.Context.Tests
         {
             // Arrange
             var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
-            
+
             // Act
             mongoDatabaseBuilder.Build();
 
@@ -301,7 +331,7 @@ namespace MongoDB.Extensions.Context.Tests
             IBsonSerializer<NoSerializerRegistered> registeredSerializer =
                 BsonSerializer.LookupSerializer<NoSerializerRegistered>();
 
-            Assert.True(registeredSerializer is 
+            Assert.True(registeredSerializer is
                 BsonClassMapSerializer<NoSerializerRegistered>);
         }
 
@@ -312,10 +342,10 @@ namespace MongoDB.Extensions.Context.Tests
             var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
             var firstSerializer = new DuplicateRegisteredSerializer();
             var secondSerializer = new DuplicateRegisteredSerializer();
-            
+
             mongoDatabaseBuilder.RegisterSerializer<DuplicateType>(firstSerializer);
             mongoDatabaseBuilder.RegisterSerializer<DuplicateType>(secondSerializer);
-            
+
             // Act
             mongoDatabaseBuilder.Build();
 
@@ -349,7 +379,7 @@ namespace MongoDB.Extensions.Context.Tests
         {
             // Arrange
             var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
-            
+
             mongoDatabaseBuilder.RegisterSerializer<NullTestType>(null);
 
             // Act
@@ -376,7 +406,7 @@ namespace MongoDB.Extensions.Context.Tests
             // Assert
             Assert.True(result.Client.IsTableScanDisabled());
         }
-        
+
         #endregion
 
         #region Private Helpers

@@ -9,14 +9,25 @@ namespace MongoDB.Extensions.Context
 
         private readonly object _lockObject = new object();
 
-        protected MongoDbContext(MongoOptions mongoOptions)
+        public MongoDbContext(MongoOptions mongoOptions) : this(mongoOptions, false)
+        {
+        }
+
+        [Obsolete]
+        public MongoDbContext(MongoOptions mongoOptions, bool enableAutoInitialize)
         {
             if (mongoOptions == null)
-            {
                 throw new ArgumentNullException(nameof(mongoOptions));
-            }
 
-            MongoOptions = mongoOptions.Validate();
+            mongoOptions.Validate();
+
+            MongoOptions = mongoOptions;
+
+            // This initialization should be removed and switched to Lazy initialization.
+            if (enableAutoInitialize)
+            {
+                Initialize(mongoOptions);
+            }
         }
 
         public IMongoClient Client
@@ -49,6 +60,12 @@ namespace MongoDB.Extensions.Context
         protected abstract void OnConfiguring(IMongoDatabaseBuilder mongoDatabaseBuilder);
 
         private void EnsureInitialized()
+        {
+            Initialize(MongoOptions);
+        }
+
+        [Obsolete]
+        protected void Initialize(MongoOptions mongoOptions)
         {
             if(_mongoDbContextData == null)
             {

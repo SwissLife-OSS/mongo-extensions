@@ -23,6 +23,30 @@ namespace MongoDB.Extensions.Context.Tests
         #region Constructor Tests
 
         [Fact]
+        public void Constructor_AutoInitializeManual_InitializationExecuted()
+        {
+            // Arrange
+
+            // Act
+            var testMongoDbContext = new TestMongoDbContext(_mongoOptions, true);
+
+            // Assert
+            Assert.True(testMongoDbContext.IsInitialized);
+        }
+
+        [Fact]
+        public void Constructor_NoInitializeManual_InitializationExecuted()
+        {
+            // Arrange
+
+            // Act
+            var testMongoDbContext = new TestMongoDbContext(_mongoOptions, false);
+
+            // Assert
+            Assert.False(testMongoDbContext.IsInitialized);
+        }
+
+        [Fact]
         public void Constructor_DatabaseAccess_InitializationExecuted()
         {
             // Arrange
@@ -81,6 +105,11 @@ namespace MongoDB.Extensions.Context.Tests
         private class TestMongoDbContext : MongoDbContext
         {
             public TestMongoDbContext(MongoOptions mongoOptions) : base(mongoOptions)
+            {
+            }
+
+            public TestMongoDbContext(MongoOptions mongoOptions, bool enableAutoInit)
+                : base(mongoOptions, enableAutoInit)
             {
             }
 

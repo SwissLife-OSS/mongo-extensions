@@ -1,7 +1,6 @@
 using System;
 using MongoDB.Driver;
 
-
 namespace MongoDB.Extensions.Context
 {
     public abstract class MongoDbContext : IMongoDbContext
@@ -10,10 +9,11 @@ namespace MongoDB.Extensions.Context
 
         private readonly object _lockObject = new object();
 
-        public MongoDbContext(MongoOptions mongoOptions) : this(mongoOptions, true)
+        public MongoDbContext(MongoOptions mongoOptions) : this(mongoOptions, false)
         {
         }
 
+        [Obsolete]
         public MongoDbContext(MongoOptions mongoOptions, bool enableAutoInitialize)
         {
             if (mongoOptions == null)
@@ -23,23 +23,48 @@ namespace MongoDB.Extensions.Context
 
             MongoOptions = mongoOptions;
 
-            if(enableAutoInitialize)
+            // This initialization should be removed and switched to Lazy initialization.
+            if (enableAutoInitialize)
             {
                 Initialize(mongoOptions);
             }
         }
 
-        public IMongoClient Client => _mongoDbContextData.Client;
-        public IMongoDatabase Database => _mongoDbContextData.Database;
+        public IMongoClient Client
+        {
+            get
+            {
+                EnsureInitialized();
+                return _mongoDbContextData.Client;
+            }
+        }
+
+        public IMongoDatabase Database
+        {
+            get
+            {
+                EnsureInitialized();
+                return _mongoDbContextData.Database;
+            }
+        }
+
         public MongoOptions MongoOptions { get; }
         
-        public IMongoCollection<TDocument> CreateCollection<TDocument>() where TDocument : class
+        public IMongoCollection<TDocument> CreateCollection<TDocument>()
+            where TDocument : class
         {
+            EnsureInitialized();
             return _mongoDbContextData.CreateCollection<TDocument>();
         }
         
         protected abstract void OnConfiguring(IMongoDatabaseBuilder mongoDatabaseBuilder);
 
+        private void EnsureInitialized()
+        {
+            Initialize(MongoOptions);
+        }
+
+        [Obsolete]
         protected void Initialize(MongoOptions mongoOptions)
         {
             if(_mongoDbContextData == null)
@@ -48,7 +73,7 @@ namespace MongoDB.Extensions.Context
                 {
                     if (_mongoDbContextData == null)
                     {
-                        var mongoDatabaseBuilder = new MongoDatabaseBuilder(mongoOptions);
+                        var mongoDatabaseBuilder = new MongoDatabaseBuilder(MongoOptions);
 
                         OnConfiguring(mongoDatabaseBuilder);
 

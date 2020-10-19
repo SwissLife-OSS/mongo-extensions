@@ -47,7 +47,7 @@ namespace MongoDB.Extensions.Context.Tests
         }
 
         [Fact]
-        public void Constructor_DatabaseAccess_InitializationExecuted()
+        public void Constructor_Database_InitializationExecuted()
         {
             // Arrange
             var testMongoDbContext = new TestMongoDbContext(_mongoOptions);
@@ -73,7 +73,7 @@ namespace MongoDB.Extensions.Context.Tests
         }
 
         [Fact]
-        public void Constructor_ClientAccess_InitializationExecuted()
+        public void Constructor_Client_InitializationExecuted()
         {
             // Arrange
             var testMongoDbContext = new TestMongoDbContext(_mongoOptions);
@@ -86,7 +86,7 @@ namespace MongoDB.Extensions.Context.Tests
         }
 
         [Fact]
-        public void Constructor_ClientAccess_InitializationNotExecuted()
+        public void Constructor_MongoOptions_InitializationNotExecuted()
         {
             // Arrange
             var testMongoDbContext = new TestMongoDbContext(_mongoOptions);

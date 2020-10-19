@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using Squadron;
 using Xunit;
 
@@ -22,36 +23,52 @@ namespace MongoDB.Extensions.Context.Tests
         #region Constructor Tests
 
         [Fact]
-        public void Constructor_AutoInitializeDefault_InitializationExecuted()
+        public void Constructor_DatabaseAccess_InitializationExecuted()
         {
             // Arrange
-            
-            // Act
             var testMongoDbContext = new TestMongoDbContext(_mongoOptions);
 
-            // Assert
-            Assert.True(testMongoDbContext.IsInitialized);
-        }
-
-        [Fact]
-        public void Constructor_AutoInitializeManual_InitializationExecuted()
-        {
-            // Arrange
-            
             // Act
-            var testMongoDbContext = new TestMongoDbContext(_mongoOptions, true);
+            _ = testMongoDbContext.Database;
 
             // Assert
             Assert.True(testMongoDbContext.IsInitialized);
         }
 
         [Fact]
-        public void Constructor_NoInitializeManual_InitializationExecuted()
+        public void Constructor_CreateCollection_InitializationExecuted()
         {
             // Arrange
+            var testMongoDbContext = new TestMongoDbContext(_mongoOptions);
 
             // Act
-            var testMongoDbContext = new TestMongoDbContext(_mongoOptions, false);
+            testMongoDbContext.CreateCollection<BsonDocument>();
+
+            // Assert
+            Assert.True(testMongoDbContext.IsInitialized);
+        }
+
+        [Fact]
+        public void Constructor_ClientAccess_InitializationExecuted()
+        {
+            // Arrange
+            var testMongoDbContext = new TestMongoDbContext(_mongoOptions);
+
+            // Act
+            _ = testMongoDbContext.Client;
+
+            // Assert
+            Assert.True(testMongoDbContext.IsInitialized);
+        }
+
+        [Fact]
+        public void Constructor_ClientAccess_InitializationNotExecuted()
+        {
+            // Arrange
+            var testMongoDbContext = new TestMongoDbContext(_mongoOptions);
+
+            // Act
+            _ = testMongoDbContext.MongoOptions;
 
             // Assert
             Assert.False(testMongoDbContext.IsInitialized);
@@ -64,11 +81,6 @@ namespace MongoDB.Extensions.Context.Tests
         private class TestMongoDbContext : MongoDbContext
         {
             public TestMongoDbContext(MongoOptions mongoOptions) : base(mongoOptions)
-            {
-            }
-
-            public TestMongoDbContext(MongoOptions mongoOptions, bool enableAutoInit) 
-                : base(mongoOptions, enableAutoInit)
             {
             }
 

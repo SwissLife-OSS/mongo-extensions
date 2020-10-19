@@ -39,7 +39,8 @@ namespace MongoDB.Extensions.Context
 
         public MongoOptions MongoOptions { get; }
         
-        public IMongoCollection<TDocument> CreateCollection<TDocument>() where TDocument : class
+        public IMongoCollection<TDocument> CreateCollection<TDocument>()
+            where TDocument : class
         {
             EnsureInitialized();
             return _mongoDbContextData.CreateCollection<TDocument>();
@@ -47,7 +48,7 @@ namespace MongoDB.Extensions.Context
         
         protected abstract void OnConfiguring(IMongoDatabaseBuilder mongoDatabaseBuilder);
 
-        internal void EnsureInitialized()
+        private void EnsureInitialized()
         {
             if(_mongoDbContextData == null)
             {

@@ -81,6 +81,78 @@ namespace MongoDB.Extensions.Context.Tests
             }
         }
 
+        public class NullableReferenceTypeCase : IClassFixture<MongoResource>
+        {
+            private readonly MongoDbContextData _context;
+
+            public NullableReferenceTypeCase(MongoResource mongoResource)
+            {
+                _context = CreateContext(mongoResource);
+            }
+
+            [Fact]
+            public async Task ApplyConvention_SerializeSuccessful()
+            {
+                // Arrange
+                IMongoCollection<A> collection = _context.CreateCollection<A>();
+
+                // Act
+                await collection.InsertOneAsync(new A("a"));
+
+                // Assert
+                A result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync();
+                result.MatchSnapshot();
+            }
+
+            public class A
+            {
+                public A(string _a, string? _b = default)
+                {
+                    _A = _a;
+                    _B = _b;
+                }
+
+                public string _A { get; }
+                public string? _B { get; }
+            }
+        }
+
+        public class NullableValueTypeCase : IClassFixture<MongoResource>
+        {
+            private readonly MongoDbContextData _context;
+
+            public NullableValueTypeCase(MongoResource mongoResource)
+            {
+                _context = CreateContext(mongoResource);
+            }
+
+            [Fact]
+            public async Task ApplyConvention_SerializeSuccessful()
+            {
+                // Arrange
+                IMongoCollection<A> collection = _context.CreateCollection<A>();
+
+                // Act
+                await collection.InsertOneAsync(new A("a"));
+
+                // Assert
+                A result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync();
+                result.MatchSnapshot();
+            }
+
+            public class A
+            {
+                public A(string _a, int? _b = default)
+                {
+                    _A = _a;
+                    _B = _b;
+                }
+
+                public string _A { get; }
+                public int? _B { get; }
+            }
+        }
+
         public class AbstractImmutableWithBasePropertyCase : IClassFixture<MongoResource>
         {
             private readonly MongoDbContextData _context;

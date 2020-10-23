@@ -11,8 +11,6 @@ namespace MongoDB.Extensions.Context
         , IClassMapConvention
     {
         private readonly BindingFlags _bindingFlags;
-        private readonly string _nullableAttributeFullName =
-            "System.Runtime.CompilerServices.NullableAttribute";
 
         public ImmutableConvention()
             : this(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
@@ -29,7 +27,6 @@ namespace MongoDB.Extensions.Context
             var properties = classMap.ClassType
                 .GetTypeInfo()
                 .GetProperties(_bindingFlags)
-                .Where(p => !IsNullableProperty(p))
                 .ToList();
 
             var mappingProperties = properties
@@ -93,12 +90,6 @@ namespace MongoDB.Extensions.Context
                        parameter.Name,
                        System.StringComparison.InvariantCultureIgnoreCase) &&
                    parameter.ParameterType == property.PropertyType;
-        }
-
-        private bool IsNullableProperty(PropertyInfo propertyInfo)
-        {
-            return propertyInfo.CustomAttributes
-                .Any(a => a.AttributeType.FullName == _nullableAttributeFullName);
         }
 
         private static bool IsReadOnlyProperty(

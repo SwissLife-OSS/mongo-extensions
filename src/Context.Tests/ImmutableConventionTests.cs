@@ -91,13 +91,27 @@ namespace MongoDB.Extensions.Context.Tests
             }
 
             [Fact]
-            public async Task ApplyConvention_SerializeSuccessful()
+            public async Task ApplyConvention_WithoutValue_SerializeSuccessful()
             {
                 // Arrange
                 IMongoCollection<A> collection = _context.CreateCollection<A>();
 
                 // Act
                 await collection.InsertOneAsync(new A("a"));
+
+                // Assert
+                A result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync();
+                result.MatchSnapshot();
+            }
+
+            [Fact]
+            public async Task ApplyConvention_WithValue_SerializeSuccessful()
+            {
+                // Arrange
+                IMongoCollection<A> collection = _context.CreateCollection<A>();
+
+                // Act
+                await collection.InsertOneAsync(new A("a", "b"));
 
                 // Assert
                 A result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync();
@@ -127,13 +141,27 @@ namespace MongoDB.Extensions.Context.Tests
             }
 
             [Fact]
-            public async Task ApplyConvention_SerializeSuccessful()
+            public async Task ApplyConvention_WithoutValue_SerializeSuccessful()
             {
                 // Arrange
                 IMongoCollection<A> collection = _context.CreateCollection<A>();
 
                 // Act
                 await collection.InsertOneAsync(new A("a"));
+
+                // Assert
+                A result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync();
+                result.MatchSnapshot();
+            }
+
+            [Fact]
+            public async Task ApplyConvention_WithValue_SerializeSuccessful()
+            {
+                // Arrange
+                IMongoCollection<A> collection = _context.CreateCollection<A>();
+
+                // Act
+                await collection.InsertOneAsync(new A("a", 9));
 
                 // Assert
                 A result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync();

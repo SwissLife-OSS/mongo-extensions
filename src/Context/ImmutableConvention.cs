@@ -13,6 +13,7 @@ namespace MongoDB.Extensions.Context
         private readonly BindingFlags _bindingFlags;
         private readonly string _nullableAttributeFullName =
             "System.Runtime.CompilerServices.NullableAttribute";
+
         public ImmutableConvention()
             : this(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
         {

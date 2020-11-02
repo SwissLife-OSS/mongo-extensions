@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using Snapshooter.Xunit;
 using Squadron;
@@ -6,7 +7,7 @@ using Xunit;
 
 namespace MongoDB.Extensions.Context.Tests
 {
-    public class ImmutableConventionTests 
+    public class ImmutableConventionTests
     {
         public class SimpleImmutableCase : IClassFixture<MongoResource>
         {
@@ -101,6 +102,23 @@ namespace MongoDB.Extensions.Context.Tests
 
                 // Assert
                 A result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync();
+                result.MatchSnapshot();
+            }
+
+            [Fact]
+            public async Task ApplyConvention_WithoutValueInDb_SerializeSuccessful()
+            {
+                // Arrange
+                IMongoCollection<A> collectionTyped =
+                    _context.Database.GetCollection<A>("test");
+                IMongoCollection<BsonDocument> collectionUntyped =
+                    _context.Database.GetCollection<BsonDocument>("test");
+
+                // Act
+                await collectionUntyped.InsertOneAsync(new BsonDocument {{"_A", "a"}});
+
+                // Assert
+                A result = await collectionTyped.FindSync(FilterDefinition<A>.Empty).FirstAsync();
                 result.MatchSnapshot();
             }
 

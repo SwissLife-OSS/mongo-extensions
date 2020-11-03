@@ -9,24 +9,22 @@ namespace MongoDB.Extensions.Context
 
         private readonly object _lockObject = new object();
 
-        public MongoDbContext(MongoOptions mongoOptions) : this(mongoOptions, false)
+        public MongoDbContext(MongoOptions mongoOptions) : this(mongoOptions, true)
         {
         }
 
-        [Obsolete]
         public MongoDbContext(MongoOptions mongoOptions, bool enableAutoInitialize)
         {
             if (mongoOptions == null)
+            {
                 throw new ArgumentNullException(nameof(mongoOptions));
+            }
 
-            mongoOptions.Validate();
+            MongoOptions = mongoOptions.Validate();
 
-            MongoOptions = mongoOptions;
-
-            // This initialization should be removed and switched to Lazy initialization.
             if (enableAutoInitialize)
             {
-                Initialize(mongoOptions);
+                Initialize();
             }
         }
 
@@ -61,11 +59,19 @@ namespace MongoDB.Extensions.Context
 
         private void EnsureInitialized()
         {
-            Initialize(MongoOptions);
+            if (_mongoDbContextData == null)
+            {
+                lock (_lockObject)
+                {
+                    if (_mongoDbContextData == null)
+                    {
+                        throw new InvalidOperationException("MongoDbContext not initialized.");
+                    }
+                }
+            }
         }
 
-        [Obsolete]
-        protected void Initialize(MongoOptions mongoOptions)
+        public virtual void Initialize()
         {
             if(_mongoDbContextData == null)
             {

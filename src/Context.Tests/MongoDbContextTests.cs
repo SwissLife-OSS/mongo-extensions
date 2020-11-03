@@ -29,7 +29,7 @@ namespace MongoDB.Extensions.Context.Tests
             // Arrange
 
             // Act
-            var testMongoDbContext = new TestMongoDbContext(_mongoOptions, true);
+            var testMongoDbContext = new TestMongoDbContext(_mongoOptions);
 
             // Assert
             Assert.True(testMongoDbContext.IsInitialized);

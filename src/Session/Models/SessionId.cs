@@ -2,7 +2,7 @@ using System;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace MongoDB.Extensions.Context
+namespace MongoDB.Extensions.Session
 {
     [BsonNoId]
     internal readonly struct SessionId

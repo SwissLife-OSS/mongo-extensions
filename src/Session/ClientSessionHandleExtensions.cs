@@ -1,7 +1,7 @@
 using System;
 using MongoDB.Driver;
 
-namespace MongoDB.Extensions.Context
+namespace MongoDB.Extensions.Session
 {
     public static class ClientSessionHandleExtensions
     {

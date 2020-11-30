@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.0;netcoreapp3.1</TargetFrameworks>
-    <AssemblyName>MongoDB.Extensions.Context.Tests</AssemblyName>
-    <RootNamespace>MongoDB.Extensions.Context.Tests</RootNamespace>
+    <AssemblyName>MongoDB.Extensions.Session.Tests</AssemblyName>
+    <RootNamespace>MongoDB.Extensions.Session.Tests</RootNamespace>
     <IsPackable>false</IsPackable>
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Context\Context.csproj" />
+    <ProjectReference Include="..\Session\Session.csproj" />
   </ItemGroup>
 
 </Project>

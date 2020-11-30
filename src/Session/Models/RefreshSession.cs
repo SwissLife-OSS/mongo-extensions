@@ -1,6 +1,6 @@
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace MongoDB.Extensions.Context
+namespace MongoDB.Extensions.Session
 {
     internal class RefreshSession
     {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace MongoDB.Extensions.Context
+namespace MongoDB.Extensions.Session
 {
     public static class MongoServerSessionExtensions
     {

@@ -9,7 +9,7 @@ using Snapshooter.Xunit;
 using Squadron;
 using Xunit;
 
-namespace MongoDB.Extensions.Context.Tests
+namespace MongoDB.Extensions.Session.Tests
 {
     public class MongoServerExtensionsTests : IClassFixture<MongoResource>
     {

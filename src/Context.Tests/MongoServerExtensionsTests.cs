@@ -85,7 +85,6 @@ namespace MongoDB.Extensions.Context.Tests
                 .ToListAsync();
         }
 
-
         [BsonNoId]
         [BsonIgnoreExtraElements(true)]
         internal sealed class ServerSessionId

@@ -84,7 +84,7 @@ namespace MongoDB.Extensions.Context.Tests.Extensions
                 result.ToString());
         }
 
-        #endregion
+        #endregion GetProfilingStatus Tests
 
         #region GetProfilingStatus Tests
 
@@ -139,6 +139,6 @@ namespace MongoDB.Extensions.Context.Tests.Extensions
             Assert.Equal("1", profileStatus.Filter);
         }
 
-        #endregion
+        #endregion GetProfilingStatus Tests
     }
 }

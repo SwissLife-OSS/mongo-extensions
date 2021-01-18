@@ -86,7 +86,7 @@ namespace MongoDB.Extensions.Context.Tests.Extensions
 
         #endregion
 
-        #region EnableProfiling Tests
+        #region GetProfilingStatus Tests
 
         [Fact]
         public void GetProfilingStatus_GetDisabledProfileStatus_StatusDisabled()

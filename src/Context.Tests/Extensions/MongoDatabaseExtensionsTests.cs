@@ -140,5 +140,26 @@ namespace MongoDB.Extensions.Context.Tests.Extensions
         }
 
         #endregion GetProfilingStatus Tests
+
+        #region GetProfilingBsonOutput Tests
+
+        //[Fact]
+        //public void GetProfilingStatus_GetDisabledProfileStatus_StatusDisabled()
+        //{
+        //    // Arrange
+        //    var profileCommand = new BsonDocument("profile", 0);
+        //    _mongoDatabase.RunCommand<BsonDocument>(profileCommand);
+
+        //    // Act
+        //    ProfilingStatus profileStatus = _mongoDatabase.GetProfilingStatus();
+
+        //    // Assert
+        //    Assert.Equal(ProfileLevel.Off, profileStatus.Level);
+        //    Assert.Equal(100, profileStatus.SlowMs);
+        //    Assert.Equal(1.0d, profileStatus.SampleRate);
+        //    Assert.Equal("1", profileStatus.Filter);
+        //}
+
+        #endregion GetProfilingBsonOutput Tests
     }
 }

@@ -28,5 +28,12 @@ namespace MongoDB.Extensions.Context
                 sampleRate: profileBsonDocument["sampleRate"].AsDouble,
                 filter: profileBsonDocument["ok"].AsDouble.ToString());
         }
+
+        public static IMongoCollection<TDocument> GetCollection<TDocument>(
+            this IMongoDatabase mongoDatabase,
+            MongoCollectionSettings settings = null)
+        {
+            return mongoDatabase.GetCollection<TDocument>(typeof(TDocument).Name, settings);
+        }
     }
 }

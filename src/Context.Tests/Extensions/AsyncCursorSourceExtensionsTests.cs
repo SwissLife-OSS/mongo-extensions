@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Threading;
 using System.Threading.Tasks;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Extensions.Context.Extensions;
 using Snapshooter.Xunit;

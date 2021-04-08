@@ -5,8 +5,6 @@
     <AssemblyName>MongoDB.Extensions.Context.Tests</AssemblyName>
     <RootNamespace>MongoDB.Extensions.Context.Tests</RootNamespace>
     <IsPackable>false</IsPackable>
-    <LangVersion>9.0</LangVersion>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>

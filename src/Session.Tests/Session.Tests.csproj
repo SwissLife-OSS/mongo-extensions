@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net5.0;netcoreapp3.0;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net5.0;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
     <AssemblyName>MongoDB.Extensions.Session.Tests</AssemblyName>
     <RootNamespace>MongoDB.Extensions.Session.Tests</RootNamespace>
     <IsPackable>false</IsPackable>

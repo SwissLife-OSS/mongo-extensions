@@ -1,4 +1,4 @@
-﻿namespace MongoDB.Extensions.Context
+﻿namespace MongoDB.Prime.Extensions
 {
     public class ProfilingStatus
     {

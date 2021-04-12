@@ -2,7 +2,7 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace MongoDB.Extensions.Context
+namespace MongoDB.Prime.Extensions
 {
     public static class MongoDatabaseExtensions
     {

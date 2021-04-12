@@ -9,7 +9,7 @@ using Squadron;
 using Xunit;
 #nullable enable
 
-namespace MongoDB.Extensions.Context.Tests
+namespace MongoDB.Prime.Extensions.Tests
 {
     public class MongoCollectionExtensionsTests : IClassFixture<MongoResource>
     {

@@ -4,12 +4,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
-using MongoDB.Extensions.Context.Extensions;
 using Snapshooter.Xunit;
 using Squadron;
 using Xunit;
 
-namespace MongoDB.Extensions.Context.Tests.Extensions
+namespace MongoDB.Extensions.Context.Tests
 {
     public class AsyncCursorSourceExtensionsTests : IClassFixture<MongoResource>
     {
@@ -118,6 +117,31 @@ namespace MongoDB.Extensions.Context.Tests.Extensions
 
             // Assert
             Assert.Empty(documentBases);
+        }
+
+        [Fact]
+        public async Task ToDictionaryAsync_DuplicateDocuments_ThrowsArgumentException()
+        {
+            // Arrange
+            IMongoCollection<Foo> fooCollection = _mongoDatabase.GetCollection<Foo>();
+
+            var arrangedFoo1 = new Foo(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903041"), "Foo1");
+            var arrangedFoo2 = new Foo(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903042"), "Foo2");
+            var arrangedFoo3 = new Foo(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903043"), "Foo3");
+            var arrangedFoo4 = new Foo(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903044"), "Foo3");
+
+            await fooCollection.InsertManyAsync(
+                new[] { arrangedFoo1, arrangedFoo2, arrangedFoo3, arrangedFoo4 });
+
+            FilterDefinition<Foo> filter = Builders<Foo>.Filter.Empty;
+
+            // Act
+            Func<Task> action = async () => await fooCollection.Find(filter)
+                .ToDictionaryAsync(foo => foo.Name, CancellationToken.None);
+
+            // Assert
+            ArgumentException exception = await Assert.ThrowsAsync<ArgumentException>(action);
+            Assert.Contains("Foo3", exception.Message);
         }
 
         [Fact]

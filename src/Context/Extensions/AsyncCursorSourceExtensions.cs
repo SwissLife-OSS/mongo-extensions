@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 
-namespace MongoDB.Extensions.Context.Extensions
+namespace MongoDB.Extensions.Context
 {
     public static class AsyncCursorSourceExtensions
     {

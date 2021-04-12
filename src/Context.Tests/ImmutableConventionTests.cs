@@ -62,7 +62,7 @@ namespace MongoDB.Extensions.Context.Tests
                 await collection.InsertOneAsync(new A("a"));
 
                 // Assert
-                A result = await collection.FindSync(FilterDefinition<IA>.Empty).FirstAsync() as A;
+                A? result = await collection.FindSync(FilterDefinition<IA>.Empty).FirstAsync() as A;
                 result.MatchSnapshot();
             }
 
@@ -218,7 +218,7 @@ namespace MongoDB.Extensions.Context.Tests
                 await collection.InsertOneAsync(new B("a", "b"));
 
                 // Assert
-                B result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync() as B;
+                B? result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync() as B;
                 result.MatchSnapshot();
             }
 
@@ -263,7 +263,7 @@ namespace MongoDB.Extensions.Context.Tests
                 await collection.InsertOneAsync(new B("a", "b"));
 
                 // Assert
-                B result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync() as B;
+                B? result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync() as B;
                 result.MatchSnapshot();
             }
 
@@ -304,7 +304,7 @@ namespace MongoDB.Extensions.Context.Tests
                 await collection.InsertOneAsync(new B("a", "b"));
 
                 // Assert
-                B result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync() as B;
+                B? result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync() as B;
                 result.MatchSnapshot();
             }
 
@@ -349,7 +349,7 @@ namespace MongoDB.Extensions.Context.Tests
                 await collection.InsertOneAsync(new B("b"));
 
                 // Assert
-                B result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync() as B;
+                B? result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync() as B;
                 result.MatchSnapshot();
             }
 
@@ -388,7 +388,7 @@ namespace MongoDB.Extensions.Context.Tests
                 await collection.InsertOneAsync(new B("a", "b"));
 
                 // Assert
-                B result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync() as B;
+                B? result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync() as B;
                 result.MatchSnapshot();
             }
 

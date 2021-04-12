@@ -1,11 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <Import Project="$(CCResourceProjectProps)" Condition="Exists('$(CCResourceProjectProps)')" />
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <AssemblyName>MongoDB.Extensions.Context</AssemblyName>
     <RootNamespace>MongoDB.Extensions.Context</RootNamespace>
-    <LangVersion>8.0</LangVersion>
     <PackageId>MongoDB.Extensions.Context</PackageId>
     <IsPackable>true</IsPackable>
   </PropertyGroup>
@@ -21,7 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="2.11.4" />
+    <PackageReference Include="MongoDB.Driver" Version="2.12.2" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1'">

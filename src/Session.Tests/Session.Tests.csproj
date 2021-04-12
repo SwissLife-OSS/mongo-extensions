@@ -2,13 +2,12 @@
 
   <PropertyGroup>
     <TargetFrameworks>net5.0;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
-    <AssemblyName>MongoDB.Extensions.Context.Tests</AssemblyName>
-    <RootNamespace>MongoDB.Extensions.Context.Tests</RootNamespace>
+    <AssemblyName>MongoDB.Extensions.Session.Tests</AssemblyName>
+    <RootNamespace>MongoDB.Extensions.Session.Tests</RootNamespace>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="Snapshooter.Xunit" Version="0.5.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
     <PackageReference Include="Squadron.Mongo" Version="0.5.0" />
@@ -21,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Context\Context.csproj" />
+    <ProjectReference Include="..\Session\Session.csproj" />
   </ItemGroup>
 
 </Project>

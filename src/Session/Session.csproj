@@ -3,9 +3,9 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
-    <AssemblyName>MongoDB.Extensions.Context</AssemblyName>
-    <RootNamespace>MongoDB.Extensions.Context</RootNamespace>
-    <PackageId>MongoDB.Extensions.Context</PackageId>
+    <AssemblyName>MongoDB.Extensions.Session</AssemblyName>
+    <RootNamespace>MongoDB.Extensions.Session</RootNamespace>
+    <PackageId>MongoDB.Extensions.Session</PackageId>
     <IsPackable>true</IsPackable>
   </PropertyGroup>
 

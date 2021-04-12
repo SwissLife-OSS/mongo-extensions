@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using Snapshooter.Xunit;
 using Squadron;
@@ -6,7 +7,7 @@ using Xunit;
 
 namespace MongoDB.Extensions.Context.Tests
 {
-    public class ImmutableConventionTests 
+    public class ImmutableConventionTests
     {
         public class SimpleImmutableCase : IClassFixture<MongoResource>
         {
@@ -61,7 +62,7 @@ namespace MongoDB.Extensions.Context.Tests
                 await collection.InsertOneAsync(new A("a"));
 
                 // Assert
-                A result = await collection.FindSync(FilterDefinition<IA>.Empty).FirstAsync() as A;
+                A? result = await collection.FindSync(FilterDefinition<IA>.Empty).FirstAsync() as A;
                 result.MatchSnapshot();
             }
 
@@ -78,6 +79,123 @@ namespace MongoDB.Extensions.Context.Tests
             public interface IA
             {
                 string _A { get; }
+            }
+        }
+
+        public class NullableReferenceTypeCase : IClassFixture<MongoResource>
+        {
+            private readonly MongoDbContextData _context;
+
+            public NullableReferenceTypeCase(MongoResource mongoResource)
+            {
+                _context = CreateContext(mongoResource);
+            }
+
+            [Fact]
+            public async Task ApplyConvention_WithoutValue_SerializeSuccessful()
+            {
+                // Arrange
+                IMongoCollection<A> collection = _context.CreateCollection<A>();
+
+                // Act
+                await collection.InsertOneAsync(new A("a"));
+
+                // Assert
+                A result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync();
+                result.MatchSnapshot();
+            }
+
+            [Fact]
+            public async Task ApplyConvention_WithoutValueInDb_SerializeSuccessful()
+            {
+                // Arrange
+                IMongoCollection<A> collectionTyped =
+                    _context.Database.GetCollection<A>("test");
+                IMongoCollection<BsonDocument> collectionUntyped =
+                    _context.Database.GetCollection<BsonDocument>("test");
+
+                // Act
+                await collectionUntyped.InsertOneAsync(new BsonDocument {{"_A", "a"}});
+
+                // Assert
+                A result = await collectionTyped.FindSync(FilterDefinition<A>.Empty).FirstAsync();
+                result.MatchSnapshot();
+            }
+
+            [Fact]
+            public async Task ApplyConvention_WithValue_SerializeSuccessful()
+            {
+                // Arrange
+                IMongoCollection<A> collection = _context.CreateCollection<A>();
+
+                // Act
+                await collection.InsertOneAsync(new A("a", "b"));
+
+                // Assert
+                A result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync();
+                result.MatchSnapshot();
+            }
+
+            public class A
+            {
+                public A(string _a, string? _b = default)
+                {
+                    _A = _a;
+                    _B = _b;
+                }
+
+                public string _A { get; }
+                public string? _B { get; }
+            }
+        }
+
+        public class NullableValueTypeCase : IClassFixture<MongoResource>
+        {
+            private readonly MongoDbContextData _context;
+
+            public NullableValueTypeCase(MongoResource mongoResource)
+            {
+                _context = CreateContext(mongoResource);
+            }
+
+            [Fact]
+            public async Task ApplyConvention_WithoutValue_SerializeSuccessful()
+            {
+                // Arrange
+                IMongoCollection<A> collection = _context.CreateCollection<A>();
+
+                // Act
+                await collection.InsertOneAsync(new A("a"));
+
+                // Assert
+                A result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync();
+                result.MatchSnapshot();
+            }
+
+            [Fact]
+            public async Task ApplyConvention_WithValue_SerializeSuccessful()
+            {
+                // Arrange
+                IMongoCollection<A> collection = _context.CreateCollection<A>();
+
+                // Act
+                await collection.InsertOneAsync(new A("a", 9));
+
+                // Assert
+                A result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync();
+                result.MatchSnapshot();
+            }
+
+            public class A
+            {
+                public A(string _a, int? _b = default)
+                {
+                    _A = _a;
+                    _B = _b;
+                }
+
+                public string _A { get; }
+                public int? _B { get; }
             }
         }
 
@@ -100,7 +218,7 @@ namespace MongoDB.Extensions.Context.Tests
                 await collection.InsertOneAsync(new B("a", "b"));
 
                 // Assert
-                B result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync() as B;
+                B? result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync() as B;
                 result.MatchSnapshot();
             }
 
@@ -145,7 +263,7 @@ namespace MongoDB.Extensions.Context.Tests
                 await collection.InsertOneAsync(new B("a", "b"));
 
                 // Assert
-                B result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync() as B;
+                B? result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync() as B;
                 result.MatchSnapshot();
             }
 
@@ -186,7 +304,7 @@ namespace MongoDB.Extensions.Context.Tests
                 await collection.InsertOneAsync(new B("a", "b"));
 
                 // Assert
-                B result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync() as B;
+                B? result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync() as B;
                 result.MatchSnapshot();
             }
 
@@ -231,7 +349,7 @@ namespace MongoDB.Extensions.Context.Tests
                 await collection.InsertOneAsync(new B("b"));
 
                 // Assert
-                B result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync() as B;
+                B? result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync() as B;
                 result.MatchSnapshot();
             }
 
@@ -270,7 +388,7 @@ namespace MongoDB.Extensions.Context.Tests
                 await collection.InsertOneAsync(new B("a", "b"));
 
                 // Assert
-                B result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync() as B;
+                B? result = await collection.FindSync(FilterDefinition<A>.Empty).FirstAsync() as B;
                 result.MatchSnapshot();
             }
 

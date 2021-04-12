@@ -3,7 +3,7 @@ using MongoDB.Driver;
 using Squadron;
 using Xunit;
 
-namespace MongoDB.Extensions.Context.Tests
+namespace MongoDB.Prime.Extensions.Tests
 {
     public class MongoDatabaseExtensionsTests : IClassFixture<MongoResource>
     {

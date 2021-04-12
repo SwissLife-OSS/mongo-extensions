@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using MongoDB.Driver;
 #nullable enable
 
-namespace MongoDB.Extensions.Context
+namespace MongoDB.Prime.Extensions
 {
     public static class MongoCollectionFindExtensions
     {

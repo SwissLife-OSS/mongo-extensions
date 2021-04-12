@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFrameworks>net5.0;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
-    <AssemblyName>MongoDB.Extensions.Context.Tests</AssemblyName>
-    <RootNamespace>MongoDB.Extensions.Context.Tests</RootNamespace>
+    <AssemblyName>MongoDB.Prime.Extensions.Tests</AssemblyName>
+    <RootNamespace>MongoDB.Prime.Extensions.Tests</RootNamespace>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Context\Context.csproj" />
+    <ProjectReference Include="..\Prime.Extensions\Prime.Extensions.csproj" />
   </ItemGroup>
 
 </Project>

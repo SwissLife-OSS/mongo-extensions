@@ -36,7 +36,7 @@ namespace MongoDB.Prime.Extensions.Tests
             var idsToFind = new List<Guid> { arrangedBar.Id };
 
             // Act
-            IDictionary<Guid, Bar> result = 
+            IReadOnlyDictionary<Guid, Bar> result = 
                 await barCollection.FindIdsAsync(idsToFind, bar => bar.Id);
 
             // Assert
@@ -69,7 +69,7 @@ namespace MongoDB.Prime.Extensions.Tests
                 .GetRange(2, 4).Select(bar => bar.Id);
 
             // Act
-            IDictionary<Guid, Bar> result = await barCollection
+            IReadOnlyDictionary<Guid, Bar> result = await barCollection
                 .FindIdsAsync(idsToFind, bar => bar.Id, parallelBatchSize: parallelBatchSize);
 
             // Assert
@@ -102,7 +102,7 @@ namespace MongoDB.Prime.Extensions.Tests
                 .GetRange(2, 4).Select(bar => bar.Id);
 
             // Act
-            IDictionary<Guid, Bar> result = await barCollection
+            IReadOnlyDictionary<Guid, Bar> result = await barCollection
                 .FindIdsAsync(idsToFind, bar => bar.Id, parallelBatchSize: parallelBatchSize);
 
             // Assert
@@ -136,7 +136,7 @@ namespace MongoDB.Prime.Extensions.Tests
                 .GetRange(2, 4).Select(bar => bar.Name);
 
             // Act
-            IDictionary<string, Bar> result = await barCollection
+            IReadOnlyDictionary<string, Bar> result = await barCollection
                 .FindIdsAsync(namesToFind, bar => bar.Name, parallelBatchSize: parallelBatchSize);
 
             // Assert
@@ -169,7 +169,7 @@ namespace MongoDB.Prime.Extensions.Tests
                 .GetRange(2, 4).Select(bar => bar.Name);
 
             // Act
-            IDictionary<string, Bar> result = await barCollection
+            IReadOnlyDictionary<string, Bar> result = await barCollection
                 .FindIdsAsync(namesToFind, bar => bar.Name, parallelBatchSize: parallelBatchSize);
 
             // Assert
@@ -273,7 +273,7 @@ namespace MongoDB.Prime.Extensions.Tests
             };
 
             // Act
-            IDictionary<Guid, Bar> result = await barCollection
+            IReadOnlyDictionary<Guid, Bar> result = await barCollection
                 .FindIdsAsync(notExistingIds, bar => bar.Id, parallelBatchSize: parallelBatchSize);
 
             // Assert
@@ -310,7 +310,7 @@ namespace MongoDB.Prime.Extensions.Tests
             };
 
             // Act
-            IDictionary<Guid, Bar> result = await barCollection
+            IReadOnlyDictionary<Guid, Bar> result = await barCollection
                 .FindIdsAsync(notExistingIds, bar => bar.Id, parallelBatchSize: parallelBatchSize);
 
             // Assert
@@ -342,7 +342,7 @@ namespace MongoDB.Prime.Extensions.Tests
             IEnumerable<Guid> barIdsToFind = barsToFind.Select(d => d.Id);
 
             // Act
-            IDictionary<Guid, Bar> result = await barCollection
+            IReadOnlyDictionary<Guid, Bar> result = await barCollection
                 .FindIdsAsync(barIdsToFind, bar => bar.Id, parallelBatchSize: parallelBatchSize);
 
             // Assert
@@ -373,7 +373,7 @@ namespace MongoDB.Prime.Extensions.Tests
             IEnumerable<Guid> barIdsToFind = barsToFind.Select(d => d.Id);
 
             // Act
-            IDictionary<Guid, Bar> result = await barCollection
+            IReadOnlyDictionary<Guid, Bar> result = await barCollection
                 .FindIdsAsync(barIdsToFind, bar => bar.Id, parallelBatchSize: parallelBatchSize);
 
             // Assert

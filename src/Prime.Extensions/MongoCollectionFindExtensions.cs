@@ -24,6 +24,11 @@ namespace MongoDB.Prime.Extensions
         {
             int allIdsCount = idsToFind.Count();
 
+            if (allIdsCount == 0)
+            {
+                return new Dictionary<TId, TDocument>();
+            }
+
             Func<TDocument, TId> idSelectorFunc = idResultSelector.Compile();
 
             int batchPartitionsCount = 

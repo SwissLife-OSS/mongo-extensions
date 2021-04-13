@@ -14,7 +14,7 @@ namespace MongoDB.Prime.Extensions
     {
         private static readonly int DefaultConcurrencyLevel = Environment.ProcessorCount;
 
-        public static async Task<IDictionary<TId, TDocument>> FindIdsAsync<TId, TDocument>(
+        public static async Task<IReadOnlyDictionary<TId, TDocument>> FindIdsAsync<TId, TDocument>(
             this IMongoCollection<TDocument> mongoCollection,
             IEnumerable<TId> idsToFind,
             Expression<Func<TDocument, TId>> idResultSelector,
@@ -85,7 +85,7 @@ namespace MongoDB.Prime.Extensions
             };
         }
 
-        private static async Task<IDictionary<TId, TDocument>> FindIdsInParallelRequests<TId, TDocument>(
+        private static async Task<IReadOnlyDictionary<TId, TDocument>> FindIdsInParallelRequests<TId, TDocument>(
             this IMongoCollection<TDocument> mongoCollection,
             IEnumerable<TId> idsToFind,
             Func<TDocument, TId> idSelectorFunc,
@@ -131,7 +131,7 @@ namespace MongoDB.Prime.Extensions
             return concurrentDocuments;
         }
 
-        private static async Task<IDictionary<TId, TDocument>> FindIdsInOneRequest<TId, TDocument>(
+        private static async Task<IReadOnlyDictionary<TId, TDocument>> FindIdsInOneRequest<TId, TDocument>(
             this IMongoCollection<TDocument> mongoCollection,
             IEnumerable<TId> idsToFind,
             Func<TDocument, TId> idSelectorFunc,

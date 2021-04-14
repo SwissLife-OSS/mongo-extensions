@@ -1,12 +1,18 @@
 ﻿using System;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Reports;
+using BenchmarkDotNet.Running;
 
 namespace Prime.Extensions.Benchmarks
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            BenchmarkSwitcher
+                .FromAssembly(typeof(Program).Assembly)
+                .Run(args, new DebugInProcessConfig());
+            //Summary summary = BenchmarkRunner.Run<FindIdsBenchmarks>();
         }
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using BenchmarkDotNet.Configs;
-using BenchmarkDotNet.Reports;
-using BenchmarkDotNet.Running;
+﻿using BenchmarkDotNet.Running;
 
 namespace Prime.Extensions.Benchmarks
 {
@@ -9,10 +6,10 @@ namespace Prime.Extensions.Benchmarks
     {
         public static void Main(string[] args)
         {
-            BenchmarkSwitcher
-                .FromAssembly(typeof(Program).Assembly)
-                .Run(args, new DebugInProcessConfig());
-            //Summary summary = BenchmarkRunner.Run<FindIdsBenchmarks>();
+            //BenchmarkSwitcher
+            //    .FromAssembly(typeof(Program).Assembly)
+            //    .Run(args, new DebugInProcessConfig());
+            BenchmarkRunner.Run<FindIdsBenchmarks>();
         }
     }
 }

@@ -14,15 +14,17 @@ namespace MongoDB.Prime.Extensions
     {
         private static readonly int DefaultConcurrencyLevel = Environment.ProcessorCount;
 
-        public static async Task<IReadOnlyDictionary<TId, TDocument>> FindIdsAsync<TId, TDocument>(
+        public static async Task<IReadOnlyDictionary<TId, TDocument>> FindUniqueIdsAsync<TId, TDocument>(
             this IMongoCollection<TDocument> mongoCollection,
-            IEnumerable<TId> idsToFind,
+            IEnumerable<TId> uniqueIdsToFind,
             Expression<Func<TDocument, TId>> idResultSelector,
             FindOptions? findOptions = null,
             int? parallelBatchSize = null,
             CancellationToken cancellationToken = default)
         {
-            int allIdsCount = idsToFind.Count();
+            IEnumerable<TId> uniqueIds = uniqueIdsToFind.Distinct();
+
+            int allIdsCount = uniqueIds.Count();
 
             Func<TDocument, TId> idSelectorFunc = idResultSelector.Compile();
 
@@ -32,7 +34,7 @@ namespace MongoDB.Prime.Extensions
             if (batchPartitionsCount <= 1)
             {
                 return await mongoCollection.FindIdsInOneRequest(
-                    idsToFind,
+                    uniqueIds,
                     idSelectorFunc,
                     idResultSelector,
                     findOptions,
@@ -40,7 +42,7 @@ namespace MongoDB.Prime.Extensions
             }
 
             return await mongoCollection.FindIdsInParallelRequests(
-                idsToFind,
+                uniqueIds,
                 idSelectorFunc,
                 idResultSelector,
                 findOptions,

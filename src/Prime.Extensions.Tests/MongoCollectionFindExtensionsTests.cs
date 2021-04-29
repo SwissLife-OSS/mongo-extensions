@@ -37,7 +37,7 @@ namespace MongoDB.Prime.Extensions.Tests
 
             // Act
             IReadOnlyDictionary<Guid, Bar> result = 
-                await barCollection.FindIdsAsync(idsToFind, bar => bar.Id);
+                await barCollection.FindUniqueIdsAsync(idsToFind, bar => bar.Id);
 
             // Assert
             Snapshot.Match(result);
@@ -70,7 +70,7 @@ namespace MongoDB.Prime.Extensions.Tests
 
             // Act
             IReadOnlyDictionary<Guid, Bar> result = await barCollection
-                .FindIdsAsync(idsToFind, bar => bar.Id, parallelBatchSize: parallelBatchSize);
+                .FindUniqueIdsAsync(idsToFind, bar => bar.Id, parallelBatchSize: parallelBatchSize);
 
             // Assert
             Assert.IsType<Dictionary<Guid, Bar>>(result);
@@ -103,7 +103,7 @@ namespace MongoDB.Prime.Extensions.Tests
 
             // Act
             IReadOnlyDictionary<Guid, Bar> result = await barCollection
-                .FindIdsAsync(idsToFind, bar => bar.Id, parallelBatchSize: parallelBatchSize);
+                .FindUniqueIdsAsync(idsToFind, bar => bar.Id, parallelBatchSize: parallelBatchSize);
 
             // Assert
             Assert.IsType<ConcurrentDictionary<Guid, Bar>>(result);
@@ -137,7 +137,7 @@ namespace MongoDB.Prime.Extensions.Tests
 
             // Act
             IReadOnlyDictionary<string, Bar> result = await barCollection
-                .FindIdsAsync(namesToFind, bar => bar.Name, parallelBatchSize: parallelBatchSize);
+                .FindUniqueIdsAsync(namesToFind, bar => bar.Name, parallelBatchSize: parallelBatchSize);
 
             // Assert
             Assert.IsType<Dictionary<string, Bar>>(result);
@@ -170,10 +170,86 @@ namespace MongoDB.Prime.Extensions.Tests
 
             // Act
             IReadOnlyDictionary<string, Bar> result = await barCollection
-                .FindIdsAsync(namesToFind, bar => bar.Name, parallelBatchSize: parallelBatchSize);
+                .FindUniqueIdsAsync(namesToFind, bar => bar.Name, parallelBatchSize: parallelBatchSize);
 
             // Assert
             Assert.IsType<ConcurrentDictionary<string, Bar>>(result);
+            Snapshot.Match(result.OrderBy(key => key.Key));
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData(3)]
+        [InlineData(4)]
+        public async Task FindIds_FindDuplicatedBarIdsSynchronously_ReturnsDistinctBars(
+            int? parallelBatchSize)
+        {
+            // Arrange
+            IMongoCollection<Bar> barCollection = _mongoDatabase.GetCollection<Bar>();
+
+            var arrangedBars = new List<Bar> {
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903041"), "Bar1", "Value1"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903042"), "Bar2", "Value2"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903043"), "Bar3", "Value3"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903044"), "Bar4", "Value4"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903045"), "Bar5", "Value5"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903046"), "Bar6", "Value6"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903047"), "Bar7", "Value7"),
+            };
+
+            await barCollection.InsertManyAsync(arrangedBars);
+
+            IEnumerable<Guid> duplicatedIds = new List<Guid> {
+               Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903041"),
+               Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903044"),
+               Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903046"),
+               Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903044"),
+            };
+
+            // Act
+            IReadOnlyDictionary<Guid, Bar> result = await barCollection
+                .FindUniqueIdsAsync(duplicatedIds, bar => bar.Id, parallelBatchSize: parallelBatchSize);
+
+            // Assert
+            Assert.IsType<Dictionary<Guid, Bar>>(result);
+            Snapshot.Match(result.OrderBy(entry => entry.Key));
+        }
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        public async Task FindIds_FindDuplicatedBarIdsAsynchronously_ReturnsDistinctBars(
+            int parallelBatchSize)
+        {
+            // Arrange
+            IMongoCollection<Bar> barCollection = _mongoDatabase.GetCollection<Bar>();
+
+            var arrangedBars = new List<Bar> {
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903041"), "Bar1", "Value1"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903042"), "Bar2", "Value2"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903043"), "Bar3", "Value3"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903044"), "Bar4", "Value4"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903045"), "Bar5", "Value5"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903046"), "Bar6", "Value6"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903047"), "Bar7", "Value7"),
+            };
+
+            await barCollection.InsertManyAsync(arrangedBars);
+
+            IEnumerable<Guid> duplicatedIds = new List<Guid> {
+               Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903041"),
+               Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903044"),
+               Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903046"),
+               Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903044"),
+               Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903047")
+            };
+
+            // Act
+            IReadOnlyDictionary<Guid, Bar> result = await barCollection
+                .FindUniqueIdsAsync(duplicatedIds, bar => bar.Id, parallelBatchSize: parallelBatchSize);
+
+            // Assert
+            Assert.IsType<ConcurrentDictionary<Guid, Bar>>(result);
             Snapshot.Match(result.OrderBy(key => key.Key));
         }
 
@@ -204,7 +280,7 @@ namespace MongoDB.Prime.Extensions.Tests
 
             // Act
             Func<Task> action = async () => await barCollection
-                .FindIdsAsync(namesToFind, bar => bar.Name, parallelBatchSize: parallelBatchSize);
+                .FindUniqueIdsAsync(namesToFind, bar => bar.Name, parallelBatchSize: parallelBatchSize);
 
             // Assert
             ArgumentException exception = await Assert.ThrowsAsync<ArgumentException>(action);
@@ -237,7 +313,7 @@ namespace MongoDB.Prime.Extensions.Tests
 
             // Act
             Func<Task> action = async () => await barCollection
-                .FindIdsAsync(namesToFind, bar => bar.Name, parallelBatchSize: parallelBatchSize);
+                .FindUniqueIdsAsync(namesToFind, bar => bar.Name, parallelBatchSize: parallelBatchSize);
 
             // Assert
             ArgumentException exception = await Assert.ThrowsAsync<ArgumentException>(action);
@@ -274,7 +350,7 @@ namespace MongoDB.Prime.Extensions.Tests
 
             // Act
             IReadOnlyDictionary<Guid, Bar> result = await barCollection
-                .FindIdsAsync(notExistingIds, bar => bar.Id, parallelBatchSize: parallelBatchSize);
+                .FindUniqueIdsAsync(notExistingIds, bar => bar.Id, parallelBatchSize: parallelBatchSize);
 
             // Assert
             Assert.IsType<Dictionary<Guid, Bar>>(result);
@@ -311,7 +387,7 @@ namespace MongoDB.Prime.Extensions.Tests
 
             // Act
             IReadOnlyDictionary<Guid, Bar> result = await barCollection
-                .FindIdsAsync(notExistingIds, bar => bar.Id, parallelBatchSize: parallelBatchSize);
+                .FindUniqueIdsAsync(notExistingIds, bar => bar.Id, parallelBatchSize: parallelBatchSize);
 
             // Assert
             Assert.IsType<ConcurrentDictionary<Guid, Bar>>(result);
@@ -343,7 +419,7 @@ namespace MongoDB.Prime.Extensions.Tests
 
             // Act
             IReadOnlyDictionary<Guid, Bar> result = await barCollection
-                .FindIdsAsync(barIdsToFind, bar => bar.Id, parallelBatchSize: parallelBatchSize);
+                .FindUniqueIdsAsync(barIdsToFind, bar => bar.Id, parallelBatchSize: parallelBatchSize);
 
             // Assert
             Assert.IsType(dictionaryType, result);
@@ -374,7 +450,7 @@ namespace MongoDB.Prime.Extensions.Tests
 
             // Act
             IReadOnlyDictionary<Guid, Bar> result = await barCollection
-                .FindIdsAsync(barIdsToFind, bar => bar.Id, parallelBatchSize: parallelBatchSize);
+                .FindUniqueIdsAsync(barIdsToFind, bar => bar.Id, parallelBatchSize: parallelBatchSize);
 
             // Assert
             Assert.IsType(dictionaryType, result);

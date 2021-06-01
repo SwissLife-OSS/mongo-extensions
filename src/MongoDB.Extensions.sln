@@ -11,9 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Session", "Session\Session.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Session.Tests", "Session.Tests\Session.Tests.csproj", "{7D953E6D-B34C-4724-8E4D-A968110CAC74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prime.Extensions", "Prime.Extensions\Prime.Extensions.csproj", "{284AF759-C10C-4C89-AFA3-F2D190115CC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prime.Extensions", "Prime.Extensions\Prime.Extensions.csproj", "{284AF759-C10C-4C89-AFA3-F2D190115CC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prime.Extensions.Tests", "Prime.Extensions.Tests\Prime.Extensions.Tests.csproj", "{74A9A535-5E20-4453-A670-2E37A279226C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Prime.Extensions.Tests", "Prime.Extensions.Tests\Prime.Extensions.Tests.csproj", "{74A9A535-5E20-4453-A670-2E37A279226C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "benchmark", "benchmark", "{73BCA034-E71E-462C-93E7-DF956BBC5E67}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prime.Extensions.Benchmarks", "..\benchmark\Prime.Extensions.Benchmarks\Prime.Extensions.Benchmarks.csproj", "{960D6087-8C05-4B19-B7D6-78F92F7BAA3F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,9 +49,16 @@ Global
 		{74A9A535-5E20-4453-A670-2E37A279226C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74A9A535-5E20-4453-A670-2E37A279226C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74A9A535-5E20-4453-A670-2E37A279226C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{960D6087-8C05-4B19-B7D6-78F92F7BAA3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{960D6087-8C05-4B19-B7D6-78F92F7BAA3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{960D6087-8C05-4B19-B7D6-78F92F7BAA3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{960D6087-8C05-4B19-B7D6-78F92F7BAA3F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{960D6087-8C05-4B19-B7D6-78F92F7BAA3F} = {73BCA034-E71E-462C-93E7-DF956BBC5E67}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1C05A190-7BC9-4DE5-A49D-D7557B01869D}

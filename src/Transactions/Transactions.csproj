@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(CCResourceProjectProps)" Condition="Exists('$(CCResourceProjectProps)')" />
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+    <AssemblyName>MongoDB.Extensions.Transactions</AssemblyName>
+    <RootNamespace>MongoDB.Extensions.Transactions</RootNamespace>
+    <PackageId>MongoDB.Extensions.Transactions</PackageId>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Driver" Version="2.12.2" />
+  </ItemGroup>
+
+</Project>

@@ -51,7 +51,7 @@ namespace MongoDB.Extensions.Transactions
             }
         }
 
-        private bool TryGetSession([NotNullWhen(true)] out IClientSessionHandle? sessionHandle)
+        private bool TryGetSession(out IClientSessionHandle sessionHandle)
         {
             if (Transaction.Current?.TransactionInformation.LocalIdentifier is { } id)
             {
@@ -59,7 +59,7 @@ namespace MongoDB.Extensions.Transactions
                 return true;
             }
 
-            sessionHandle = null;
+            sessionHandle = null!;
             return false;
         }
 

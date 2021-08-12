@@ -98,41 +98,6 @@ namespace MongoDB.Extensions.Transactions.Tests
         }
 
         [Fact]
-        public async Task Transaction_Rollsback_On_DbFail()
-        {
-            // arrange
-            IMongoDatabase database = _mongoResource.CreateDatabase();
-            IMongoCollection<User> collection =
-                database.GetCollection<User>("users").AsTransactionCollection();
-            var id = Guid.NewGuid();
-
-            await collection.InsertOneAsync(new User(id, "Foo"));
-
-            // act
-            MongoWriteException ex = await Assert.ThrowsAsync<MongoWriteException>(async () =>
-            {
-                using (var scope = new TransactionScope(Enabled))
-                {
-                    User user1 = new(Guid.NewGuid(), "Foo1");
-                    await collection.InsertOneAsync(user1);
-
-                    User user2 = new(Guid.NewGuid(), "Foo2");
-                    await collection.InsertOneAsync(user2);
-
-                    User user3 = new(Guid.NewGuid(), "Foo3");
-                    await collection.InsertOneAsync(user3);
-
-                    scope.Complete();
-                }
-            });
-
-            // assert
-            Assert.NotNull(ex);
-            Assert.True(ex.Message.Contains("E11000"));
-            Assert.Single(await collection.Find(FilterDefinition<User>.Empty).ToListAsync());
-        }
-
-        [Fact]
         public async Task Transaction_Should_ReadChangesDuringTransaction()
         {
             // arrange

@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prime.Extensions", "Prime.E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prime.Extensions.Tests", "Prime.Extensions.Tests\Prime.Extensions.Tests.csproj", "{74A9A535-5E20-4453-A670-2E37A279226C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transactions", "Transactions\Transactions.csproj", "{3E611B65-CECA-4576-8720-A4D835D3630E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transactions.Tests", "Transactions.Tests\Transactions.Tests.csproj", "{ADD0EC1E-226B-4122-B745-6D64435E064E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{74A9A535-5E20-4453-A670-2E37A279226C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74A9A535-5E20-4453-A670-2E37A279226C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74A9A535-5E20-4453-A670-2E37A279226C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E611B65-CECA-4576-8720-A4D835D3630E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E611B65-CECA-4576-8720-A4D835D3630E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E611B65-CECA-4576-8720-A4D835D3630E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E611B65-CECA-4576-8720-A4D835D3630E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADD0EC1E-226B-4122-B745-6D64435E064E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADD0EC1E-226B-4122-B745-6D64435E064E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADD0EC1E-226B-4122-B745-6D64435E064E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADD0EC1E-226B-4122-B745-6D64435E064E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

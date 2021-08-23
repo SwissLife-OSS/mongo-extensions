@@ -17,11 +17,16 @@ namespace MongoDB.Prime.Extensions
 
         public static ProfilingStatus GetProfilingStatus(this IMongoDatabase mongoDatabase)
         {
-            var profileStatusCommand = new BsonDocument("profile", BsonValue.Create(null));
+            var profileStatusCommand = new BsonDocument("profile", -1);
 
             BsonDocument profileBsonDocument =
                 mongoDatabase.RunCommand<BsonDocument>(profileStatusCommand);
 
+            return CreateProfilingStatus(profileBsonDocument);
+        }
+
+        private static ProfilingStatus CreateProfilingStatus(BsonDocument profileBsonDocument)
+        {
             return new ProfilingStatus(
                 level: (ProfileLevel)profileBsonDocument["was"].AsInt32,
                 slowMs: profileBsonDocument["slowms"].AsInt32,
@@ -31,7 +36,7 @@ namespace MongoDB.Prime.Extensions
 
         public static IMongoCollection<TDocument> GetCollection<TDocument>(
             this IMongoDatabase mongoDatabase,
-            MongoCollectionSettings settings = null)
+            MongoCollectionSettings? settings = null)
         {
             return mongoDatabase.GetCollection<TDocument>(typeof(TDocument).Name, settings);
         }

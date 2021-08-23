@@ -25,7 +25,7 @@ namespace MongoDB.Prime.Extensions.Tests
             _mongoDatabase.EnableProfiling();
 
             // Assert
-            var profileStatusCommand = new BsonDocument("profile", BsonValue.Create(null));
+            var profileStatusCommand = new BsonDocument("profile", -1);
             BsonDocument result = _mongoDatabase.RunCommand<BsonDocument>(profileStatusCommand);
 
             Assert.Equal(
@@ -42,7 +42,7 @@ namespace MongoDB.Prime.Extensions.Tests
             _mongoDatabase.EnableProfiling(ProfileLevel.All);
 
             // Assert
-            var profileStatusCommand = new BsonDocument("profile", BsonValue.Create(null));
+            var profileStatusCommand = new BsonDocument("profile", -1);
             BsonDocument result = _mongoDatabase.RunCommand<BsonDocument>(profileStatusCommand);
 
             Assert.Equal(
@@ -59,7 +59,7 @@ namespace MongoDB.Prime.Extensions.Tests
             _mongoDatabase.EnableProfiling(ProfileLevel.SlowOperationsOnly);
 
             // Assert
-            var profileStatusCommand = new BsonDocument("profile", BsonValue.Create(null));
+            var profileStatusCommand = new BsonDocument("profile", -1);
             BsonDocument result = _mongoDatabase.RunCommand<BsonDocument>(profileStatusCommand);
 
             Assert.Equal(
@@ -76,7 +76,7 @@ namespace MongoDB.Prime.Extensions.Tests
             _mongoDatabase.EnableProfiling(ProfileLevel.Off);
 
             // Assert
-            var profileStatusCommand = new BsonDocument("profile", BsonValue.Create(null));
+            var profileStatusCommand = new BsonDocument("profile", -1);
             BsonDocument result = _mongoDatabase.RunCommand<BsonDocument>(profileStatusCommand);
 
             Assert.Equal(

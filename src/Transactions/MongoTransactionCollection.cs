@@ -1,12 +1,11 @@
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Transactions;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using static MongoDB.Extensions.Transactions.TransactionStore;
 
 #pragma warning disable 618
 
@@ -14,7 +13,6 @@ namespace MongoDB.Extensions.Transactions
 {
     public class MongoTransactionCollection<T> : IMongoCollection<T>
     {
-        private readonly ConcurrentDictionary<string, IClientSessionHandle> _sessions = new();
         private readonly IMongoCollection<T> _collection;
         private readonly IMongoClient _client;
 
@@ -24,44 +22,6 @@ namespace MongoDB.Extensions.Transactions
             _client = collection.Database.Client;
         }
 
-        private IClientSessionHandle GetOrCreateTransaction(string id) =>
-            _sessions.GetOrAdd(id, CreateAndRegister);
-
-        private IClientSessionHandle CreateAndRegister(string id)
-        {
-            if (Transaction.Current is null)
-            {
-                throw new TransactionException("Cannot open a transaction without a valid scope");
-            }
-
-            IClientSessionHandle? session = _client.StartSession();
-            session.StartTransaction();
-            MongoDbEnlistmentScope enlistment = new(session, Unregister);
-
-            Transaction.Current.EnlistVolatile(enlistment, EnlistmentOptions.None);
-
-            return session;
-
-            void Unregister()
-            {
-                if (_sessions.TryRemove(id, out session))
-                {
-                    session.Dispose();
-                }
-            }
-        }
-
-        private bool TryGetSession(out IClientSessionHandle sessionHandle)
-        {
-            if (Transaction.Current?.TransactionInformation.LocalIdentifier is { } id)
-            {
-                sessionHandle = GetOrCreateTransaction(id);
-                return true;
-            }
-
-            sessionHandle = null!;
-            return false;
-        }
 
         public IAsyncCursor<TResult> Aggregate<TResult>(
             PipelineDefinition<T, TResult> pipeline,

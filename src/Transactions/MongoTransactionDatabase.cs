@@ -488,5 +488,8 @@ namespace MongoDB.Extensions.Transactions
         public DatabaseNamespace DatabaseNamespace => _database.DatabaseNamespace;
 
         public MongoDatabaseSettings Settings => _database.Settings;
+
+        private bool TryGetSession(out IClientSessionHandle sessionHandle) =>
+            TransactionStore.TryGetSession(_database.Client, out sessionHandle);
     }
 }

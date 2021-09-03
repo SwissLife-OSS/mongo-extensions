@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Core.Clusters;
-using static MongoDB.Extensions.Transactions.TransactionStore;
 
 namespace MongoDB.Extensions.Transactions
 {
@@ -283,5 +282,8 @@ namespace MongoDB.Extensions.Transactions
         public ICluster Cluster => _client.Cluster;
 
         public MongoClientSettings Settings => _client.Settings;
+
+        private bool TryGetSession(out IClientSessionHandle sessionHandle) =>
+            TransactionStore.TryGetSession(_client, out sessionHandle);
     }
 }

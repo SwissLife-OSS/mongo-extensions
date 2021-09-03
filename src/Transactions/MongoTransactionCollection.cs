@@ -1,11 +1,9 @@
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
-using static MongoDB.Extensions.Transactions.TransactionStore;
 
 #pragma warning disable 618
 
@@ -14,14 +12,11 @@ namespace MongoDB.Extensions.Transactions
     public class MongoTransactionCollection<T> : IMongoCollection<T>
     {
         private readonly IMongoCollection<T> _collection;
-        private readonly IMongoClient _client;
 
         public MongoTransactionCollection(IMongoCollection<T> collection)
         {
             _collection = collection;
-            _client = collection.Database.Client;
         }
-
 
         public IAsyncCursor<TResult> Aggregate<TResult>(
             PipelineDefinition<T, TResult> pipeline,
@@ -1073,5 +1068,8 @@ namespace MongoDB.Extensions.Transactions
         public IMongoIndexManager<T> Indexes => _collection.Indexes;
 
         public MongoCollectionSettings Settings => _collection.Settings;
+
+        private bool TryGetSession(out IClientSessionHandle sessionHandle) =>
+            TransactionStore.TryGetSession(_collection.Database.Client, out sessionHandle);
     }
 }

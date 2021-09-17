@@ -59,7 +59,7 @@ namespace MongoDB.Extensions.Context.Tests
                 result.Should().Be(new A("a", null));
             }
 
-            public record A(string Foo, int? Bar)
+            public record A(string Foo, int? Bar = default)
             {
                 public string? BarFoo { get; init; }
                 public int FooBar { get; init; }

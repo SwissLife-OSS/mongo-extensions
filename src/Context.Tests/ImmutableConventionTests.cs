@@ -123,6 +123,23 @@ namespace MongoDB.Extensions.Context.Tests
             }
 
             [Fact]
+            public async Task ApplyConvention_WithoutValueInDbWithoutDefault_SerializeSuccessful()
+            {
+                // Arrange
+                IMongoCollection<C> collectionTyped =
+                    _context.Database.GetCollection<C>("test");
+                IMongoCollection<BsonDocument> collectionUntyped =
+                    _context.Database.GetCollection<BsonDocument>("test");
+
+                // Act
+                await collectionUntyped.InsertOneAsync(new BsonDocument { { "_A", "a" } });
+
+                // Assert
+                C result = await collectionTyped.FindSync(FilterDefinition<C>.Empty).FirstAsync();
+                result.MatchSnapshot();
+            }
+
+            [Fact]
             public async Task ApplyConvention_WithValue_SerializeSuccessful()
             {
                 // Arrange
@@ -139,6 +156,18 @@ namespace MongoDB.Extensions.Context.Tests
             public class A
             {
                 public A(string _a, string? _b = default)
+                {
+                    _A = _a;
+                    _B = _b;
+                }
+
+                public string _A { get; }
+                public string? _B { get; }
+            }
+
+            public class C
+            {
+                public C(string _a, string? _b)
                 {
                     _A = _a;
                     _B = _b;

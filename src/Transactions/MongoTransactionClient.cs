@@ -22,6 +22,7 @@ namespace MongoDB.Extensions.Transactions
             if (TryGetSession(out IClientSessionHandle? session))
             {
                 _client.DropDatabase(session, name, cancellationToken);
+                return;
             }
 
             _client.DropDatabase(name, cancellationToken);

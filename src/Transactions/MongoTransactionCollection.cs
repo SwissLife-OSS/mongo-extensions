@@ -70,6 +70,7 @@ namespace MongoDB.Extensions.Transactions
             if (TryGetSession(out IClientSessionHandle? session))
             {
                 AggregateToCollection(session, pipeline, options, cancellationToken);
+                return;
             }
 
             _collection.AggregateToCollection(pipeline, options, cancellationToken);
@@ -654,6 +655,7 @@ namespace MongoDB.Extensions.Transactions
             if (TryGetSession(out IClientSessionHandle? session))
             {
                 InsertOne(session, document, options, cancellationToken);
+                return;
             }
 
             _collection.InsertOne(document, options, cancellationToken);
@@ -709,6 +711,7 @@ namespace MongoDB.Extensions.Transactions
             {
                 // ReSharper disable once PossibleMultipleEnumeration
                 InsertMany(session, documents, options, cancellationToken);
+                return;
             }
 
             // ReSharper disable once PossibleMultipleEnumeration

@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transactions", "Transaction
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transactions.Tests", "Transactions.Tests\Transactions.Tests.csproj", "{ADD0EC1E-226B-4122-B745-6D64435E064E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Context.Tests2", "Context.Tests2\Context.Tests2.csproj", "{6655AD69-6FD7-4AE2-BF09-53152911D7BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Context.InterferingTests", "Context.InterferingTests\Context.InterferingTests.csproj", "{6655AD69-6FD7-4AE2-BF09-53152911D7BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

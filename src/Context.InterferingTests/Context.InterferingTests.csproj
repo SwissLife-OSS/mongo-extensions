@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFrameworks>net5.0;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
-    <AssemblyName>MongoDB.Extensions.Context.Tests2</AssemblyName>
-    <RootNamespace>MongoDB.Extensions.Context.Tests2</RootNamespace>
+    <AssemblyName>MongoDB.Extensions.Context.InterferingTests</AssemblyName>
+    <RootNamespace>MongoDB.Extensions.Context.InterferingTests</RootNamespace>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 

@@ -21,6 +21,7 @@ namespace MongoDB.Extensions.Context.Tests
             [Fact]
             public async Task ApplyConvention_SerializeSuccessful()
             {
+                // Arrange, Act and Assert
                 await InsertAndFind(_context, new A("a"));
             }
 
@@ -37,15 +38,39 @@ namespace MongoDB.Extensions.Context.Tests
                 _context = CreateContext(mongoResource);
             }
 
-            [Fact]
-            public async Task ApplyConvention_SerializeSuccessful()
+            [Theory]
+            [InlineData(null)]
+            [InlineData(1)]
+            public async Task ApplyConvention_SerializeSuccessful(int? secondValue)
             {
-                await InsertAndFind(_context, new A("a", null));
+                // Arrange, Act and Assert
+                await InsertAndFind(_context, new A("a", secondValue));
+            }
+
+            [Fact]
+            public async Task ApplyConvention_WithValueInDb_SerializeSuccessful()
+            {
+                // Arrange
+                IMongoCollection<A> collectionTyped =
+                    _context.Database.GetCollection<A>("test");
+                IMongoCollection<BsonDocument> collectionUntyped =
+                    _context.Database.GetCollection<BsonDocument>("test");
+
+                // Act
+                await collectionUntyped.InsertOneAsync(new BsonDocument
+                {
+                    { "Foo", "a" }, { "Bar", "42" }
+                });
+
+                // Assert
+                A result = await collectionTyped.FindSync(FilterDefinition<A>.Empty).FirstAsync();
+                result.Should().Be(new A("a", 42));
             }
 
             [Fact]
             public async Task ApplyConvention_WithoutValueInDb_SerializeSuccessful()
             {
+                // Arrange
                 IMongoCollection<A> collectionTyped =
                     _context.Database.GetCollection<A>("test");
                 IMongoCollection<BsonDocument> collectionUntyped =
@@ -79,6 +104,7 @@ namespace MongoDB.Extensions.Context.Tests
             [Fact]
             public async Task ApplyConvention_SerializeSuccessful()
             {
+                // Arrange, Act and Assert
                 await InsertAndFind(_context, new A(new B("bar"), "a"));
             }
 

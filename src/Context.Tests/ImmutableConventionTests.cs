@@ -123,6 +123,20 @@ namespace MongoDB.Extensions.Context.Tests
             }
 
             [Fact]
+            public async Task ApplyConvention_CtorWithDefault_SerializeSuccessful()
+            {
+                // Arrange
+                IMongoCollection<C> collection = _context.CreateCollection<C>();
+
+                // Act
+                await collection.InsertOneAsync(new C("a", "b"));
+
+                // Assert
+                C result = await collection.FindSync(FilterDefinition<C>.Empty).FirstAsync();
+                result.MatchSnapshot();
+            }
+
+            [Fact]
             public async Task ApplyConvention_WithoutValueInDbWithoutDefault_SerializeSuccessful()
             {
                 // Arrange

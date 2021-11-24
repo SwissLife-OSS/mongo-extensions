@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFrameworks>net5.0;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
-    <AssemblyName>MongoDB.Extensions.Context.Tests</AssemblyName>
-    <RootNamespace>MongoDB.Extensions.Context.Tests</RootNamespace>
+    <AssemblyName>MongoDB.Extensions.Context.InterferingTests</AssemblyName>
+    <RootNamespace>MongoDB.Extensions.Context.InterferingTests</RootNamespace>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -26,10 +26,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Context\Context.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="IsExternalInit.cs" Condition="'$(TargetFramework)' == 'net5.0'" />
   </ItemGroup>
 
 </Project>

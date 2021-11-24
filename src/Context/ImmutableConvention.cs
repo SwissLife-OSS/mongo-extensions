@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -11,6 +12,8 @@ namespace MongoDB.Extensions.Context
         , IClassMapConvention
     {
         private readonly BindingFlags _bindingFlags;
+        private readonly string _externalInitTypeName =
+            "System.Runtime.CompilerServices.IsExternalInit";
         private readonly string _nullableAttributeFullName =
             "System.Runtime.CompilerServices.NullableAttribute";
 
@@ -29,10 +32,11 @@ namespace MongoDB.Extensions.Context
             var properties = classMap.ClassType
                 .GetTypeInfo()
                 .GetProperties(_bindingFlags)
+                .Where(p => p.PropertyType != typeof(Type))
                 .ToList();
 
             var mappingProperties = properties
-                .Where(p => IsReadOnlyProperty(classMap, p))
+                .Where(p => IsReadOnlyProperty(classMap, p) || IsInitOnlyProperty(p))
                 .ToList();
 
             foreach (PropertyInfo property in mappingProperties)
@@ -40,7 +44,7 @@ namespace MongoDB.Extensions.Context
                 BsonMemberMap member = classMap.MapMember(property);
                 if (IsNullableProperty(property))
                 {
-                    member.SetDefaultValue((object)null);
+                    member.SetDefaultValue((object?)null);
                 }
             }
 
@@ -65,8 +69,9 @@ namespace MongoDB.Extensions.Context
 
         private bool IsNullableProperty(PropertyInfo propertyInfo)
         {
-            return propertyInfo.CustomAttributes
-                .Any(a => a.AttributeType.FullName == _nullableAttributeFullName);
+            return Nullable.GetUnderlyingType(propertyInfo.PropertyType) != null ||
+                   propertyInfo.CustomAttributes.Any(a =>
+                       a.AttributeType.FullName == _nullableAttributeFullName);
         }
 
         private static List<PropertyInfo> GetMatchingProperties(
@@ -78,7 +83,7 @@ namespace MongoDB.Extensions.Context
             ParameterInfo[] ctorParameters = constructor.GetParameters();
             foreach (ParameterInfo ctorParameter in ctorParameters)
             {
-                PropertyInfo matchProperty = properties
+                PropertyInfo? matchProperty = properties
                     .FirstOrDefault(p => ParameterMatchProperty(ctorParameter, p));
 
                 if (matchProperty == null)
@@ -100,7 +105,7 @@ namespace MongoDB.Extensions.Context
             return string.Equals(
                        property.Name,
                        parameter.Name,
-                       System.StringComparison.InvariantCultureIgnoreCase) &&
+                       StringComparison.InvariantCultureIgnoreCase) &&
                    parameter.ParameterType == property.PropertyType;
         }
 
@@ -133,6 +138,19 @@ namespace MongoDB.Extensions.Context
             }
 
             return true;
+        }
+
+        private bool IsInitOnlyProperty(PropertyInfo property)
+        {
+            if (!property.CanWrite)
+            {
+                return false;
+            }
+
+            var setModifiers = property.SetMethod?.ReturnParameter?.GetRequiredCustomModifiers();
+            var containsInit = setModifiers?.Any(m =>
+                m.FullName == _externalInitTypeName);
+            return containsInit ?? false;
         }
 
         private static bool IsBaseTypeProperty(BsonClassMap classMap, MethodInfo getMethodInfo)

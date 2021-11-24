@@ -67,6 +67,7 @@ namespace MongoDB.Extensions.Transactions
             if (TryGetSession(out IClientSessionHandle? session))
             {
                 _database.AggregateToCollection(session, pipeline, options, cancellationToken);
+                return;
             }
 
             _database.AggregateToCollection(pipeline, options, cancellationToken);
@@ -113,6 +114,7 @@ namespace MongoDB.Extensions.Transactions
             if (TryGetSession(out IClientSessionHandle? session))
             {
                 _database.CreateCollection(session, name, options, cancellationToken);
+                return;
             }
 
             _database.CreateCollection(name, options, cancellationToken);
@@ -160,6 +162,7 @@ namespace MongoDB.Extensions.Transactions
             {
                 _database
                     .CreateView(session, viewName, viewOn, pipeline, options, cancellationToken);
+                return;
             }
 
             _database.CreateView(viewName, viewOn, pipeline, options, cancellationToken);
@@ -215,6 +218,7 @@ namespace MongoDB.Extensions.Transactions
             if (TryGetSession(out IClientSessionHandle? session))
             {
                 _database.DropCollection(session, name, cancellationToken);
+                return;
             }
 
             _database.DropCollection(name, cancellationToken);
@@ -344,6 +348,7 @@ namespace MongoDB.Extensions.Transactions
             if (TryGetSession(out IClientSessionHandle? session))
             {
                 _database.RenameCollection(session, oldName, newName, options, cancellationToken);
+                return;
             }
 
             _database.RenameCollection(oldName, newName, options, cancellationToken);

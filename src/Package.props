@@ -4,14 +4,15 @@
     <Product>MongoDB Extensions</Product>
     <Authors>Swiss Life authors and contributors</Authors>
     <Company>Swiss Life</Company>
-    <Copyright>Copyright © 2019 Swiss Life</Copyright>
+    <Copyright>Copyright © $(Company) $([System.DateTime]::Now.Year)</Copyright>
     <PackageLicenseUrl>https://github.com/SwissLife-OSS/mongo-extensions/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/SwissLife-OSS/mongo-extensions</PackageProjectUrl>
     <PackageReleaseNotes>Release notes: https://github.com/SwissLife-OSS/mongo-extensions/releases/$(Version)</PackageReleaseNotes>
     <PackageTags>MongoDB Extensions DbContext Context Boostrap Mongo .Net</PackageTags>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageIconUrl>https://github.com/SwissLife-OSS/mongo-extensions-docs/raw/master/logo.png</PackageIconUrl>
-	  <IsPackable>false</IsPackable>
+	<IsPackable>false</IsPackable> 
+	<LangVersion>10.0</LangVersion>	
   </PropertyGroup>
 
   <PropertyGroup>
@@ -25,7 +26,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net5.0;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net6.0;netcoreapp2.1;netcoreapp3.1</TargetFrameworks>
     <AssemblyName>MongoDB.Extensions.Context.Tests</AssemblyName>
     <RootNamespace>MongoDB.Extensions.Context.Tests</RootNamespace>
     <IsPackable>false</IsPackable>
@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="IsExternalInit.cs" Condition="'$(TargetFramework)' == 'net5.0'" />
+    <Compile Remove="IsExternalInit.cs" Condition="'$(TargetFramework)' == 'net6.0'" />
   </ItemGroup>
 
 </Project>

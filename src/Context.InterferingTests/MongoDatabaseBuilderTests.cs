@@ -7,9 +7,11 @@ using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 using Squadron;
 using Xunit;
+using Xunit.Priority;
 
 namespace MongoDB.Extensions.Context.Tests
 {
+    [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
     public class MongoDatabaseBuilderTests : IClassFixture<MongoResource>
     {
         private readonly MongoOptions _mongoOptions;
@@ -211,6 +213,7 @@ namespace MongoDB.Extensions.Context.Tests
         }
 
         [Fact]
+        [Priority(0)]
         public void RegisterConventionPack_ConventionPackNotRegistered_ConventionPacksNotRegistered()
         {
             // Arrange

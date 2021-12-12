@@ -18,9 +18,7 @@ namespace MongoDB.Extensions.Context
 
         public MongoCollectionBuilder(IMongoDatabase mongoDatabase)
         {
-            _mongoDatabase = mongoDatabase 
-                ?? throw new ArgumentNullException(nameof(mongoDatabase));
-
+            _mongoDatabase = mongoDatabase;
             _collectionName = typeof(TDocument).Name;
             _classMapActions = new List<Action>();
             _collectionConfigurations = new List<Action<IMongoCollection<TDocument>>>();

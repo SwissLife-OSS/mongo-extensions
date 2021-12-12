@@ -1,55 +1,61 @@
-using System;
-using System.Collections.Generic;
 using MongoDB.Driver;
+using MongoDB.Extensions.Context.Internal;
 
 namespace MongoDB.Extensions.Context
 {
     internal class MongoDbContextData
     {
-        private readonly Dictionary<Type, object> _mongoCollectionBuilders;
+        private readonly IMongoCollections _mongoCollections;
+        private readonly object _lockObject = new object();
 
         public MongoDbContextData(
             IMongoClient mongoClient,
             IMongoDatabase mongoDatabase,
-            Dictionary<Type, object> mongoCollectionBuilders)
+            IMongoCollections mongoCollections)
         {
-            Client = mongoClient ?? 
-                throw new ArgumentNullException(nameof(mongoClient));
-            Database = mongoDatabase ??
-                throw new ArgumentNullException(nameof(mongoDatabase));
-            _mongoCollectionBuilders = mongoCollectionBuilders ??
-                throw new ArgumentNullException(nameof(mongoCollectionBuilders));
+            Client = mongoClient;
+            Database = mongoDatabase;
+            _mongoCollections = mongoCollections;
         }
 
         public IMongoClient Client { get; }
         public IMongoDatabase Database { get; }
 
-        internal IMongoCollection<TDocument> CreateCollection<TDocument>() 
+        public IMongoCollection<TDocument> GetCollection<TDocument>()
             where TDocument : class
         {
-            MongoCollectionBuilder<TDocument> collectionBuilder =
-                TryGetCollectionBuilder<TDocument>();
-
-            if (collectionBuilder == null)
-            {
-                collectionBuilder = new MongoCollectionBuilder<TDocument>(Database);
-            }
-
-            return collectionBuilder.Build();
+            return GetConfiguredCollection<TDocument>();
         }
 
-        private MongoCollectionBuilder<TDocument> TryGetCollectionBuilder<TDocument>() 
+        private IMongoCollection<TDocument> GetConfiguredCollection<TDocument>()
             where TDocument : class
         {
-            MongoCollectionBuilder<TDocument> collectionBuilder = null;
+            IMongoCollection<TDocument>? configuredCollection =
+                _mongoCollections.TryGetCollection<TDocument>();
 
-            if (_mongoCollectionBuilders.ContainsKey(typeof(TDocument)))
+            if (configuredCollection == null)
             {
-                collectionBuilder = (MongoCollectionBuilder<TDocument>)
-                    _mongoCollectionBuilders[typeof(TDocument)];
+                lock (_lockObject)
+                {
+                    if (configuredCollection == null)
+                    {
+                        return AddDefaultCollection<TDocument>();
+                    }
+                }
             }
 
-            return collectionBuilder;
+            return configuredCollection;
+        }
+
+        private IMongoCollection<TDocument> AddDefaultCollection<TDocument>()
+            where TDocument : class
+        {
+            IMongoCollection<TDocument> configuredCollection =
+                new MongoCollectionBuilder<TDocument>(Database).Build();
+
+            _mongoCollections.Add(configuredCollection);
+
+            return configuredCollection;
         }
     }
 }

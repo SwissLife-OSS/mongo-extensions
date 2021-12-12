@@ -117,7 +117,7 @@ namespace MongoDB.Extensions.Context.Tests
         private static async Task InsertAndFind<T>(MongoDbContextData context, T input) where T : class
         {
             // Arrange
-            IMongoCollection<T> collection = context.CreateCollection<T>();
+            IMongoCollection<T> collection = context.GetCollection<T>();
 
             // Act
             await collection.InsertOneAsync(input);

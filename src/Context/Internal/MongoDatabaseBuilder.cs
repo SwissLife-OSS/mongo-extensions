@@ -5,6 +5,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
+using MongoDB.Extensions.Context.Internal;
 
 namespace MongoDB.Extensions.Context
 {
@@ -15,7 +16,7 @@ namespace MongoDB.Extensions.Context
         private readonly List<Action> _registrationSerializerActions;
         private readonly List<Action<MongoClientSettings>> _mongoClientSettingsActions;
         private readonly List<Action<IMongoDatabase>> _databaseConfigurationActions;
-        private readonly List<Action<IMongoDatabase, Dictionary<Type, object>>> _builderActions;
+        private readonly List<Action<IMongoDatabase, IMongoCollections>> _collectionActions;
 
         private static readonly object _lockObject = new object();
         private static readonly Dictionary<string, Type> _registeredSerializers;
@@ -34,24 +35,30 @@ namespace MongoDB.Extensions.Context
             _registrationSerializerActions = new List<Action>();
             _mongoClientSettingsActions = new List<Action<MongoClientSettings>>();
             _databaseConfigurationActions = new List<Action<IMongoDatabase>>();
-            _builderActions = new List<Action<IMongoDatabase, Dictionary<Type, object>>>();
+            _collectionActions = new List<Action<IMongoDatabase, IMongoCollections>>();
         }
-        
+
         public IMongoDatabaseBuilder ConfigureConnection(
             Action<MongoClientSettings> mongoClientSettingsAction)
         {
             _mongoClientSettingsActions.Add(mongoClientSettingsAction);
+            return this;
+        }
 
+        public IMongoDatabaseBuilder ConfigureClientSettings(
+            Action<MongoClientSettings> mongoClientSettingsAction)
+        {
+            _mongoClientSettingsActions.Add(mongoClientSettingsAction);
             return this;
         }
 
         public IMongoDatabaseBuilder ConfigureCollection<TDocument>(
             IMongoCollectionConfiguration<TDocument> configuration) where TDocument : class
         {
-            Action<IMongoDatabase, Dictionary<Type, object>> buildAction =
+            Action<IMongoDatabase, IMongoCollections> collectionConfigurationAction =
                 (mongoDb, mongoCollectionBuilders) =>
                 {
-                    if (mongoCollectionBuilders.ContainsKey(typeof(TDocument)))
+                    if (mongoCollectionBuilders.Exists<TDocument>())
                     {
                         throw new Exception($"The mongo collection configuration for " +
                             $"document type '{typeof(TDocument)}' already exists.");
@@ -60,12 +67,14 @@ namespace MongoDB.Extensions.Context
                     var collectionBuilder = new MongoCollectionBuilder<TDocument>(mongoDb);
 
                     configuration.OnConfiguring(collectionBuilder);
-                    collectionBuilder.Build();
 
-                    mongoCollectionBuilders.Add(typeof(TDocument), collectionBuilder);
+                    IMongoCollection<TDocument> configuredCollection =
+                        collectionBuilder.Build();
+
+                    mongoCollectionBuilders.Add(configuredCollection);
                 };
 
-            _builderActions.Add(buildAction);
+            _collectionActions.Add(collectionConfigurationAction);
 
             return this;
         }
@@ -161,16 +170,19 @@ namespace MongoDB.Extensions.Context
                 .GetDatabase(_mongoOptions.DatabaseName);
 
             // configure mongo database
-            _databaseConfigurationActions.ForEach(configure => configure(mongoDatabase));
+            _databaseConfigurationActions.ForEach(
+                configure => configure(mongoDatabase));
 
-            // create mongo collection builders
-            var mongoCollectionBuilders = new Dictionary<Type, object>();
-            _builderActions.ForEach(
-                config => config(mongoDatabase, mongoCollectionBuilders));
+            // create mongo collections
+            var mongoCollections = new MongoCollections();
 
-            // create configured mongo db context
+            // configure mongo collections
+            _collectionActions.ForEach(
+                config => config(mongoDatabase, mongoCollections));
+
+            // create configured mongo db context data
             return new MongoDbContextData(
-                mongoClient, mongoDatabase, mongoCollectionBuilders);
+                mongoClient, mongoDatabase, mongoCollections);
         }
 
         private MongoClientSettings SetDefaultClientSettings(

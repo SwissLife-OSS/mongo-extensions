@@ -22,7 +22,7 @@ namespace MongoDB.Extensions.Context.Tests
             public async Task ApplyConvention_SerializeSuccessful()
             {
                 // Arrange
-                IMongoCollection<A> collection = _context.CreateCollection<A>();
+                IMongoCollection<A> collection = _context.GetCollection<A>();
 
                 // Act
                 await collection.InsertOneAsync(new A("a"));
@@ -56,7 +56,7 @@ namespace MongoDB.Extensions.Context.Tests
             public async Task ApplyConvention_SerializeSuccessful()
             {
                 // Arrange
-                IMongoCollection<IA> collection = _context.CreateCollection<IA>();
+                IMongoCollection<IA> collection = _context.GetCollection<IA>();
 
                 // Act
                 await collection.InsertOneAsync(new A("a"));
@@ -95,7 +95,7 @@ namespace MongoDB.Extensions.Context.Tests
             public async Task ApplyConvention_WithoutValue_SerializeSuccessful()
             {
                 // Arrange
-                IMongoCollection<A> collection = _context.CreateCollection<A>();
+                IMongoCollection<A> collection = _context.GetCollection<A>();
 
                 // Act
                 await collection.InsertOneAsync(new A("a"));
@@ -126,7 +126,7 @@ namespace MongoDB.Extensions.Context.Tests
             public async Task ApplyConvention_CtorWithDefault_SerializeSuccessful()
             {
                 // Arrange
-                IMongoCollection<C> collection = _context.CreateCollection<C>();
+                IMongoCollection<C> collection = _context.GetCollection<C>();
 
                 // Act
                 await collection.InsertOneAsync(new C("a", "b"));
@@ -157,7 +157,7 @@ namespace MongoDB.Extensions.Context.Tests
             public async Task ApplyConvention_WithValue_SerializeSuccessful()
             {
                 // Arrange
-                IMongoCollection<A> collection = _context.CreateCollection<A>();
+                IMongoCollection<A> collection = _context.GetCollection<A>();
 
                 // Act
                 await collection.InsertOneAsync(new A("a", "b"));
@@ -205,7 +205,7 @@ namespace MongoDB.Extensions.Context.Tests
             public async Task ApplyConvention_WithoutValue_SerializeSuccessful()
             {
                 // Arrange
-                IMongoCollection<A> collection = _context.CreateCollection<A>();
+                IMongoCollection<A> collection = _context.GetCollection<A>();
 
                 // Act
                 await collection.InsertOneAsync(new A("a"));
@@ -219,7 +219,7 @@ namespace MongoDB.Extensions.Context.Tests
             public async Task ApplyConvention_WithValue_SerializeSuccessful()
             {
                 // Arrange
-                IMongoCollection<A> collection = _context.CreateCollection<A>();
+                IMongoCollection<A> collection = _context.GetCollection<A>();
 
                 // Act
                 await collection.InsertOneAsync(new A("a", 9));
@@ -255,7 +255,7 @@ namespace MongoDB.Extensions.Context.Tests
             public async Task ApplyConvention_SerializeSuccessful()
             {
                 // Arrange
-                IMongoCollection<A> collection = _context.CreateCollection<A>();
+                IMongoCollection<A> collection = _context.GetCollection<A>();
 
                 // Act
                 await collection.InsertOneAsync(new B("a", "b"));
@@ -300,7 +300,7 @@ namespace MongoDB.Extensions.Context.Tests
             public async Task ApplyConvention_SerializeSuccessful()
             {
                 // Arrange
-                IMongoCollection<A> collection = _context.CreateCollection<A>();
+                IMongoCollection<A> collection = _context.GetCollection<A>();
 
                 // Act
                 await collection.InsertOneAsync(new B("a", "b"));
@@ -341,7 +341,7 @@ namespace MongoDB.Extensions.Context.Tests
             public async Task ApplyConvention_SerializeSuccessful()
             {
                 // Arrange
-                IMongoCollection<A> collection = _context.CreateCollection<A>();
+                IMongoCollection<A> collection = _context.GetCollection<A>();
 
                 // Act
                 await collection.InsertOneAsync(new B("a", "b"));
@@ -386,7 +386,7 @@ namespace MongoDB.Extensions.Context.Tests
             public async Task ApplyConvention_SerializeSuccessful()
             {
                 // Arrange
-                IMongoCollection<A> collection = _context.CreateCollection<A>();
+                IMongoCollection<A> collection = _context.GetCollection<A>();
 
                 // Act
                 await collection.InsertOneAsync(new B("b"));
@@ -425,7 +425,7 @@ namespace MongoDB.Extensions.Context.Tests
             public async Task ApplyConvention_SerializeSuccessful()
             {
                 // Arrange
-                IMongoCollection<A> collection = _context.CreateCollection<A>();
+                IMongoCollection<A> collection = _context.GetCollection<A>();
 
                 // Act
                 await collection.InsertOneAsync(new B("a", "b"));

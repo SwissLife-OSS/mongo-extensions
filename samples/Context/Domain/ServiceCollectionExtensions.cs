@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MongoDB.Extensions.Context;
 
 namespace SimpleBlog.Domain
 {

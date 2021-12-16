@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
@@ -10,8 +10,8 @@ namespace MongoDB.Prime.Extensions
         public static Task InsertOneAsync<TDocument>(
             this IMongoCollection<TDocument> collection,
             TDocument document,
-            IClientSessionHandle session = null,
-            InsertOneOptions options = null,
+            IClientSessionHandle? session = null,
+            InsertOneOptions? options = null,
             CancellationToken cancellationToken = default)
         {
             if (session is { })
@@ -27,8 +27,8 @@ namespace MongoDB.Prime.Extensions
         public static Task InsertManyAsync<TDocument>(
             this IMongoCollection<TDocument> collection,
             IEnumerable<TDocument> documents,
-            IClientSessionHandle session = null,
-            InsertManyOptions options = null,
+            IClientSessionHandle? session = null,
+            InsertManyOptions? options = null,
             CancellationToken cancellationToken = default)
         {
             if (session is { })

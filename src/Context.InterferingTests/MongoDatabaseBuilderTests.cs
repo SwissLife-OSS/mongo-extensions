@@ -5,6 +5,8 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
+using MongoDB.Extensions.Context.InterferingTests.Helpers;
+using Snapshooter.Xunit;
 using Squadron;
 using Xunit;
 using Xunit.Priority;
@@ -408,6 +410,42 @@ namespace MongoDB.Extensions.Context.Tests
 
             // Assert
             Assert.True(result.Client.IsTableScanDisabled());
+        }
+
+        #endregion
+
+        #region ConfigureCollection Tests
+
+        [Fact]
+        public void ConfigureCollection_SetDifferentSettingsToCollection_CollectionConfiguredSuccessfully()
+        {
+            // Arrange
+            var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
+
+            // Act
+            mongoDatabaseBuilder.ConfigureCollection(new FooCollectionConfiguration());
+            MongoDbContextData result = mongoDatabaseBuilder.Build();
+
+            // Assert
+            IMongoCollection<Foo> collection = result.GetCollection<Foo>();
+
+            IEnumerable<BsonClassMap> classMaps = BsonClassMap.GetRegisteredClassMaps();
+                
+            Snapshot.Match(new
+            {
+                CollectionName = collection.CollectionNamespace.CollectionName,
+                Settings = collection.Settings,
+                Indexes = collection.Indexes.List().ToList(),
+                ClassMaps = classMaps.Select(map => new {
+                    Name = map.Discriminator,
+                    IdMemberMap = new {
+                        map.IdMemberMap?.ElementName,
+                        map.IdMemberMap?.MemberName },
+                    AllMemberMaps = map.AllMemberMaps.Select(amm =>
+                        new { amm.ElementName, amm.MemberName }),
+                    IgnoreExtraElements = map.IgnoreExtraElements
+                })
+            });
         }
 
         #endregion

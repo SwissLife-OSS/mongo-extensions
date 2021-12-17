@@ -5,7 +5,7 @@ namespace MongoDB.Extensions.Context
 {
     public abstract class MongoDbContext : IMongoDbContext
     {
-        private MongoDbContextData _mongoDbContextData;
+        private MongoDbContextData? _mongoDbContextData;
 
         private readonly object _lockObject = new object();
 
@@ -15,11 +15,6 @@ namespace MongoDB.Extensions.Context
 
         public MongoDbContext(MongoOptions mongoOptions, bool enableAutoInitialize)
         {
-            if (mongoOptions == null)
-            {
-                throw new ArgumentNullException(nameof(mongoOptions));
-            }
-
             MongoOptions = mongoOptions.Validate();
 
             if (enableAutoInitialize)
@@ -27,13 +22,14 @@ namespace MongoDB.Extensions.Context
                 Initialize();
             }
         }
+        public MongoOptions MongoOptions { get; }
 
         public IMongoClient Client
         {
             get
             {
                 EnsureInitialized();
-                return _mongoDbContextData.Client;
+                return _mongoDbContextData!.Client;
             }
         }
 
@@ -42,35 +38,19 @@ namespace MongoDB.Extensions.Context
             get
             {
                 EnsureInitialized();
-                return _mongoDbContextData.Database;
+                return _mongoDbContextData!.Database;
             }
         }
-
-        public MongoOptions MongoOptions { get; }
-        
+                
         public IMongoCollection<TDocument> CreateCollection<TDocument>()
             where TDocument : class
         {
             EnsureInitialized();
-            return _mongoDbContextData.CreateCollection<TDocument>();
+            return _mongoDbContextData!.GetCollection<TDocument>();
         }
-        
+
         protected abstract void OnConfiguring(IMongoDatabaseBuilder mongoDatabaseBuilder);
-
-        private void EnsureInitialized()
-        {
-            if (_mongoDbContextData == null)
-            {
-                lock (_lockObject)
-                {
-                    if (_mongoDbContextData == null)
-                    {
-                        throw new InvalidOperationException("MongoDbContext not initialized.");
-                    }
-                }
-            }
-        }
-
+        
         public virtual void Initialize()
         {
             if(_mongoDbContextData == null)
@@ -84,6 +64,20 @@ namespace MongoDB.Extensions.Context
                         OnConfiguring(mongoDatabaseBuilder);
 
                         _mongoDbContextData = mongoDatabaseBuilder.Build();
+                    }
+                }
+            }
+        }
+
+        private void EnsureInitialized()
+        {
+            if (_mongoDbContextData == null)
+            {
+                lock (_lockObject)
+                {
+                    if (_mongoDbContextData == null)
+                    {
+                        throw new InvalidOperationException("MongoDbContext not initialized.");
                     }
                 }
             }

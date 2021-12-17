@@ -1,0 +1,176 @@
+﻿{
+  "CollectionName": "TheArtOfFoo",
+  "Settings": {
+    "AssignIdOnInsert": true,
+    "GuidRepresentation": "CSharpLegacy",
+    "IsFrozen": true,
+    "ReadConcern": {
+      "IsServerDefault": false,
+      "Level": "Available"
+    },
+    "ReadEncoding": null,
+    "ReadPreference": {
+      "Hedge": null,
+      "MaxStaleness": null,
+      "ReadPreferenceMode": "Primary",
+      "TagSets": []
+    },
+    "SerializerRegistry": {},
+    "WriteConcern": {
+      "FSync": null,
+      "IsAcknowledged": true,
+      "IsServerDefault": false,
+      "Journal": true,
+      "W": {
+        "Value": "majority"
+      },
+      "WTimeout": null
+    },
+    "WriteEncoding": null
+  },
+  "Indexes": [
+    [
+      {
+        "Name": "v",
+        "Value": 2
+      },
+      {
+        "Name": "key",
+        "Value": [
+          {
+            "Name": "_id",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Name": "name",
+        "Value": "_id_"
+      }
+    ],
+    [
+      {
+        "Name": "v",
+        "Value": 2
+      },
+      {
+        "Name": "key",
+        "Value": [
+          {
+            "Name": "Name",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Name": "name",
+        "Value": "Name_case_insensitive"
+      },
+      {
+        "Name": "background",
+        "Value": true
+      },
+      {
+        "Name": "collation",
+        "Value": [
+          {
+            "Name": "locale",
+            "Value": "en"
+          },
+          {
+            "Name": "caseLevel",
+            "Value": false
+          },
+          {
+            "Name": "caseFirst",
+            "Value": "off"
+          },
+          {
+            "Name": "strength",
+            "Value": 2
+          },
+          {
+            "Name": "numericOrdering",
+            "Value": false
+          },
+          {
+            "Name": "alternate",
+            "Value": "non-ignorable"
+          },
+          {
+            "Name": "maxVariable",
+            "Value": "punct"
+          },
+          {
+            "Name": "normalization",
+            "Value": false
+          },
+          {
+            "Name": "backwards",
+            "Value": false
+          },
+          {
+            "Name": "version",
+            "Value": "57.1"
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "Name": "v",
+        "Value": 2
+      },
+      {
+        "Name": "key",
+        "Value": [
+          {
+            "Name": "Number",
+            "Value": 1
+          }
+        ]
+      },
+      {
+        "Name": "name",
+        "Value": "Number_1"
+      },
+      {
+        "Name": "unique",
+        "Value": true
+      }
+    ]
+  ],
+  "ClassMaps": [
+    {
+      "Name": "Foo",
+      "IdMemberMap": {
+        "ElementName": "_id",
+        "MemberName": "FooId"
+      },
+      "AllMemberMaps": [
+        {
+          "ElementName": "_id",
+          "MemberName": "FooId"
+        },
+        {
+          "ElementName": "Name",
+          "MemberName": "Name"
+        },
+        {
+          "ElementName": "Number",
+          "MemberName": "Number"
+        }
+      ],
+      "IgnoreExtraElements": false
+    },
+    {
+      "Name": "Object",
+      "IdMemberMap": {
+        "ElementName": null,
+        "MemberName": null
+      },
+      "AllMemberMaps": [],
+      "IgnoreExtraElements": false
+    }
+  ]
+}

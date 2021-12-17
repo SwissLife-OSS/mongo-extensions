@@ -147,18 +147,25 @@ namespace MongoDB.Extensions.Context
                 return false;
             }
 
-            var setModifiers = property.SetMethod?.ReturnParameter?.GetRequiredCustomModifiers();
+            Type[]? setModifiers =
+                property.SetMethod?.ReturnParameter?.GetRequiredCustomModifiers();
+
             var containsInit = setModifiers?.Any(m =>
                 m.FullName == _externalInitTypeName);
+
             return containsInit ?? false;
         }
 
-        private static bool IsBaseTypeProperty(BsonClassMap classMap, MethodInfo getMethodInfo)
+        private static bool IsBaseTypeProperty(
+            BsonClassMap classMap,
+            MethodInfo getMethodInfo)
         {
             return getMethodInfo.GetBaseDefinition().DeclaringType != classMap.ClassType;
         }
 
-        private static bool IsOverrideProperty(BsonClassMap classMap, MethodInfo getMethodInfo)
+        private static bool IsOverrideProperty(
+            BsonClassMap classMap,
+            MethodInfo getMethodInfo)
         {
             return getMethodInfo.DeclaringType == classMap.ClassType;
         }

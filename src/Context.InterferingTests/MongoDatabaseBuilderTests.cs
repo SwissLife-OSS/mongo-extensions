@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
@@ -450,6 +451,24 @@ namespace MongoDB.Extensions.Context.Tests
 
         #endregion
 
+        #region AddInstrumentation Tests
+
+        [Fact]
+        public void AddInstrumentation_Command_ActivityCreated()
+        {
+            // Arrange
+            var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
+            mongoDatabaseBuilder.AddInstrumentation();
+
+            // Act
+            MongoDbContextData result = mongoDatabaseBuilder.Build();
+
+            // Assert
+            result.Client.Settings.ClusterConfigurator.Should().NotBeNull();
+        }
+
+        #endregion
+
         #region Private Helpers
 
         private class DuplicateTestConvention1 : ConventionBase
@@ -573,6 +592,6 @@ namespace MongoDB.Extensions.Context.Tests
             }
         }
 
-        #endregion
+        #endregion  
     }
 }

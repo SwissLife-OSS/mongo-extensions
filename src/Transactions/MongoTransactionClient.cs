@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Bson;
@@ -56,7 +57,7 @@ namespace MongoDB.Extensions.Transactions
             return _client.DropDatabaseAsync(session, name, cancellationToken);
         }
 
-        public IMongoDatabase GetDatabase(string name, MongoDatabaseSettings settings = null)
+        public IMongoDatabase GetDatabase(string name, MongoDatabaseSettings? settings = null)
         {
             return _client.GetDatabase(name, settings).AsTransactionDatabase();
         }
@@ -267,23 +268,24 @@ namespace MongoDB.Extensions.Transactions
 
         public IMongoClient WithReadConcern(ReadConcern readConcern)
         {
-            return _client.WithReadConcern(readConcern);
+            return _client.WithReadConcern(readConcern).AsTransactionClient();
         }
 
         public IMongoClient WithReadPreference(ReadPreference readPreference)
         {
-            return _client.WithReadPreference(readPreference);
+            return _client.WithReadPreference(readPreference).AsTransactionClient();
         }
 
         public IMongoClient WithWriteConcern(WriteConcern writeConcern)
         {
-            return _client.WithWriteConcern(writeConcern);
+            return _client.WithWriteConcern(writeConcern).AsTransactionClient();
         }
 
         public ICluster Cluster => _client.Cluster;
 
         public MongoClientSettings Settings => _client.Settings;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool TryGetSession(out IClientSessionHandle sessionHandle) =>
             TransactionStore.TryGetSession(_client, out sessionHandle);
     }

@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using static MongoDB.Extensions.Transactions.TransactionStore;
 
 namespace MongoDB.Extensions.Transactions
 {

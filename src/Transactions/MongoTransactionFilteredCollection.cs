@@ -4,7 +4,9 @@ using MongoDB.Driver;
 
 namespace MongoDB.Extensions.Transactions
 {
-    public class MongoTransactionFilteredCollection<T> : MongoTransactionCollection<T>, IFilteredMongoCollection<T>
+    public class MongoTransactionFilteredCollection<T>
+        : MongoTransactionCollection<T>
+        , IFilteredMongoCollection<T>
     {
         private readonly IFilteredMongoCollection<T> _filteredCollection;
 
@@ -15,6 +17,5 @@ namespace MongoDB.Extensions.Transactions
         {
             _filteredCollection = filteredCollection;
         }
-
     }
 }

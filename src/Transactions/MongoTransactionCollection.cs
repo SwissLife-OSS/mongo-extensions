@@ -801,7 +801,7 @@ namespace MongoDB.Extensions.Transactions
         public IFilteredMongoCollection<TDerivedDocument> OfType<TDerivedDocument>()
             where TDerivedDocument : T
         {
-            return _collection.OfType<TDerivedDocument>().AsTransactionFilteredCollection();
+            return _collection.OfType<TDerivedDocument>().AsTransactionCollection();
         }
 
         public ReplaceOneResult ReplaceOne(

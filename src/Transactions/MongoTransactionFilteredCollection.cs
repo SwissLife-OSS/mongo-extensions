@@ -1,7 +1,5 @@
 using MongoDB.Driver;
 
-#pragma warning disable 618
-
 namespace MongoDB.Extensions.Transactions
 {
     public class MongoTransactionFilteredCollection<T>

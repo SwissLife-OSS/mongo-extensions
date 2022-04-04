@@ -8,12 +8,12 @@ namespace MongoDB.Extensions.Transactions
     {
         private readonly IFilteredMongoCollection<T> _filteredCollection;
 
-        public FilterDefinition<T> Filter => _filteredCollection.Filter;
-
         public MongoTransactionFilteredCollection(IFilteredMongoCollection<T> filteredCollection)
             : base(filteredCollection)
         {
             _filteredCollection = filteredCollection;
         }
+
+        public FilterDefinition<T> Filter => _filteredCollection.Filter;
     }
 }

@@ -17,7 +17,9 @@ namespace MongoDB.Extensions.Context
         IMongoDatabaseBuilder RegisterDefaultConventionPack();
 
         IMongoDatabaseBuilder RegisterCamelCaseConventionPack();
-        
+
+        IMongoDatabaseBuilder RegisterIgnoreIfNullConventionPack();
+
         IMongoDatabaseBuilder ConfigureCollection<TDocument>(
             IMongoCollectionConfiguration<TDocument> configuration) where TDocument : class;
 

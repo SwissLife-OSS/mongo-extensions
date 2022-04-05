@@ -123,6 +123,16 @@ namespace MongoDB.Extensions.Context
             return this;
         }
 
+        public IMongoDatabaseBuilder RegisterIgnoreIfNullConventionPack()
+        {
+            RegisterConventionPack("IgnoreIfNull", new ConventionPack
+            {
+                new IgnoreIfNullConvention(true)
+            }, t => true);
+
+            return this;
+        }
+
         public IMongoDatabaseBuilder RegisterSerializer<T>(IBsonSerializer<T> serializer)
         {
             _registrationSerializerActions.Add(

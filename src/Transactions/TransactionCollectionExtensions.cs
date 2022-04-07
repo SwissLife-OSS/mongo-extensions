@@ -9,5 +9,11 @@ namespace MongoDB.Extensions.Transactions
         {
             return new MongoTransactionCollection<T>(collection);
         }
+
+        public static IFilteredMongoCollection<T> AsTransactionCollection<T>(
+            this IFilteredMongoCollection<T> collection)
+        {
+            return new MongoTransactionFilteredCollection<T>(collection);
+        }
     }
 }

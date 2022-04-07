@@ -1,8 +1,8 @@
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using static MongoDB.Extensions.Transactions.TransactionStore;
 
 namespace MongoDB.Extensions.Transactions
 {
@@ -475,17 +475,17 @@ namespace MongoDB.Extensions.Transactions
 
         public IMongoDatabase WithReadConcern(ReadConcern readConcern)
         {
-            return _database.WithReadConcern(readConcern);
+            return _database.WithReadConcern(readConcern).AsTransactionDatabase();
         }
 
         public IMongoDatabase WithReadPreference(ReadPreference readPreference)
         {
-            return _database.WithReadPreference(readPreference);
+            return _database.WithReadPreference(readPreference).AsTransactionDatabase();
         }
 
         public IMongoDatabase WithWriteConcern(WriteConcern writeConcern)
         {
-            return _database.WithWriteConcern(writeConcern);
+            return _database.WithWriteConcern(writeConcern).AsTransactionDatabase();
         }
 
         public IMongoClient Client => _database.Client;
@@ -494,6 +494,7 @@ namespace MongoDB.Extensions.Transactions
 
         public MongoDatabaseSettings Settings => _database.Settings;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool TryGetSession(out IClientSessionHandle sessionHandle) =>
             TransactionStore.TryGetSession(_database.Client, out sessionHandle);
     }

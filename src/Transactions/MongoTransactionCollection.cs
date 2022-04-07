@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Bson;
@@ -800,7 +801,7 @@ namespace MongoDB.Extensions.Transactions
         public IFilteredMongoCollection<TDerivedDocument> OfType<TDerivedDocument>()
             where TDerivedDocument : T
         {
-            return _collection.OfType<TDerivedDocument>();
+            return _collection.OfType<TDerivedDocument>().AsTransactionCollection();
         }
 
         public ReplaceOneResult ReplaceOne(
@@ -1072,6 +1073,7 @@ namespace MongoDB.Extensions.Transactions
 
         public MongoCollectionSettings Settings => _collection.Settings;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool TryGetSession(out IClientSessionHandle sessionHandle) =>
             TransactionStore.TryGetSession(_collection.Database.Client, out sessionHandle);
     }

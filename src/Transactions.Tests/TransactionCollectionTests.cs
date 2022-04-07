@@ -88,7 +88,7 @@ namespace MongoDB.Extensions.Transactions.Tests
                     await collection.InsertOneAsync(user);
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 // ignored
             }
@@ -430,22 +430,15 @@ namespace MongoDB.Extensions.Transactions.Tests
             {
                 async Task task()
                 {
-                    try
+                    for (var j = 0; j < documentCount; j++)
                     {
-                        for (var j = 0; j < documentCount; j++)
+                        using (var scope = new TransactionScope(Enabled))
                         {
-                            using (var scope = new TransactionScope(Enabled))
-                            {
-                                await collection.InsertOneAsync(
-                                    new User(Guid.NewGuid(), "Foo"));
+                            await collection.InsertOneAsync(
+                                new User(Guid.NewGuid(), "Foo"));
 
-                                scope.Complete();
-                            }
+                            scope.Complete();
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        throw ex;
                     }
                 }
 

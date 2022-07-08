@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SimpleBlog", "SimpleBlog", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host", "Context\Host\Host.csproj", "{0CCED088-DBB6-4DA2-8DFC-D9968EEBB9FA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migration", "Migration\Migration.csproj", "{8226313B-FAC9-4D0F-AEE8-424DD310BBFB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{0CCED088-DBB6-4DA2-8DFC-D9968EEBB9FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CCED088-DBB6-4DA2-8DFC-D9968EEBB9FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CCED088-DBB6-4DA2-8DFC-D9968EEBB9FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8226313B-FAC9-4D0F-AEE8-424DD310BBFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8226313B-FAC9-4D0F-AEE8-424DD310BBFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8226313B-FAC9-4D0F-AEE8-424DD310BBFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8226313B-FAC9-4D0F-AEE8-424DD310BBFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Extensions.Migration;
 using FluentAssertions;
@@ -66,6 +66,34 @@ public class MigrateUpTests
 
         // Assert
         result.Foo.Should().Be("Bar Migrated Up to 1 Migrated Up to 2 Migrated Up to 3");
+    }
+
+    [Fact]
+    public async Task Scenario1_RetrieveWithoutVersion_MigratedToNewestVersion()
+    {
+        // Arrange
+        await _untypedCollection.InsertOneAsync(new BsonDocument(new Dictionary<string, object>
+            { ["_id"] = "id5", ["Foo"] = "Bar" }));
+
+        // Act
+        TestEntityForUp result = await _typedCollection.AsQueryable().SingleOrDefaultAsync(c => c.Id == "id0");
+
+        // Assert
+        result.Foo.Should().Be("Bar Migrated Up to 1 Migrated Up to 2 Migrated Up to 3");
+    }
+
+    [Fact]
+    public async Task Scenario1_RetrieveAtNewUnknownVersion_NoMigration()
+    {
+        // Arrange
+        await _untypedCollection.InsertOneAsync(new BsonDocument(new Dictionary<string, object>
+            { ["_id"] = "id4", ["Foo"] = "Bar", ["Version"] = 4 }));
+
+        // Act
+        TestEntityForUp result = await _typedCollection.AsQueryable().SingleOrDefaultAsync(c => c.Id == "id0");
+
+        // Assert
+        result.Foo.Should().Be("Bar");
     }
 
     [Fact]

@@ -10,9 +10,10 @@ builder.Services
 
 var app = builder.Build();
 
-app.UseMongoMigration(m => m.ForEntity<Customer>(e => e
-    .AtVersion(1)
-    .WithMigration(new ExampleMigration())));
+app.UseMongoMigration(m => m
+    .ForEntity<Customer>(e => e
+        .AtVersion(1)
+        .WithMigration(new ExampleMigration())));
 
 app.MapGet("/customer/{id}", (string id, Repository repo) => repo.GetAsync(id));
 app.MapPost("/customer/", (Customer customer, Repository repo) => repo.AddAsync(customer));

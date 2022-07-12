@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Extensions.Migration;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
@@ -21,21 +21,20 @@ public class MigrateUpTests
     public MigrateUpTests(MongoResource resource)
     {
         RegisterMongoMigrations();
-        var database = resource.Client.GetDatabase("Scenario1-up");
+        IMongoDatabase database = resource.Client.GetDatabase("Scenario1-up");
         _typedCollection = database.GetCollection<TestEntityForUp>("TestEntityForUp");
         _untypedCollection = database.GetCollection<BsonDocument>("TestEntityForUp");
     }
 
     static void RegisterMongoMigrations()
     {
-        var loggerFactory = LoggerFactory.Create(_ => { });
-
-        var options = new MigrationOptionBuilder().ForEntity<TestEntityForUp>(o => o
+        MigrationOption options = new MigrationOptionBuilder()
+            .ForEntity<TestEntityForUp>(o => o
                 .WithMigration(new TestMigration1())
                 .WithMigration(new TestMigration2())
                 .WithMigration(new TestMigration3()))
             .Build();
-        var context = new MigrationContext(options, loggerFactory);
+        var context = new MigrationContext(options, NullLoggerFactory.Instance);
 
         BsonSerializer.RegisterSerializationProvider(new MigrationSerializerProvider(context));
     }
@@ -45,7 +44,7 @@ public class MigrateUpTests
     {
         // Arrange
         const string input = "Bar";
-        await _typedCollection.InsertOneAsync(new TestEntityForUp("1", input, 1));
+        await _typedCollection.InsertOneAsync(new TestEntityForUp("1", input));
 
         // Act
         var result = await _typedCollection.AsQueryable().SingleOrDefaultAsync(c => c.Id == "1");
@@ -55,28 +54,14 @@ public class MigrateUpTests
     }
 
     [Fact]
-    public async Task Scenario1_RetrieveAtVersion0_MigratedToNewestVersion()
-    {
-        // Arrange
-        await _untypedCollection.InsertOneAsync(new BsonDocument(new Dictionary<string, object>
-        { ["_id"] = "id0", ["Foo"] = "Bar", ["Version"] = 0 }));
-
-        // Act
-        TestEntityForUp result = await _typedCollection.AsQueryable().SingleOrDefaultAsync(c => c.Id == "id0");
-
-        // Assert
-        result.Foo.Should().Be("Bar Migrated Up to 1 Migrated Up to 2 Migrated Up to 3");
-    }
-
-    [Fact]
     public async Task Scenario1_RetrieveWithoutVersion_MigratedToNewestVersion()
     {
         // Arrange
         await _untypedCollection.InsertOneAsync(new BsonDocument(new Dictionary<string, object>
-            { ["_id"] = "id5", ["Foo"] = "Bar" }));
+            { ["_id"] = "2", ["Foo"] = "Bar" }));
 
         // Act
-        TestEntityForUp result = await _typedCollection.AsQueryable().SingleOrDefaultAsync(c => c.Id == "id0");
+        TestEntityForUp result = await _typedCollection.AsQueryable().SingleOrDefaultAsync(c => c.Id == "2");
 
         // Assert
         result.Foo.Should().Be("Bar Migrated Up to 1 Migrated Up to 2 Migrated Up to 3");
@@ -87,10 +72,10 @@ public class MigrateUpTests
     {
         // Arrange
         await _untypedCollection.InsertOneAsync(new BsonDocument(new Dictionary<string, object>
-            { ["_id"] = "id4", ["Foo"] = "Bar", ["Version"] = 4 }));
+            { ["_id"] = "3", ["Foo"] = "Bar", ["Version"] = 4 }));
 
         // Act
-        TestEntityForUp result = await _typedCollection.AsQueryable().SingleOrDefaultAsync(c => c.Id == "id0");
+        TestEntityForUp result = await _typedCollection.AsQueryable().SingleOrDefaultAsync(c => c.Id == "3");
 
         // Assert
         result.Foo.Should().Be("Bar");
@@ -101,10 +86,10 @@ public class MigrateUpTests
     {
         // Arrange
         await _untypedCollection.InsertOneAsync(new BsonDocument(new Dictionary<string, object>
-        { ["_id"] = "id1", ["Foo"] = "Bar", ["Version"] = 2 }));
+        { ["_id"] = "4", ["Foo"] = "Bar", ["Version"] = 2 }));
 
         // Act
-        TestEntityForUp result = await _typedCollection.AsQueryable().SingleOrDefaultAsync(c => c.Id == "id1");
+        TestEntityForUp result = await _typedCollection.AsQueryable().SingleOrDefaultAsync(c => c.Id == "4");
 
         // Assert
         result.Foo.Should().Be("Bar Migrated Up to 3");

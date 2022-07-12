@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Extensions.Migration;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
@@ -28,15 +28,13 @@ public class MigrateDownTests
 
     static void RegisterMongoMigrations()
     {
-        ILoggerFactory loggerFactory = LoggerFactory.Create(_ => { });
-
         MigrationOption options = new MigrationOptionBuilder()
             .ForEntity<TestEntityForDown>(o => o.AtVersion(0)
                 .WithMigration(new TestMigration1())
                 .WithMigration(new TestMigration2())
                 .WithMigration(new TestMigration3()))
             .Build();
-        var context = new MigrationContext(options, loggerFactory);
+        var context = new MigrationContext(options, NullLoggerFactory.Instance);
 
         BsonSerializer.RegisterSerializationProvider(new MigrationSerializerProvider(context));
     }
@@ -46,7 +44,7 @@ public class MigrateDownTests
     {
         // Arrange
         const string input = "Bar";
-        await _typedCollection.InsertOneAsync(new TestEntityForDown("1", input, 1));
+        await _typedCollection.InsertOneAsync(new TestEntityForDown("1", input));
 
         // Act
         TestEntityForDown result = await _typedCollection.AsQueryable()

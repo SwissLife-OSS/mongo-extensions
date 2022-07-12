@@ -12,34 +12,52 @@ public class MigrationRunner<T>
     private const string Version = "Version";
     private const string Id = "_id";
     private readonly Dictionary<int, IMigration> _migrationRegistry;
-    private readonly int _currentVersion;
+    private readonly int _currentVersionOfApplication;
 
     public MigrationRunner(EntityContext context)
     {
-        _currentVersion = context.Option.CurrentVersion;
+        _currentVersionOfApplication = context.Option.CurrentVersion;
         _migrationRegistry = context.Option.Migrations.ToDictionary(m => m.Version, m => m);
         _logger = context.LoggerFactory.CreateLogger<MigrationRunner<T>>();
     }
 
     public void Run(BsonDocument document)
     {
-        // TODO: Change to IComparable
-        // use BsonTypeMapper.MapToDotNetValue or BsonDocumentSerializer.Instance.Deserialize depending if it is a primitive type or not
-        // unresolved issue: To what do we default if we do not have a version, maybe null?
-        var fromVersion = document.Contains(Version) && document[Version].IsInt32 
-            ? document[Version].AsInt32
-            : 0;
-        string id = document[Id].ToString() ?? "";
+        var fromVersion = FindCurrentVersionOfDocument(document);
 
-        MigrateUp(document, _currentVersion, fromVersion, id);
-        MigrateDown(document, _currentVersion, fromVersion, id);
+        MigrateUp(document, fromVersion, _currentVersionOfApplication);
+        MigrateDown(document, fromVersion, _currentVersionOfApplication);
+    }
+
+    private int FindCurrentVersionOfDocument(BsonDocument document)
+    {
+        // Document is from before Migrations have been introduced
+        if (!(document.Contains(Version) && document[Version].IsInt32))
+        {
+            return _migrationRegistry.Keys.First() - 1;
+        }
+
+        var fromVersion = document[Version].AsInt32;
+        if (_migrationRegistry.ContainsKey(fromVersion))
+        {
+            return fromVersion;
+        }
+
+        // Document is newer than any migration we know
+        if (fromVersion > _migrationRegistry.Keys.Last())
+        {
+            return _migrationRegistry.Keys.Last();
+        }
+
+        // Document is older than any migration we know
+        return _migrationRegistry.Keys.First() - 1;
+
     }
 
     private void MigrateUp(
         BsonDocument document,
-        int toVersion,
         int fromVersion,
-        string id)
+        int toVersion)
     {
         for (var version = fromVersion + 1; version <= toVersion; version++)
         {
@@ -49,9 +67,9 @@ public class MigrationRunner<T>
                 migration.Up(document);
                 document.Set(Version, version);
                 _logger.LogInformation(
-                    "Successfully Migrated {entity} with id {id} to version {version} ",
+                    "Successfully Migrated {entity} with id {id} to version {version}",
                     typeof(T).Name,
-                    id,
+                    GetIdOrEmpty(document),
                     version);
             }
             catch (Exception e)
@@ -59,7 +77,7 @@ public class MigrationRunner<T>
                 _logger.LogError(e,
                     "Migration of {entity} with id {id} to version {version} failed",
                     typeof(T).Name,
-                    id,
+                    GetIdOrEmpty(document),
                     version);
                 break;
             }
@@ -68,9 +86,8 @@ public class MigrationRunner<T>
 
     private void MigrateDown(
         BsonDocument document,
-        int toVersion,
         int fromVersion,
-        string id)
+        int toVersion)
     {
         for (var version = fromVersion; version > toVersion; version--)
         {
@@ -80,9 +97,9 @@ public class MigrationRunner<T>
                 migration.Down(document);
                 document.Set(Version, version);
                 _logger.LogInformation(
-                    "Successfully Migrated {entity} with id {id} to version {version} ",
+                    "Successfully Migrated {entity} with id {id} to version {version}",
                     typeof(T).Name,
-                    id,
+                    GetIdOrEmpty(document),
                     version);
             }
             catch (Exception e)
@@ -90,10 +107,15 @@ public class MigrationRunner<T>
                 _logger.LogError(e,
                     "Migration of {entity} with id {id} to version {version} failed",
                     typeof(T).Name,
-                    id,
+                    GetIdOrEmpty(document),
                     version);
                 break;
             }
         }
+    }
+
+    private static string GetIdOrEmpty(BsonDocument document)
+    {
+        return document.Contains(Id) ? document[Id].ToString() ?? string.Empty : string.Empty;
     }
 }

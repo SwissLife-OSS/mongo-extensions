@@ -28,34 +28,35 @@ public class EntityOptionBuilder<T> where T : IVersioned
         return this;
     }
 
+    /// <summary>
+    /// Builds the EntityOption
+    /// </summary>
     public EntityOption Build()
     {
         if (_migrations.Count == 0)
         {
-            throw new BuilderNotInitializedException(
-                "Please register at least one migration using the WithMigration method");
+            throw new InvalidConfigurationException(
+                $"There must be at least one migration registered for entity {typeof(T).Name}");
         }
 
         _migrations.Sort((x, y) => x.Version.CompareTo(y.Version));
 
         _atVersion ??= _migrations.Last().Version;
 
-        // TODO: use IComparibel for this
-        if (_atVersion != 0 && _migrations.All(m => !Equals(m.Version, _atVersion)))
+        if (_atVersion != _migrations.First().Version - 1 &&
+            _migrations.All(m => !Equals(m.Version, _atVersion)))
         {
             throw new InvalidConfigurationException(
                 $"There is no migration for version {_atVersion} for entity {typeof(T).Name}");
         }
 
-        for (var i = 1; i < _migrations.Count; i++)
+        for (var i = _migrations.First().Version + 1; i < _migrations.Count; i++)
         {
             if (_migrations[i - 1].Version + 1 != _migrations[i].Version)
             {
-                // TODO: Compare with IComparibel instead
                 throw new InvalidConfigurationException(
-                    "The versions of the migrations must be continuously incremented");
+                    $"{typeof(T).Name}: Migration Versions must be continuously incremented!");
             }
-
         }
 
         return new EntityOption(

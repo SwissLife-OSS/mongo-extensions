@@ -1,7 +1,7 @@
-﻿using MongoDB.Extensions.Migration;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
+using MongoDB.Extensions.Migration;
 
-namespace MongoMigrationTest.Integration.Scenario1;
+namespace Migration.Tests;
 
 public class TestMigration1 : IMigration
 {

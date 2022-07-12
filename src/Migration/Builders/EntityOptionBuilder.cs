@@ -50,7 +50,7 @@ public class EntityOptionBuilder<T> where T : IVersioned
                 $"There is no migration for version {_atVersion} for entity {typeof(T).Name}");
         }
 
-        for (var i = _migrations.First().Version + 1; i < _migrations.Count; i++)
+        for (var i = 1; i < _migrations.Count; i++)
         {
             if (_migrations[i - 1].Version + 1 != _migrations[i].Version)
             {

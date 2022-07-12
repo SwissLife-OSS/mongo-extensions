@@ -11,7 +11,7 @@ using Xunit;
 using MongoDB.Driver.Linq;
 using Squadron;
 
-namespace MongoMigrationTest.Integration.Scenario1;
+namespace MongoMigrationTest.Integration.Scenario2;
 
 [Collection("SharedMongoDbCollection")]
 public class MigrateUpTests
@@ -22,7 +22,7 @@ public class MigrateUpTests
     public MigrateUpTests(MongoResource resource)
     {
         RegisterMongoMigrations();
-        IMongoDatabase database = resource.Client.GetDatabase("Scenario1-up");
+        IMongoDatabase database = resource.Client.GetDatabase("Scenario2-up");
         _typedCollection = database.GetCollection<TestEntityForUp>("TestEntityForUp");
         _untypedCollection = database.GetCollection<BsonDocument>("TestEntityForUp");
     }
@@ -33,7 +33,8 @@ public class MigrateUpTests
             .ForEntity<TestEntityForUp>(o => o
                 .WithMigration(new TestMigration1())
                 .WithMigration(new TestMigration2())
-                .WithMigration(new TestMigration3()))
+                .WithMigration(new TestMigration3())
+                .AtVersion(2))
             .Build();
         var context = new MigrationContext(options, NullLoggerFactory.Instance);
 
@@ -41,7 +42,7 @@ public class MigrateUpTests
     }
 
     [Fact]
-    public async Task Scenario1_AddRetrieve_NoMigration()
+    public async Task Scenario2_AddRetrieve_NoMigration()
     {
         // Arrange
         const string input = "Bar";
@@ -55,44 +56,16 @@ public class MigrateUpTests
     }
 
     [Fact]
-    public async Task Scenario1_RetrieveWithoutVersion_MigratedToNewestVersion()
+    public async Task Scenario2_RetrieveWithoutVersion_MigratedToCurrentVersion()
     {
         // Arrange
         await _untypedCollection.InsertOneAsync(new BsonDocument(new Dictionary<string, object>
-            { ["_id"] = "2", ["Foo"] = "Bar" }));
+        { ["_id"] = "2", ["Foo"] = "Bar" }));
 
         // Act
         TestEntityForUp result = await _typedCollection.AsQueryable().SingleOrDefaultAsync(c => c.Id == "2");
 
         // Assert
-        result.Foo.Should().Be("Bar Migrated Up to 1 Migrated Up to 2 Migrated Up to 3");
-    }
-
-    [Fact]
-    public async Task Scenario1_RetrieveAtNewUnknownVersion_NoMigration()
-    {
-        // Arrange
-        await _untypedCollection.InsertOneAsync(new BsonDocument(new Dictionary<string, object>
-            { ["_id"] = "3", ["Foo"] = "Bar", ["Version"] = 4 }));
-
-        // Act
-        TestEntityForUp result = await _typedCollection.AsQueryable().SingleOrDefaultAsync(c => c.Id == "3");
-
-        // Assert
-        result.Foo.Should().Be("Bar");
-    }
-
-    [Fact]
-    public async Task Scenario1_RetrieveAtVersion2_MigratedToVersion3()
-    {
-        // Arrange
-        await _untypedCollection.InsertOneAsync(new BsonDocument(new Dictionary<string, object>
-        { ["_id"] = "4", ["Foo"] = "Bar", ["Version"] = 2 }));
-
-        // Act
-        TestEntityForUp result = await _typedCollection.AsQueryable().SingleOrDefaultAsync(c => c.Id == "4");
-
-        // Assert
-        result.Foo.Should().Be("Bar Migrated Up to 3");
+        result.Foo.Should().Be("Bar Migrated Up to 1 Migrated Up to 2");
     }
 }

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using MongoDB.Extensions.Migration;
 using FluentAssertions;
@@ -11,7 +11,7 @@ using MongoDB.Driver.Linq;
 using Squadron;
 using Xunit;
 
-namespace MongoMigrationTest.Integration.Scenario1;
+namespace MongoMigrationTest.Integration.Scenario2;
 
 [Collection("SharedMongoDbCollection")]
 public class MigrateDownTests
@@ -22,7 +22,7 @@ public class MigrateDownTests
     public MigrateDownTests(MongoResource resource)
     {
         RegisterMongoMigrations();
-        IMongoDatabase database = resource.Client.GetDatabase("Scenario1-down");
+        IMongoDatabase database = resource.Client.GetDatabase("Scenario2-down");
         _typedCollection = database.GetCollection<TestEntityForDown>("TestEntityForDown");
         _untypedCollection = database.GetCollection<BsonDocument>("TestEntityForDown");
     }
@@ -30,10 +30,11 @@ public class MigrateDownTests
     static void RegisterMongoMigrations()
     {
         MigrationOption options = new MigrationOptionBuilder()
-            .ForEntity<TestEntityForDown>(o => o.AtVersion(0)
+            .ForEntity<TestEntityForDown>(o => o
                 .WithMigration(new TestMigration1())
                 .WithMigration(new TestMigration2())
-                .WithMigration(new TestMigration3()))
+                .WithMigration(new TestMigration3())
+                .AtVersion(2))
             .Build();
         var context = new MigrationContext(options, NullLoggerFactory.Instance);
 
@@ -41,48 +42,30 @@ public class MigrateDownTests
     }
 
     [Fact]
-    public async Task Scenario1_AddRetrieve_NoMigration()
-    {
-        // Arrange
-        const string input = "Bar";
-        await _typedCollection.InsertOneAsync(new TestEntityForDown("1", input));
-
-        // Act
-        TestEntityForDown result = await _typedCollection.AsQueryable()
-            .SingleOrDefaultAsync(c => c.Id == "1");
-
-        // Assert
-        result.Foo.Should().Be(input);
-    }
-
-    [Fact]
-    public async Task Scenario1_RetrieveAtVersion3_MigratedDownTo0()
+    public async Task Scenario2_RetrieveAtNewUnknownVersion_MigrateDownTo2()
     {
         // Arrange
         await _untypedCollection.InsertOneAsync(new BsonDocument(new Dictionary<string, object>
-        { ["_id"] = "id0", ["Foo"] = "Bar", ["Version"] = 3 }));
+            { ["_id"] = "3", ["Foo"] = "Bar", ["Version"] = 4 }));
 
         // Act
-        TestEntityForDown result = await _typedCollection.AsQueryable()
-            .SingleOrDefaultAsync(c => c.Id == "id0");
+        TestEntityForDown result = await _typedCollection.AsQueryable().SingleOrDefaultAsync(c => c.Id == "3");
 
         // Assert
-        result.Foo.Should().Be("Bar Migrated Down to 2 Migrated Down to 1 Migrated Down to 0");
+        result.Foo.Should().Be("Bar Migrated Down to 2");
     }
 
     [Fact]
-    public async Task Scenario1_RetrieveAtVersion2_MigratedToVersion3()
+    public async Task Scenario2_RetrieveAtVersion3_MigratedToVersion2()
     {
         // Arrange
         await _untypedCollection.InsertOneAsync(new BsonDocument(new Dictionary<string, object>
-        { ["_id"] = "id1", ["Foo"] = "Bar", ["Version"] = 1 }));
+            { ["_id"] = "4", ["Foo"] = "Bar", ["Version"] = 3 }));
 
         // Act
-        TestEntityForDown result = await _typedCollection.AsQueryable()
-            .SingleOrDefaultAsync(c => c.Id == "id1");
+        TestEntityForDown result = await _typedCollection.AsQueryable().SingleOrDefaultAsync(c => c.Id == "4");
 
         // Assert
-        result.Foo.Should().Be("Bar Migrated Down to 0");
+        result.Foo.Should().Be("Bar Migrated Down to 2");
     }
-
 }

@@ -10,10 +10,12 @@ With document databases which have a schema on read not on write we can do bette
 Introducing a version field on each document and having migration logic which performs the needed migrations when reading a document allows for a downtime free migrations.
 This pattern allows for multiple versions of an application to use the same database, for example in the case of a rolling update.
 
-## Api
+## Getting Started
 
-If used in combination with ASP.NET Core register your migrations with the `UseMongoMigration` extension method on the `IApplicationBuilder`.
-Either in Program.cs or in the Configure method of Startup.cs.
+1. Add MongoDB.Extensions.Migration to your project using `dotnet add package MongoDB.Extensions.Migration`
+2. Make sure that your your domain entities for which you want to write a migration implement the interface IVersioned
+3. Write a migration by creating a new class which implements IMigration, see below.
+4. Regsiter your migrations with the `UseMongoMigration` extension method on the `IApplicationBuilder`. Either in Program.cs or in the Configure method of Startup.cs.
 
 ```csharp
 ...
@@ -25,7 +27,13 @@ app.UseMongoMigration(m => m
         .WithMigration(new ExampleMigration())));
 
 
-public record Customer : IVersioned {...}
+public record Customer : IVersioned {
+  public int Version { get; set; }
+  public Guid Id {get; set;}
+  public string FirstName {get; set;}
+  public string LastName {get; set;}
+}
+
 public class ExampleMigration : IMigration {...}
 ```
 

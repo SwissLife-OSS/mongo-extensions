@@ -13,12 +13,16 @@ public class MigrationRunner<T>
     private const string Id = "_id";
     private readonly Dictionary<int, IMigration> _migrationRegistry;
     private readonly int _currentVersionOfApplication;
+    private readonly int _lastKey;
+    private readonly int _beforeFirstKey;
 
     public MigrationRunner(EntityContext context)
     {
         _currentVersionOfApplication = context.Option.CurrentVersion;
         _migrationRegistry = context.Option.Migrations.ToDictionary(m => m.Version, m => m);
         _logger = context.LoggerFactory.CreateLogger<MigrationRunner<T>>();
+        _lastKey = _migrationRegistry.Keys.Last();
+        _beforeFirstKey = _migrationRegistry.Keys.First() - 1;
     }
 
     public void Run(BsonDocument document)
@@ -34,7 +38,7 @@ public class MigrationRunner<T>
         // Document is from before Migrations have been introduced
         if (!(document.Contains(Version) && document[Version].IsInt32))
         {
-            return _migrationRegistry.Keys.First() - 1;
+            return _beforeFirstKey;
         }
 
         var fromVersion = document[Version].AsInt32;
@@ -44,13 +48,13 @@ public class MigrationRunner<T>
         }
 
         // Document is newer than any migration we know
-        if (fromVersion > _migrationRegistry.Keys.Last())
+        if (fromVersion > _lastKey)
         {
-            return _migrationRegistry.Keys.Last();
+            return _lastKey;
         }
 
         // Document is older than any migration we know
-        return _migrationRegistry.Keys.First() - 1;
+        return _beforeFirstKey;
 
     }
 
@@ -66,7 +70,7 @@ public class MigrationRunner<T>
                 IMigration migration = _migrationRegistry[version];
                 migration.Up(document);
                 document.Set(Version, version);
-                _logger.LogInformation(
+                _logger.LogDebug(
                     "Successfully Migrated {entity} with id {id} to version {version}",
                     typeof(T).Name,
                     GetIdOrEmpty(document),
@@ -96,7 +100,7 @@ public class MigrationRunner<T>
                 IMigration migration = _migrationRegistry[version];
                 migration.Down(document);
                 document.Set(Version, version);
-                _logger.LogInformation(
+                _logger.LogDebug(
                     "Successfully Migrated {entity} with id {id} to version {version}",
                     typeof(T).Name,
                     GetIdOrEmpty(document),

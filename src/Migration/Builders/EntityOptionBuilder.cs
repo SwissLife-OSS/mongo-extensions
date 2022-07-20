@@ -33,7 +33,7 @@ public class EntityOptionBuilder<T> where T : IVersioned
     /// </summary>
     public EntityOption Build()
     {
-        if (_migrations.Count == 0)
+        if (!_migrations.Any())
         {
             throw new InvalidConfigurationException(
                 $"There must be at least one migration registered for entity {typeof(T).Name}");

@@ -10,26 +10,6 @@ namespace Migration.Tests.Unit;
 
 public class MigrationRunnerTests
 {
-    record TestEntity(string Id, int Version) : IVersioned
-    {
-        public int Version { get; set; } = Version;
-    };
-
-    public class TestMigration : IMigration
-    {
-        public int Version { get; } = 1;
-
-        public void Up(BsonDocument document)
-        {
-            throw new Exception();
-        }
-
-        public void Down(BsonDocument document)
-        {
-            throw new Exception();
-        }
-    }
-
     [Fact]
     public void MigrationRunner_MigrationUpThrows_Catches()
     {

@@ -15,7 +15,7 @@ public class MigrationSerializerProvider : IBsonSerializationProvider
 
     public IBsonSerializer? GetSerializer(Type type)
     {
-        EntityOption? option = _context.Option.EntityOptions.FirstOrDefault(e => e.Type == type);
+        EntityOption? option = _context.Option.EntityOptions.SingleOrDefault(e => e.Type == type);
         if (option is null)
         {
             return null;

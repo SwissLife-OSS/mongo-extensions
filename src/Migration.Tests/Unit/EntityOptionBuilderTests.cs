@@ -57,8 +57,3 @@ public class EntityOptionBuilderTests
         action.Should().Throw<InvalidConfigurationException>();
     }
 }
-
-record TestEntity(int Id) : IVersioned
-{
-    public int Version { get; set; }
-}

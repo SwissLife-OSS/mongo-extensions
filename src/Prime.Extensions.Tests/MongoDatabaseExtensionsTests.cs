@@ -173,6 +173,8 @@ namespace MongoDB.Prime.Extensions.Tests
                     .IgnoreField("**.locks")
                     .IgnoreField("**.ReplicationStateTransition")
                     .IgnoreField("**.FeatureCompatibilityVersion")
+                    .IgnoreField("**.queryHash")
+                    .IgnoreField("**.planCacheKey")
                 );
         }
 
@@ -205,6 +207,8 @@ namespace MongoDB.Prime.Extensions.Tests
                     .IgnoreField("**.locks")
                     .IgnoreField("**.ReplicationStateTransition")
                     .IgnoreField("**.FeatureCompatibilityVersion")
+                    .IgnoreField("**.queryHash")
+                    .IgnoreField("**.planCacheKey")
                 );
         }
 

@@ -170,7 +170,7 @@ namespace MongoDB.Prime.Extensions.Tests
                     .IgnoreField("**.ts")
                     .IgnoreField("**.base64")
                     .IgnoreField("**.client")
-                    .IgnoreField("**.r")
+                    .IgnoreField("**.locks")
                     .IgnoreField("**.ReplicationStateTransition")
                     .IgnoreField("**.FeatureCompatibilityVersion")
                 );
@@ -202,7 +202,7 @@ namespace MongoDB.Prime.Extensions.Tests
                     .IgnoreField("**.ts")
                     .IgnoreField("**.base64")
                     .IgnoreField("**.client")
-                    .IgnoreField("**.r")
+                    .IgnoreField("**.locks")
                     .IgnoreField("**.ReplicationStateTransition")
                     .IgnoreField("**.FeatureCompatibilityVersion")
                 );

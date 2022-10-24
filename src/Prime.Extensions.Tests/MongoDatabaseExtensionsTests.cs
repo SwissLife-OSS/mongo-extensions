@@ -171,6 +171,8 @@ namespace MongoDB.Prime.Extensions.Tests
                     .IgnoreField("**.base64")
                     .IgnoreField("**.client")
                     .IgnoreField("**.r")
+                    .IgnoreField("**.ReplicationStateTransition")
+                    .IgnoreField("**.FeatureCompatibilityVersion")
                 );
         }
 
@@ -201,6 +203,8 @@ namespace MongoDB.Prime.Extensions.Tests
                     .IgnoreField("**.base64")
                     .IgnoreField("**.client")
                     .IgnoreField("**.r")
+                    .IgnoreField("**.ReplicationStateTransition")
+                    .IgnoreField("**.FeatureCompatibilityVersion")
                 );
         }
 

@@ -170,6 +170,7 @@ namespace MongoDB.Prime.Extensions.Tests
                     .IgnoreField("**.ts")
                     .IgnoreField("**.base64")
                     .IgnoreField("**.client")
+                    .IgnoreField("**.r")
                 );
         }
 
@@ -199,6 +200,7 @@ namespace MongoDB.Prime.Extensions.Tests
                     .IgnoreField("**.ts")
                     .IgnoreField("**.base64")
                     .IgnoreField("**.client")
+                    .IgnoreField("**.r")
                 );
         }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +11,11 @@ using Xunit;
 
 namespace MongoDB.Prime.Extensions.Tests
 {
-    public class MongoCollectionExtensionsTests : IClassFixture<MongoResource>
+    public class MongoCollectionFindExtensionsTests : IClassFixture<MongoResource>
     {
         private readonly IMongoDatabase _mongoDatabase;
 
-        public MongoCollectionExtensionsTests(MongoResource mongoResource)
+        public MongoCollectionFindExtensionsTests(MongoResource mongoResource)
         {
             _mongoDatabase = mongoResource.CreateDatabase();
         }

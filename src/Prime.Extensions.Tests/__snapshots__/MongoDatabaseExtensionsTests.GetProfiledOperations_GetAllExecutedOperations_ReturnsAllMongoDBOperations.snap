@@ -1,0 +1,329 @@
+﻿[{
+  "op": "command",
+  "ns": "db_98188f7406cc40a888db9ab8056eb396.Bar",
+  "command": {
+    "create": "Bar",
+    "$db": "db_98188f7406cc40a888db9ab8056eb396",
+    "lsid": {
+      "id": {
+        "$binary": {
+          "base64": "w6P\u002BgezU1ECJmuzdA0rhPg==",
+          "subType": "03"
+        }
+      }
+    }
+  },
+  "numYield": 0,
+  "locks": {
+    "ParallelBatchWriterMode": {
+      "acquireCount": {
+        "r": 2
+      }
+    },
+    "ReplicationStateTransition": {
+      "acquireCount": {
+        "w": 2
+      }
+    },
+    "Global": {
+      "acquireCount": {
+        "r": 1,
+        "w": 1
+      }
+    },
+    "Database": {
+      "acquireCount": {
+        "r": 1,
+        "w": 1
+      }
+    },
+    "Collection": {
+      "acquireCount": {
+        "w": 1
+      }
+    },
+    "Mutex": {
+      "acquireCount": {
+        "r": 2
+      }
+    }
+  },
+  "flowControl": {
+    "acquireCount": 1,
+    "timeAcquiringMicros": 5
+  },
+  "responseLength": 38,
+  "protocol": "op_msg",
+  "millis": 18,
+  "ts": {
+    "$date": "2022-10-24T12:34:51.893Z"
+  },
+  "client": "172.17.0.1",
+  "allUsers": [],
+  "user": ""
+},{
+  "op": "command",
+  "ns": "db_98188f7406cc40a888db9ab8056eb396.Foo",
+  "command": {
+    "create": "Foo",
+    "$db": "db_98188f7406cc40a888db9ab8056eb396",
+    "lsid": {
+      "id": {
+        "$binary": {
+          "base64": "w6P\u002BgezU1ECJmuzdA0rhPg==",
+          "subType": "03"
+        }
+      }
+    }
+  },
+  "numYield": 0,
+  "locks": {
+    "ParallelBatchWriterMode": {
+      "acquireCount": {
+        "r": 2
+      }
+    },
+    "ReplicationStateTransition": {
+      "acquireCount": {
+        "w": 2
+      }
+    },
+    "Global": {
+      "acquireCount": {
+        "r": 1,
+        "w": 1
+      }
+    },
+    "Database": {
+      "acquireCount": {
+        "r": 1,
+        "w": 1
+      }
+    },
+    "Collection": {
+      "acquireCount": {
+        "w": 1
+      }
+    },
+    "Mutex": {
+      "acquireCount": {
+        "r": 2
+      }
+    }
+  },
+  "flowControl": {
+    "acquireCount": 1,
+    "timeAcquiringMicros": 4
+  },
+  "responseLength": 38,
+  "protocol": "op_msg",
+  "millis": 16,
+  "ts": {
+    "$date": "2022-10-24T12:34:51.921Z"
+  },
+  "client": "172.17.0.1",
+  "allUsers": [],
+  "user": ""
+},{
+  "op": "insert",
+  "ns": "db_98188f7406cc40a888db9ab8056eb396.Bar",
+  "command": {
+    "insert": "Bar",
+    "ordered": true,
+    "$db": "db_98188f7406cc40a888db9ab8056eb396",
+    "lsid": {
+      "id": {
+        "$binary": {
+          "base64": "w6P\u002BgezU1ECJmuzdA0rhPg==",
+          "subType": "03"
+        }
+      }
+    }
+  },
+  "ninserted": 1,
+  "keysInserted": 1,
+  "numYield": 0,
+  "locks": {
+    "ParallelBatchWriterMode": {
+      "acquireCount": {
+        "r": 1
+      }
+    },
+    "ReplicationStateTransition": {
+      "acquireCount": {
+        "w": 1
+      }
+    },
+    "Global": {
+      "acquireCount": {
+        "w": 1
+      }
+    },
+    "Database": {
+      "acquireCount": {
+        "w": 1
+      }
+    },
+    "Collection": {
+      "acquireCount": {
+        "w": 1
+      }
+    },
+    "Mutex": {
+      "acquireCount": {
+        "r": 1
+      }
+    }
+  },
+  "flowControl": {
+    "acquireCount": 1,
+    "timeAcquiringMicros": 5
+  },
+  "responseLength": 45,
+  "protocol": "op_msg",
+  "millis": 0,
+  "ts": {
+    "$date": "2022-10-24T12:34:52.026Z"
+  },
+  "client": "172.17.0.1",
+  "allUsers": [],
+  "user": ""
+},{
+  "op": "insert",
+  "ns": "db_98188f7406cc40a888db9ab8056eb396.Foo",
+  "command": {
+    "insert": "Foo",
+    "ordered": true,
+    "$db": "db_98188f7406cc40a888db9ab8056eb396",
+    "lsid": {
+      "id": {
+        "$binary": {
+          "base64": "w6P\u002BgezU1ECJmuzdA0rhPg==",
+          "subType": "03"
+        }
+      }
+    }
+  },
+  "ninserted": 1,
+  "keysInserted": 1,
+  "numYield": 0,
+  "locks": {
+    "ParallelBatchWriterMode": {
+      "acquireCount": {
+        "r": 1
+      }
+    },
+    "ReplicationStateTransition": {
+      "acquireCount": {
+        "w": 1
+      }
+    },
+    "Global": {
+      "acquireCount": {
+        "w": 1
+      }
+    },
+    "Database": {
+      "acquireCount": {
+        "w": 1
+      }
+    },
+    "Collection": {
+      "acquireCount": {
+        "w": 1
+      }
+    },
+    "Mutex": {
+      "acquireCount": {
+        "r": 1
+      }
+    }
+  },
+  "flowControl": {
+    "acquireCount": 1,
+    "timeAcquiringMicros": 4
+  },
+  "responseLength": 45,
+  "protocol": "op_msg",
+  "millis": 0,
+  "ts": {
+    "$date": "2022-10-24T12:34:52.041Z"
+  },
+  "client": "172.17.0.1",
+  "allUsers": [],
+  "user": ""
+},{
+  "op": "query",
+  "ns": "db_98188f7406cc40a888db9ab8056eb396.Foo",
+  "command": {
+    "find": "Foo",
+    "filter": {
+      "Name": "foo1"
+    },
+    "readConcern": {
+      "level": "majority"
+    },
+    "$db": "db_98188f7406cc40a888db9ab8056eb396",
+    "lsid": {
+      "id": {
+        "$binary": {
+          "base64": "w6P\u002BgezU1ECJmuzdA0rhPg==",
+          "subType": "03"
+        }
+      }
+    }
+  },
+  "keysExamined": 0,
+  "docsExamined": 1,
+  "cursorExhausted": true,
+  "numYield": 0,
+  "nreturned": 1,
+  "queryHash": "EBFEE4C5",
+  "planCacheKey": "CEC3A330",
+  "locks": {
+    "Global": {
+      "acquireCount": {
+        "r": 1
+      }
+    },
+    "Mutex": {
+      "acquireCount": {
+        "r": 1
+      }
+    }
+  },
+  "flowControl": {},
+  "readConcern": {
+    "level": "majority",
+    "provenance": "clientSupplied"
+  },
+  "responseLength": 156,
+  "protocol": "op_msg",
+  "millis": 0,
+  "planSummary": "COLLSCAN",
+  "execStats": {
+    "stage": "COLLSCAN",
+    "filter": {
+      "Name": {
+        "$eq": "foo1"
+      }
+    },
+    "nReturned": 1,
+    "executionTimeMillisEstimate": 0,
+    "works": 3,
+    "advanced": 1,
+    "needTime": 1,
+    "needYield": 0,
+    "saveState": 0,
+    "restoreState": 0,
+    "isEOF": 1,
+    "direction": "forward",
+    "docsExamined": 1
+  },
+  "ts": {
+    "$date": "2022-10-24T12:34:52.088Z"
+  },
+  "client": "172.17.0.1",
+  "allUsers": [],
+  "user": ""
+}]

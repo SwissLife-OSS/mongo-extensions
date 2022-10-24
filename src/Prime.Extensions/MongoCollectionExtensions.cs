@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace MongoDB.Prime.Extensions
@@ -39,6 +40,35 @@ namespace MongoDB.Prime.Extensions
 
             return collection.InsertManyAsync(
                 documents, options, cancellationToken);
+        }
+
+        public static string? Explain<T>(
+            this IMongoCollection<T> collection,
+            FilterDefinition<T> filter)
+        {
+            var options = new FindOptions
+            {
+                Modifiers = new BsonDocument("$explain", true)
+            };
+
+            return Explain(collection, filter, options);
+        }
+
+        public static string? Explain<T>(
+            this IMongoCollection<T> collection,
+            FilterDefinition<T> filter,
+            FindOptions findOptions)
+        {
+            findOptions.Modifiers =
+                new BsonDocument("$explain", true);
+
+            string? explain = collection
+                .Find(filter, findOptions)
+                .Project(new BsonDocument())
+                .FirstOrDefault()
+                ?.ToJson();
+
+            return explain;
         }
     }
 }

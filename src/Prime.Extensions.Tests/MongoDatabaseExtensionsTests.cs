@@ -1,5 +1,10 @@
-﻿using MongoDB.Bson;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using MongoDB.Bson;
 using MongoDB.Driver;
+using Snapshooter.Xunit;
 using Squadron;
 using Xunit;
 
@@ -140,5 +145,63 @@ namespace MongoDB.Prime.Extensions.Tests
         }
 
         #endregion GetProfilingStatus Tests
+
+        #region GetProfiledOperations Tests
+
+        [Fact]
+        public void GetProfiledOperations_GetOneExecutedOperations_ReturnsOneMongoDBOperation()
+        {
+            // Arrange
+            _mongoDatabase.EnableProfiling();
+
+            _mongoDatabase.CreateCollection("Bar");
+
+            // Act
+            IEnumerable<string> results =
+                _mongoDatabase.GetProfiledOperations();
+
+            // Assert
+            Snapshot.Match(results.Single(),
+                matchOptions => matchOptions
+                    .IgnoreField("**.ns")
+                    .IgnoreField("**.$db")
+                    .IgnoreField("**.flowControl")
+                    .IgnoreField("**.millis")
+                    .IgnoreField("**.ts")
+                    .IgnoreField("**.base64")
+                    .IgnoreField("**.client")
+                );
+        }
+
+        [Fact]
+        public void GetProfiledOperations_GetAllExecutedOperations_ReturnsAllMongoDBOperations()
+        {
+            // Arrange
+            _mongoDatabase.EnableProfiling();
+
+            _mongoDatabase.CreateCollection("Bar");
+            _mongoDatabase.CreateCollection("Foo");
+            _mongoDatabase.GetCollection<Bar>().InsertOne(new Bar("bar1"));
+            _mongoDatabase.GetCollection<Foo>().InsertOne(new Foo("foo1"));
+            _mongoDatabase.GetCollection<Foo>().Find(foo => foo.Name == "foo1").ToList();
+
+            // Act
+            string[] results =
+                _mongoDatabase.GetProfiledOperations().ToArray();
+
+            // Assert
+            Snapshot.Match(results.ToJsonArray(),
+                matchOptions => matchOptions
+                    .IgnoreField("**.ns")
+                    .IgnoreField("**.$db")
+                    .IgnoreField("**.flowControl")
+                    .IgnoreField("**.millis")
+                    .IgnoreField("**.ts")
+                    .IgnoreField("**.base64")
+                    .IgnoreField("**.client")
+                );
+        }
+
+        #endregion
     }
 }

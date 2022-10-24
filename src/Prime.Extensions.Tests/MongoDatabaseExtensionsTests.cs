@@ -175,6 +175,8 @@ namespace MongoDB.Prime.Extensions.Tests
                     .IgnoreField("**.FeatureCompatibilityVersion")
                     .IgnoreField("**.queryHash")
                     .IgnoreField("**.planCacheKey")
+                    .IgnoreField("**.queryExecutionEngine")
+                    .IgnoreField("**.readConcern")
                 );
         }
 
@@ -209,6 +211,8 @@ namespace MongoDB.Prime.Extensions.Tests
                     .IgnoreField("**.FeatureCompatibilityVersion")
                     .IgnoreField("**.queryHash")
                     .IgnoreField("**.planCacheKey")
+                    .IgnoreField("**.queryExecutionEngine")
+                    .IgnoreField("**.readConcern")
                 );
         }
 

@@ -1,0 +1,64 @@
+﻿{
+  "op": "command",
+  "ns": "db_2073f5d0f83849bb991287c1b488d141.Bar",
+  "command": {
+    "create": "Bar",
+    "$db": "db_2073f5d0f83849bb991287c1b488d141",
+    "lsid": {
+      "id": {
+        "$binary": {
+          "base64": "LS6ugmsi2EiKMKvM62WMng==",
+          "subType": "03"
+        }
+      }
+    }
+  },
+  "numYield": 0,
+  "locks": {
+    "ParallelBatchWriterMode": {
+      "acquireCount": {
+        "r": 2
+      }
+    },
+    "ReplicationStateTransition": {
+      "acquireCount": {
+        "w": 2
+      }
+    },
+    "Global": {
+      "acquireCount": {
+        "r": 1,
+        "w": 1
+      }
+    },
+    "Database": {
+      "acquireCount": {
+        "r": 1,
+        "w": 1
+      }
+    },
+    "Collection": {
+      "acquireCount": {
+        "w": 1
+      }
+    },
+    "Mutex": {
+      "acquireCount": {
+        "r": 2
+      }
+    }
+  },
+  "flowControl": {
+    "acquireCount": 1,
+    "timeAcquiringMicros": 3
+  },
+  "responseLength": 38,
+  "protocol": "op_msg",
+  "millis": 17,
+  "ts": {
+    "$date": "2022-10-24T12:44:09.669Z"
+  },
+  "client": "172.17.0.1",
+  "allUsers": [],
+  "user": ""
+}

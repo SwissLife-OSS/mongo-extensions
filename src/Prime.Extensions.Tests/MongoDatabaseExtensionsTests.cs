@@ -213,6 +213,7 @@ namespace MongoDB.Prime.Extensions.Tests
                     .IgnoreField("**.queryHash")
                     .IgnoreField("**.planCacheKey")
                     .IgnoreField("**.queryExecutionEngine")
+                    .IgnoreField("**.queryFramework")
                     .IgnoreField("**.readConcern")
                 );
         }

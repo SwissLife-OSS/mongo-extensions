@@ -1,0 +1,11 @@
+﻿{
+  "$or" : [{
+      "$and" : [{
+          "_id" : CSUUID("44752191-e10b-435a-a0e9-62e7f13d41cd")
+        }, {
+          "Name" : "Walse"
+        }, {
+          "Name" : "Toronto"
+        }]
+    }]
+}

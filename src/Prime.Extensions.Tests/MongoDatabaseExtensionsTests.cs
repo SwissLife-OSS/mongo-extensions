@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Nodes;
+using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Snapshooter.Xunit;
@@ -163,20 +163,13 @@ namespace MongoDB.Prime.Extensions.Tests
             // Assert
             Snapshot.Match(results.Single(),
                 matchOptions => matchOptions
-                    .IgnoreField("**.ns")
-                    .IgnoreField("**.$db")
-                    .IgnoreField("**.flowControl")
-                    .IgnoreField("**.millis")
-                    .IgnoreField("**.ts")
-                    .IgnoreField("**.base64")
-                    .IgnoreField("**.client")
-                    .IgnoreField("**.locks")
-                    .IgnoreField("**.ReplicationStateTransition")
-                    .IgnoreField("**.FeatureCompatibilityVersion")
-                    .IgnoreField("**.queryHash")
-                    .IgnoreField("**.planCacheKey")
-                    .IgnoreField("**.queryExecutionEngine")
-                    .IgnoreField("**.readConcern")
+                    .IncludeField("**.command")                    
+                    .IncludeField("**.keysExamined")                    
+                    .IncludeField("**.docsExamined")                    
+                    .IncludeField("**.planSummary")                    
+                    .IncludeField("**.execStats")
+                    .ExcludeField("**.$db")
+                    .ExcludeField("**.lsid")
                 );
         }
 
@@ -188,8 +181,9 @@ namespace MongoDB.Prime.Extensions.Tests
 
             _mongoDatabase.CreateCollection("Bar");
             _mongoDatabase.CreateCollection("Foo");
-            _mongoDatabase.GetCollection<Bar>().InsertOne(new Bar("bar1"));
-            _mongoDatabase.GetCollection<Foo>().InsertOne(new Foo("foo1"));
+            _mongoDatabase.GetCollection<Bar>()
+                .InsertOne(new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903041"), "Bar1", "Value1"));
+            _mongoDatabase.GetCollection<Foo>().InsertOne(new Foo("Foo1", "Value1"));
             _mongoDatabase.GetCollection<Foo>().Find(foo => foo.Name == "foo1").ToList();
 
             // Act
@@ -199,23 +193,98 @@ namespace MongoDB.Prime.Extensions.Tests
             // Assert
             Snapshot.Match(results.ToJsonArray(),
                 matchOptions => matchOptions
-                    .IgnoreField("**.ns")
-                    .IgnoreField("**.$db")
-                    .IgnoreField("**.flowControl")
-                    .IgnoreField("**.millis")
-                    .IgnoreField("**.ts")
-                    .IgnoreField("**.base64")
-                    .IgnoreField("**.client")
-                    .IgnoreField("**.locks")
-                    .IgnoreField("**.ReplicationStateTransition")
-                    .IgnoreField("**.FeatureCompatibilityVersion")
-                    .IgnoreField("**.queryHash")
-                    .IgnoreField("**.planCacheKey")
-                    .IgnoreField("**.queryExecutionEngine")
-                    .IgnoreField("**.readConcern")
+                    .IncludeField("**.command")
+                    .IncludeField("**.keysExamined")
+                    .IncludeField("**.docsExamined")
+                    .IncludeField("**.planSummary")
+                    .IncludeField("**.execStats")
+                    .ExcludeField("**.$db")
+                    .ExcludeField("**.lsid")
                 );
         }
 
         #endregion
+
+        #region CleanAllCollections Tests
+
+        [Fact]
+        public async Task CleanAllCollections_CleanAllDocumentsOfAllCollections_AllCollectionsEmpty()
+        {
+            // Arrange
+            IMongoCollection<Bar> barCollection = _mongoDatabase.GetCollection<Bar>();
+            IMongoCollection<Foo> fooCollection = _mongoDatabase.GetCollection<Foo>();
+
+            var arrangedBars = new List<Bar> {
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903041"), "Bar1", "Value1"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903042"), "Bar2", "Value2"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903043"), "Bar3", "Value3"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903044"), "Bar3", "Value4"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903045"), "Bar5", "Value5"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903046"), "Bar6", "Value6"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903047"), "Bar7", "Value7"),
+            };
+
+            var arrangedFoo = new List<Foo> {
+               new Foo("Foo1", "Value1"),
+               new Foo("Foo2", "Value2"),
+               new Foo("Foo3", "Value3"),
+               new Foo("Foo4", "Value4"),
+               new Foo("Foo5", "Value5")
+            };
+
+            await barCollection.InsertManyAsync(arrangedBars);
+            await fooCollection.InsertManyAsync(arrangedFoo);
+
+            Assert.Equal(7, barCollection.CountDocuments());
+            Assert.Equal(5, fooCollection.CountDocuments());
+
+            // Act
+            _mongoDatabase.CleanAllCollections();
+
+            // Assert
+            Assert.Equal(0, barCollection.CountDocuments());
+            Assert.Equal(0, fooCollection.CountDocuments());
+        }
+
+        [Fact]
+        public async Task CleanAllCollectionsAsync_CleanAllDocumentsOfAllCollections_AllCollectionsEmpty()
+        {
+            // Arrange
+            IMongoCollection<Bar> barCollection = _mongoDatabase.GetCollection<Bar>();
+            IMongoCollection<Foo> fooCollection = _mongoDatabase.GetCollection<Foo>();
+
+            var arrangedBars = new List<Bar> {
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903041"), "Bar1", "Value1"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903042"), "Bar2", "Value2"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903043"), "Bar3", "Value3"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903044"), "Bar3", "Value4"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903045"), "Bar5", "Value5"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903046"), "Bar6", "Value6"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903047"), "Bar7", "Value7"),
+            };
+
+            var arrangedFoo = new List<Foo> {
+               new Foo("Foo1", "Value1"),
+               new Foo("Foo2", "Value2"),
+               new Foo("Foo3", "Value3"),
+               new Foo("Foo4", "Value4"),
+               new Foo("Foo5", "Value5")
+            };
+
+            await barCollection.InsertManyAsync(arrangedBars);
+            await fooCollection.InsertManyAsync(arrangedFoo);
+
+            Assert.Equal(7, barCollection.CountDocuments());
+            Assert.Equal(5, fooCollection.CountDocuments());
+
+            // Act
+            await _mongoDatabase.CleanAllCollectionsAsync();
+
+            // Assert
+            Assert.Equal(0, barCollection.CountDocuments());
+            Assert.Equal(0, fooCollection.CountDocuments());
+        }
+
+        #endregion CleanAllCollections Tests        
     }
 }

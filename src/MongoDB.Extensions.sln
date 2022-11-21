@@ -25,6 +25,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Migration", "Migration\Migr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Migration.Tests", "Migration.Tests\Migration.Tests.csproj", "{A7D17D8A-99BC-40AC-92B4-996790F7F26E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".SolutionFiles", ".SolutionFiles", "{A21A1FF3-25C1-4FE1-994E-E16CDF98BB99}"
+	ProjectSection(SolutionItems) = preProject
+		TestProject.props = TestProject.props
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

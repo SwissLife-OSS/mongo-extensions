@@ -163,20 +163,11 @@ namespace MongoDB.Prime.Extensions.Tests
             // Assert
             Snapshot.Match(results.Single(),
                 matchOptions => matchOptions
-                    .IgnoreField("**.ns")
-                    .IgnoreField("**.$db")
-                    .IgnoreField("**.flowControl")
-                    .IgnoreField("**.millis")
-                    .IgnoreField("**.ts")
-                    .IgnoreField("**.base64")
-                    .IgnoreField("**.client")
-                    .IgnoreField("**.locks")
-                    .IgnoreField("**.ReplicationStateTransition")
-                    .IgnoreField("**.FeatureCompatibilityVersion")
-                    .IgnoreField("**.queryHash")
-                    .IgnoreField("**.planCacheKey")
-                    .IgnoreField("**.queryExecutionEngine")
-                    .IgnoreField("**.readConcern")
+                    .IncludeField("**.command")                    
+                    .IncludeField("**.keysExamined")                    
+                    .IncludeField("**.docsExamined")                    
+                    .IncludeField("**.planSummary")                    
+                    .IncludeField("**.execStats")                    
                 );
         }
 
@@ -200,21 +191,11 @@ namespace MongoDB.Prime.Extensions.Tests
             // Assert
             Snapshot.Match(results.ToJsonArray(),
                 matchOptions => matchOptions
-                    .IgnoreField("**.ns")
-                    .IgnoreField("**.$db")
-                    .IgnoreField("**.flowControl")
-                    .IgnoreField("**.millis")
-                    .IgnoreField("**.ts")
-                    .IgnoreField("**.base64")
-                    .IgnoreField("**.client")
-                    .IgnoreField("**.locks")
-                    .IgnoreField("**.ReplicationStateTransition")
-                    .IgnoreField("**.FeatureCompatibilityVersion")
-                    .IgnoreField("**.queryHash")
-                    .IgnoreField("**.planCacheKey")
-                    .IgnoreField("**.queryExecutionEngine")
-                    .IgnoreField("**.queryFramework")
-                    .IgnoreField("**.readConcern")
+                    .IncludeField("**.command")
+                    .IncludeField("**.keysExamined")
+                    .IncludeField("**.docsExamined")
+                    .IncludeField("**.planSummary")
+                    .IncludeField("**.execStats")
                 );
         }
 

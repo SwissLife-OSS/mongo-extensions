@@ -1,351 +1,102 @@
-﻿[{
-  "op": "command",
-  "ns": "db_33afcfa9f5ed4205a52d2542e16bc7c2.Bar",
-  "command": {
-    "create": "Bar",
-    "$db": "db_33afcfa9f5ed4205a52d2542e16bc7c2",
-    "lsid": {
-      "id": {
-        "$binary": {
-          "base64": "yQrcbO8qqE6t7tB4V7euSg==",
-          "subType": "03"
+﻿[
+  {
+    "command": {
+      "create": "Bar",
+      "$db": "db_e723fe9843fc4e7699279a4d3ed7f07a",
+      "lsid": {
+        "id": {
+          "$binary": {
+            "base64": "LSTAcBhmFEWAYEZo8znlEw==",
+            "subType": "03"
+          }
         }
       }
     }
   },
-  "numYield": 0,
-  "locks": {
-    "ParallelBatchWriterMode": {
-      "acquireCount": {
-        "r": 1
-      }
-    },
-    "FeatureCompatibilityVersion": {
-      "acquireCount": {
-        "w": 1
-      }
-    },
-    "ReplicationStateTransition": {
-      "acquireCount": {
-        "w": 1
-      }
-    },
-    "Global": {
-      "acquireCount": {
-        "w": 1
-      }
-    },
-    "Database": {
-      "acquireCount": {
-        "w": 1
-      }
-    },
-    "Collection": {
-      "acquireCount": {
-        "w": 1
-      }
-    },
-    "Mutex": {
-      "acquireCount": {
-        "r": 2
-      }
-    }
-  },
-  "flowControl": {
-    "acquireCount": 1,
-    "timeAcquiringMicros": 6
-  },
-  "responseLength": 38,
-  "protocol": "op_msg",
-  "millis": 39,
-  "ts": {
-    "$date": "2022-11-21T14:02:35.02Z"
-  },
-  "client": "172.17.0.1",
-  "allUsers": [],
-  "user": ""
-},{
-  "op": "command",
-  "ns": "db_33afcfa9f5ed4205a52d2542e16bc7c2.Foo",
-  "command": {
-    "create": "Foo",
-    "$db": "db_33afcfa9f5ed4205a52d2542e16bc7c2",
-    "lsid": {
-      "id": {
-        "$binary": {
-          "base64": "yQrcbO8qqE6t7tB4V7euSg==",
-          "subType": "03"
+  {
+    "command": {
+      "create": "Foo",
+      "$db": "db_e723fe9843fc4e7699279a4d3ed7f07a",
+      "lsid": {
+        "id": {
+          "$binary": {
+            "base64": "LSTAcBhmFEWAYEZo8znlEw==",
+            "subType": "03"
+          }
         }
       }
     }
   },
-  "numYield": 0,
-  "locks": {
-    "ParallelBatchWriterMode": {
-      "acquireCount": {
-        "r": 1
-      }
-    },
-    "FeatureCompatibilityVersion": {
-      "acquireCount": {
-        "w": 1
-      }
-    },
-    "ReplicationStateTransition": {
-      "acquireCount": {
-        "w": 1
-      }
-    },
-    "Global": {
-      "acquireCount": {
-        "w": 1
-      }
-    },
-    "Database": {
-      "acquireCount": {
-        "w": 1
-      }
-    },
-    "Collection": {
-      "acquireCount": {
-        "w": 1
-      }
-    },
-    "Mutex": {
-      "acquireCount": {
-        "r": 2
-      }
-    }
-  },
-  "flowControl": {
-    "acquireCount": 1,
-    "timeAcquiringMicros": 6
-  },
-  "responseLength": 38,
-  "protocol": "op_msg",
-  "millis": 28,
-  "ts": {
-    "$date": "2022-11-21T14:02:35.051Z"
-  },
-  "client": "172.17.0.1",
-  "allUsers": [],
-  "user": ""
-},{
-  "op": "insert",
-  "ns": "db_33afcfa9f5ed4205a52d2542e16bc7c2.Bar",
-  "command": {
-    "insert": "Bar",
-    "ordered": true,
-    "$db": "db_33afcfa9f5ed4205a52d2542e16bc7c2",
-    "lsid": {
-      "id": {
-        "$binary": {
-          "base64": "yQrcbO8qqE6t7tB4V7euSg==",
-          "subType": "03"
+  {
+    "command": {
+      "insert": "Bar",
+      "ordered": true,
+      "$db": "db_e723fe9843fc4e7699279a4d3ed7f07a",
+      "lsid": {
+        "id": {
+          "$binary": {
+            "base64": "LSTAcBhmFEWAYEZo8znlEw==",
+            "subType": "03"
+          }
         }
       }
     }
   },
-  "ninserted": 1,
-  "keysInserted": 1,
-  "numYield": 0,
-  "locks": {
-    "ParallelBatchWriterMode": {
-      "acquireCount": {
-        "r": 1
-      }
-    },
-    "FeatureCompatibilityVersion": {
-      "acquireCount": {
-        "w": 1
-      }
-    },
-    "ReplicationStateTransition": {
-      "acquireCount": {
-        "w": 1
-      }
-    },
-    "Global": {
-      "acquireCount": {
-        "w": 1
-      }
-    },
-    "Database": {
-      "acquireCount": {
-        "w": 1
-      }
-    },
-    "Collection": {
-      "acquireCount": {
-        "w": 1
-      }
-    },
-    "Mutex": {
-      "acquireCount": {
-        "r": 1
-      }
-    }
-  },
-  "flowControl": {
-    "acquireCount": 1,
-    "timeAcquiringMicros": 5
-  },
-  "responseLength": 45,
-  "protocol": "op_msg",
-  "millis": 0,
-  "ts": {
-    "$date": "2022-11-21T14:02:35.056Z"
-  },
-  "client": "172.17.0.1",
-  "allUsers": [],
-  "user": ""
-},{
-  "op": "insert",
-  "ns": "db_33afcfa9f5ed4205a52d2542e16bc7c2.Foo",
-  "command": {
-    "insert": "Foo",
-    "ordered": true,
-    "$db": "db_33afcfa9f5ed4205a52d2542e16bc7c2",
-    "lsid": {
-      "id": {
-        "$binary": {
-          "base64": "yQrcbO8qqE6t7tB4V7euSg==",
-          "subType": "03"
+  {
+    "command": {
+      "insert": "Foo",
+      "ordered": true,
+      "$db": "db_e723fe9843fc4e7699279a4d3ed7f07a",
+      "lsid": {
+        "id": {
+          "$binary": {
+            "base64": "LSTAcBhmFEWAYEZo8znlEw==",
+            "subType": "03"
+          }
         }
       }
     }
   },
-  "ninserted": 1,
-  "keysInserted": 1,
-  "numYield": 0,
-  "locks": {
-    "ParallelBatchWriterMode": {
-      "acquireCount": {
-        "r": 1
-      }
-    },
-    "FeatureCompatibilityVersion": {
-      "acquireCount": {
-        "w": 1
-      }
-    },
-    "ReplicationStateTransition": {
-      "acquireCount": {
-        "w": 1
-      }
-    },
-    "Global": {
-      "acquireCount": {
-        "w": 1
-      }
-    },
-    "Database": {
-      "acquireCount": {
-        "w": 1
-      }
-    },
-    "Collection": {
-      "acquireCount": {
-        "w": 1
-      }
-    },
-    "Mutex": {
-      "acquireCount": {
-        "r": 1
-      }
-    }
-  },
-  "flowControl": {
-    "acquireCount": 1,
-    "timeAcquiringMicros": 6
-  },
-  "responseLength": 45,
-  "protocol": "op_msg",
-  "millis": 0,
-  "ts": {
-    "$date": "2022-11-21T14:02:35.059Z"
-  },
-  "client": "172.17.0.1",
-  "allUsers": [],
-  "user": ""
-},{
-  "op": "query",
-  "ns": "db_33afcfa9f5ed4205a52d2542e16bc7c2.Foo",
-  "command": {
-    "find": "Foo",
-    "filter": {
-      "Name": "foo1"
-    },
-    "readConcern": {
-      "level": "majority"
-    },
-    "$db": "db_33afcfa9f5ed4205a52d2542e16bc7c2",
-    "lsid": {
-      "id": {
-        "$binary": {
-          "base64": "yQrcbO8qqE6t7tB4V7euSg==",
-          "subType": "03"
+  {
+    "command": {
+      "find": "Foo",
+      "filter": {
+        "Name": "foo1"
+      },
+      "readConcern": {
+        "level": "majority"
+      },
+      "$db": "db_e723fe9843fc4e7699279a4d3ed7f07a",
+      "lsid": {
+        "id": {
+          "$binary": {
+            "base64": "LSTAcBhmFEWAYEZo8znlEw==",
+            "subType": "03"
+          }
         }
       }
+    },
+    "keysExamined": 0,
+    "docsExamined": 1,
+    "planSummary": "COLLSCAN",
+    "execStats": {
+      "stage": "COLLSCAN",
+      "filter": {
+        "Name": {
+          "$eq": "foo1"
+        }
+      },
+      "nReturned": 0,
+      "executionTimeMillisEstimate": 0,
+      "works": 3,
+      "advanced": 0,
+      "needTime": 2,
+      "needYield": 0,
+      "saveState": 0,
+      "restoreState": 0,
+      "isEOF": 1,
+      "direction": "forward",
+      "docsExamined": 1
     }
-  },
-  "keysExamined": 0,
-  "docsExamined": 1,
-  "cursorExhausted": true,
-  "numYield": 0,
-  "nreturned": 0,
-  "queryHash": "C2E834E8",
-  "planCacheKey": "C2E834E8",
-  "queryExecutionEngine": "classic",
-  "locks": {
-    "FeatureCompatibilityVersion": {
-      "acquireCount": {
-        "r": 1
-      }
-    },
-    "Global": {
-      "acquireCount": {
-        "r": 1
-      }
-    },
-    "Mutex": {
-      "acquireCount": {
-        "r": 1
-      }
-    }
-  },
-  "flowControl": {},
-  "readConcern": {
-    "level": "majority",
-    "provenance": "clientSupplied"
-  },
-  "responseLength": 128,
-  "protocol": "op_msg",
-  "millis": 0,
-  "planSummary": "COLLSCAN",
-  "execStats": {
-    "stage": "COLLSCAN",
-    "filter": {
-      "Name": {
-        "$eq": "foo1"
-      }
-    },
-    "nReturned": 0,
-    "executionTimeMillisEstimate": 0,
-    "works": 3,
-    "advanced": 0,
-    "needTime": 2,
-    "needYield": 0,
-    "saveState": 0,
-    "restoreState": 0,
-    "isEOF": 1,
-    "direction": "forward",
-    "docsExamined": 1
-  },
-  "ts": {
-    "$date": "2022-11-21T14:02:35.063Z"
-  },
-  "client": "172.17.0.1",
-  "allUsers": [],
-  "user": ""
-}]
+  }
+]

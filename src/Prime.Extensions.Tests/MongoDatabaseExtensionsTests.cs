@@ -167,7 +167,9 @@ namespace MongoDB.Prime.Extensions.Tests
                     .IncludeField("**.keysExamined")                    
                     .IncludeField("**.docsExamined")                    
                     .IncludeField("**.planSummary")                    
-                    .IncludeField("**.execStats")                    
+                    .IncludeField("**.execStats")
+                    .ExcludeField("**.$db")
+                    .ExcludeField("**.lsid")
                 );
         }
 
@@ -196,6 +198,8 @@ namespace MongoDB.Prime.Extensions.Tests
                     .IncludeField("**.docsExamined")
                     .IncludeField("**.planSummary")
                     .IncludeField("**.execStats")
+                    .ExcludeField("**.$db")
+                    .ExcludeField("**.lsid")
                 );
         }
 

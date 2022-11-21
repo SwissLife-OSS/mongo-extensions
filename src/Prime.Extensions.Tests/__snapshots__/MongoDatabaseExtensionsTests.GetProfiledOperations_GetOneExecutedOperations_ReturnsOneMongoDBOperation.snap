@@ -1,14 +1,5 @@
 ﻿{
   "command": {
-    "create": "Bar",
-    "$db": "db_637d1050afba4829b3d48f1a9f92de34",
-    "lsid": {
-      "id": {
-        "$binary": {
-          "base64": "LSTAcBhmFEWAYEZo8znlEw==",
-          "subType": "03"
-        }
-      }
-    }
+    "create": "Bar"
   }
 }

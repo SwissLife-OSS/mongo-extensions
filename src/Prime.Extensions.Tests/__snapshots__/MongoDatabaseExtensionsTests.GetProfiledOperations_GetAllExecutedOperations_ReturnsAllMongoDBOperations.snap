@@ -1,60 +1,24 @@
 ﻿[
   {
     "command": {
-      "create": "Bar",
-      "$db": "db_e723fe9843fc4e7699279a4d3ed7f07a",
-      "lsid": {
-        "id": {
-          "$binary": {
-            "base64": "LSTAcBhmFEWAYEZo8znlEw==",
-            "subType": "03"
-          }
-        }
-      }
+      "create": "Bar"
     }
   },
   {
     "command": {
-      "create": "Foo",
-      "$db": "db_e723fe9843fc4e7699279a4d3ed7f07a",
-      "lsid": {
-        "id": {
-          "$binary": {
-            "base64": "LSTAcBhmFEWAYEZo8znlEw==",
-            "subType": "03"
-          }
-        }
-      }
+      "create": "Foo"
     }
   },
   {
     "command": {
       "insert": "Bar",
-      "ordered": true,
-      "$db": "db_e723fe9843fc4e7699279a4d3ed7f07a",
-      "lsid": {
-        "id": {
-          "$binary": {
-            "base64": "LSTAcBhmFEWAYEZo8znlEw==",
-            "subType": "03"
-          }
-        }
-      }
+      "ordered": true
     }
   },
   {
     "command": {
       "insert": "Foo",
-      "ordered": true,
-      "$db": "db_e723fe9843fc4e7699279a4d3ed7f07a",
-      "lsid": {
-        "id": {
-          "$binary": {
-            "base64": "LSTAcBhmFEWAYEZo8znlEw==",
-            "subType": "03"
-          }
-        }
-      }
+      "ordered": true
     }
   },
   {
@@ -65,15 +29,6 @@
       },
       "readConcern": {
         "level": "majority"
-      },
-      "$db": "db_e723fe9843fc4e7699279a4d3ed7f07a",
-      "lsid": {
-        "id": {
-          "$binary": {
-            "base64": "LSTAcBhmFEWAYEZo8znlEw==",
-            "subType": "03"
-          }
-        }
       }
     },
     "keysExamined": 0,

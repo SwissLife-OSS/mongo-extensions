@@ -27,7 +27,7 @@ namespace MongoDB.Prime.Extensions.Tests
 
             // Act
             string mongodbQuery = barCollection
-                .Find<Bar>(bar => bar.Name == "Bar1" || bar.Id == "1234")
+                .Find<Bar>(bar => bar.Name == "Bar1" || bar.Value == "1234")
                 .Limit(5)
                 .PrintQuery();
 

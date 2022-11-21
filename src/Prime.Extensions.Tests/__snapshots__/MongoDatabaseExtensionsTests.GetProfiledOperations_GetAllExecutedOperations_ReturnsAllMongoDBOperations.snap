@@ -1,13 +1,13 @@
 ﻿[{
   "op": "command",
-  "ns": "db_98188f7406cc40a888db9ab8056eb396.Bar",
+  "ns": "db_33afcfa9f5ed4205a52d2542e16bc7c2.Bar",
   "command": {
     "create": "Bar",
-    "$db": "db_98188f7406cc40a888db9ab8056eb396",
+    "$db": "db_33afcfa9f5ed4205a52d2542e16bc7c2",
     "lsid": {
       "id": {
         "$binary": {
-          "base64": "w6P\u002BgezU1ECJmuzdA0rhPg==",
+          "base64": "yQrcbO8qqE6t7tB4V7euSg==",
           "subType": "03"
         }
       }
@@ -17,23 +17,26 @@
   "locks": {
     "ParallelBatchWriterMode": {
       "acquireCount": {
-        "r": 2
+        "r": 1
+      }
+    },
+    "FeatureCompatibilityVersion": {
+      "acquireCount": {
+        "w": 1
       }
     },
     "ReplicationStateTransition": {
       "acquireCount": {
-        "w": 2
+        "w": 1
       }
     },
     "Global": {
       "acquireCount": {
-        "r": 1,
         "w": 1
       }
     },
     "Database": {
       "acquireCount": {
-        "r": 1,
         "w": 1
       }
     },
@@ -50,27 +53,27 @@
   },
   "flowControl": {
     "acquireCount": 1,
-    "timeAcquiringMicros": 5
+    "timeAcquiringMicros": 6
   },
   "responseLength": 38,
   "protocol": "op_msg",
-  "millis": 18,
+  "millis": 39,
   "ts": {
-    "$date": "2022-10-24T12:34:51.893Z"
+    "$date": "2022-11-21T14:02:35.02Z"
   },
   "client": "172.17.0.1",
   "allUsers": [],
   "user": ""
 },{
   "op": "command",
-  "ns": "db_98188f7406cc40a888db9ab8056eb396.Foo",
+  "ns": "db_33afcfa9f5ed4205a52d2542e16bc7c2.Foo",
   "command": {
     "create": "Foo",
-    "$db": "db_98188f7406cc40a888db9ab8056eb396",
+    "$db": "db_33afcfa9f5ed4205a52d2542e16bc7c2",
     "lsid": {
       "id": {
         "$binary": {
-          "base64": "w6P\u002BgezU1ECJmuzdA0rhPg==",
+          "base64": "yQrcbO8qqE6t7tB4V7euSg==",
           "subType": "03"
         }
       }
@@ -80,23 +83,26 @@
   "locks": {
     "ParallelBatchWriterMode": {
       "acquireCount": {
-        "r": 2
+        "r": 1
+      }
+    },
+    "FeatureCompatibilityVersion": {
+      "acquireCount": {
+        "w": 1
       }
     },
     "ReplicationStateTransition": {
       "acquireCount": {
-        "w": 2
+        "w": 1
       }
     },
     "Global": {
       "acquireCount": {
-        "r": 1,
         "w": 1
       }
     },
     "Database": {
       "acquireCount": {
-        "r": 1,
         "w": 1
       }
     },
@@ -113,28 +119,28 @@
   },
   "flowControl": {
     "acquireCount": 1,
-    "timeAcquiringMicros": 4
+    "timeAcquiringMicros": 6
   },
   "responseLength": 38,
   "protocol": "op_msg",
-  "millis": 16,
+  "millis": 28,
   "ts": {
-    "$date": "2022-10-24T12:34:51.921Z"
+    "$date": "2022-11-21T14:02:35.051Z"
   },
   "client": "172.17.0.1",
   "allUsers": [],
   "user": ""
 },{
   "op": "insert",
-  "ns": "db_98188f7406cc40a888db9ab8056eb396.Bar",
+  "ns": "db_33afcfa9f5ed4205a52d2542e16bc7c2.Bar",
   "command": {
     "insert": "Bar",
     "ordered": true,
-    "$db": "db_98188f7406cc40a888db9ab8056eb396",
+    "$db": "db_33afcfa9f5ed4205a52d2542e16bc7c2",
     "lsid": {
       "id": {
         "$binary": {
-          "base64": "w6P\u002BgezU1ECJmuzdA0rhPg==",
+          "base64": "yQrcbO8qqE6t7tB4V7euSg==",
           "subType": "03"
         }
       }
@@ -147,6 +153,11 @@
     "ParallelBatchWriterMode": {
       "acquireCount": {
         "r": 1
+      }
+    },
+    "FeatureCompatibilityVersion": {
+      "acquireCount": {
+        "w": 1
       }
     },
     "ReplicationStateTransition": {
@@ -183,22 +194,22 @@
   "protocol": "op_msg",
   "millis": 0,
   "ts": {
-    "$date": "2022-10-24T12:34:52.026Z"
+    "$date": "2022-11-21T14:02:35.056Z"
   },
   "client": "172.17.0.1",
   "allUsers": [],
   "user": ""
 },{
   "op": "insert",
-  "ns": "db_98188f7406cc40a888db9ab8056eb396.Foo",
+  "ns": "db_33afcfa9f5ed4205a52d2542e16bc7c2.Foo",
   "command": {
     "insert": "Foo",
     "ordered": true,
-    "$db": "db_98188f7406cc40a888db9ab8056eb396",
+    "$db": "db_33afcfa9f5ed4205a52d2542e16bc7c2",
     "lsid": {
       "id": {
         "$binary": {
-          "base64": "w6P\u002BgezU1ECJmuzdA0rhPg==",
+          "base64": "yQrcbO8qqE6t7tB4V7euSg==",
           "subType": "03"
         }
       }
@@ -211,6 +222,11 @@
     "ParallelBatchWriterMode": {
       "acquireCount": {
         "r": 1
+      }
+    },
+    "FeatureCompatibilityVersion": {
+      "acquireCount": {
+        "w": 1
       }
     },
     "ReplicationStateTransition": {
@@ -241,20 +257,20 @@
   },
   "flowControl": {
     "acquireCount": 1,
-    "timeAcquiringMicros": 4
+    "timeAcquiringMicros": 6
   },
   "responseLength": 45,
   "protocol": "op_msg",
   "millis": 0,
   "ts": {
-    "$date": "2022-10-24T12:34:52.041Z"
+    "$date": "2022-11-21T14:02:35.059Z"
   },
   "client": "172.17.0.1",
   "allUsers": [],
   "user": ""
 },{
   "op": "query",
-  "ns": "db_98188f7406cc40a888db9ab8056eb396.Foo",
+  "ns": "db_33afcfa9f5ed4205a52d2542e16bc7c2.Foo",
   "command": {
     "find": "Foo",
     "filter": {
@@ -263,11 +279,11 @@
     "readConcern": {
       "level": "majority"
     },
-    "$db": "db_98188f7406cc40a888db9ab8056eb396",
+    "$db": "db_33afcfa9f5ed4205a52d2542e16bc7c2",
     "lsid": {
       "id": {
         "$binary": {
-          "base64": "w6P\u002BgezU1ECJmuzdA0rhPg==",
+          "base64": "yQrcbO8qqE6t7tB4V7euSg==",
           "subType": "03"
         }
       }
@@ -277,10 +293,16 @@
   "docsExamined": 1,
   "cursorExhausted": true,
   "numYield": 0,
-  "nreturned": 1,
-  "queryHash": "EBFEE4C5",
-  "planCacheKey": "CEC3A330",
+  "nreturned": 0,
+  "queryHash": "C2E834E8",
+  "planCacheKey": "C2E834E8",
+  "queryExecutionEngine": "classic",
   "locks": {
+    "FeatureCompatibilityVersion": {
+      "acquireCount": {
+        "r": 1
+      }
+    },
     "Global": {
       "acquireCount": {
         "r": 1
@@ -297,7 +319,7 @@
     "level": "majority",
     "provenance": "clientSupplied"
   },
-  "responseLength": 156,
+  "responseLength": 128,
   "protocol": "op_msg",
   "millis": 0,
   "planSummary": "COLLSCAN",
@@ -308,11 +330,11 @@
         "$eq": "foo1"
       }
     },
-    "nReturned": 1,
+    "nReturned": 0,
     "executionTimeMillisEstimate": 0,
     "works": 3,
-    "advanced": 1,
-    "needTime": 1,
+    "advanced": 0,
+    "needTime": 2,
     "needYield": 0,
     "saveState": 0,
     "restoreState": 0,
@@ -321,7 +343,7 @@
     "docsExamined": 1
   },
   "ts": {
-    "$date": "2022-10-24T12:34:52.088Z"
+    "$date": "2022-11-21T14:02:35.063Z"
   },
   "client": "172.17.0.1",
   "allUsers": [],

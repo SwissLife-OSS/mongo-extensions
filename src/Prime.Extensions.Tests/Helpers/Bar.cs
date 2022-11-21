@@ -1,14 +1,18 @@
-namespace MongoDB.Prime.Extensions.Tests
+using System;
+
+namespace MongoDB.Prime.Extensions.Tests;
+
+public class Bar
 {
-    public class Bar
+    public Bar(Guid id, string name, string value)
     {
-        public Bar(string name)
-        {
-            Name = name;
-        }
-
-        public string Id { get; set; }
-
-        public string Name { get; set; }
+        Id = id;
+        Name = name;
+        Value = value;
     }
+
+    public Guid Id { get; }
+
+    public string Name { get; }
+    public string Value { get; }
 }

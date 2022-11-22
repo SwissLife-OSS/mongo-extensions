@@ -34,5 +34,22 @@ namespace MongoDB.Prime.Extensions.Tests
             // Assert
             Snapshot.Match(mongodbQuery);
         }
+
+        [Fact]
+        public void ToQueryString_ToOneSingleQueryString_OriginalMongoDbQueryPrinted()
+        {
+            // Arrange
+            IMongoCollection<Bar> barCollection =
+                _mongoDatabase.GetCollection<Bar>();
+
+            // Act
+            string mongodbQuery = barCollection
+                .Find<Bar>(bar => bar.Name == "Bar1" || bar.Value == "1234")
+                .Limit(5)
+                .ToQueryString();
+
+            // Assert
+            Snapshot.Match(mongodbQuery);
+        }
     }
 }

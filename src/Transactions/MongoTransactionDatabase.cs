@@ -213,6 +213,51 @@ namespace MongoDB.Extensions.Transactions
                 .CreateViewAsync(session, viewName, viewOn, pipeline, options, cancellationToken);
         }
 
+        public void DropCollection(
+            string name,
+            DropCollectionOptions options,
+            CancellationToken cancellationToken = default)
+        {
+            if (TryGetSession(out IClientSessionHandle? session))
+            {
+                _database.DropCollection(session, name, options, cancellationToken);
+                return;
+            }
+
+            _database.DropCollection(name, options, cancellationToken);
+        }
+
+        public void DropCollection(
+            IClientSessionHandle session,
+            string name,
+            DropCollectionOptions options,
+            CancellationToken cancellationToken = default)
+        {
+            _database.DropCollectionAsync(session, name, options, cancellationToken);
+        }
+
+        public Task DropCollectionAsync(
+            string name,
+            DropCollectionOptions options,
+            CancellationToken cancellationToken = default)
+        {
+            if (TryGetSession(out IClientSessionHandle? session))
+            {
+                return _database.DropCollectionAsync(session, name, options, cancellationToken);
+            }
+
+            return _database.DropCollectionAsync(name, options, cancellationToken);
+        }
+
+        public Task DropCollectionAsync(
+            IClientSessionHandle session,
+            string name,
+            DropCollectionOptions options,
+            CancellationToken cancellationToken = default)
+        {
+            return _database.DropCollectionAsync(session, name, options, cancellationToken);
+        }
+
         public void DropCollection(string name, CancellationToken cancellationToken = default)
         {
             if (TryGetSession(out IClientSessionHandle? session))

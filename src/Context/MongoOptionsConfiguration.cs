@@ -24,10 +24,9 @@ namespace MongoDB.Extensions.Context
         public static MongoOptions<TMongoDBContext> GetMongoOptions<TMongoDBContext>(
             this IConfigurationSection section) where TMongoDBContext : IMongoDbContext
         {
-            MongoOptions<TMongoDBContext> mongoOptions =
-                section.Get<MongoOptions<TMongoDBContext>>();
-
-            mongoOptions.Validate();
+            MongoOptions<TMongoDBContext> mongoOptions = section
+                .Get<MongoOptions<TMongoDBContext>>()
+                .Validate<TMongoDBContext>();
 
             return mongoOptions;
         }

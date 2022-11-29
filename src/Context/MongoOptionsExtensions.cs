@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 
 namespace MongoDB.Extensions.Context
 {
     public static class MongoOptionsExtensions
     {
         public static MongoOptions Validate(
-            this MongoOptions mongoOptions)
+            this MongoOptions? mongoOptions)
         {
             if (mongoOptions == null)
             {

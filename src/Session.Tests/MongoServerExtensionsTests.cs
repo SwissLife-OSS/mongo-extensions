@@ -8,13 +8,14 @@ using MongoDB.Driver;
 using Snapshooter.Xunit;
 using Squadron;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace MongoDB.Extensions.Session.Tests
 {
     public class MongoServerExtensionsTests : IClassFixture<MongoResource>
     {
         private readonly IMongoClient _mongoClient;
-
+        
         public MongoServerExtensionsTests(MongoResource mongoResource)
         {
             _mongoClient = mongoResource.Client;
@@ -39,6 +40,8 @@ namespace MongoDB.Extensions.Session.Tests
         {
             // Arrange
             IClientSessionHandle session = await _mongoClient.StartSessionAsync();
+            Guid sessionId = session.GetSessionId();
+
             List<ServerSession> serverSessionsFirst = await GetServerSessions();
 
             // Act
@@ -48,17 +51,19 @@ namespace MongoDB.Extensions.Session.Tests
 
             // Assert
             ServerSession sessionFirstUse = serverSessionsFirst
-                .First(s => s.Id == session.GetSessionId());
+                .First(s => s.Id == sessionId);
             ServerSession sessionSecondUse = serverSessionsSecond
-                .First(s => s.Id == session.GetSessionId());
+                .First(s => s.Id == sessionId);
             Assert.True(sessionSecondUse.LastUse > sessionFirstUse.LastUse);
         }
 
         [Fact]
         public async Task GiveSession_WhenNoRefresh_ThanLastUseIsSame()
-        {
+         {
             // Arrange
             IClientSessionHandle session = await _mongoClient.StartSessionAsync();
+            Guid sessionId = session.GetSessionId();
+
             List<ServerSession> serverSessionsFirst = await GetServerSessions();
 
             // Act
@@ -67,18 +72,19 @@ namespace MongoDB.Extensions.Session.Tests
 
             // Assert
             ServerSession sessionFirstUse = serverSessionsFirst
-                .First(s => s.Id == session.GetSessionId());
+                .First(s => s.Id == sessionId);
             ServerSession sessionSecondUse = serverSessionsSecond
-                .First(s => s.Id == session.GetSessionId());
-            Assert.True(sessionSecondUse.LastUse == sessionFirstUse.LastUse);
+                .First(s => s.Id == sessionId);
+
+            Assert.Equal(sessionSecondUse.LastUse, sessionFirstUse.LastUse);
         }
 
-        private Task<List<ServerSession>> GetServerSessions()
+        private async Task<List<ServerSession>> GetServerSessions()
         {
             var pipeline = PipelineDefinition<NoPipelineInput, ServerSession>
                 .Create("{ $listLocalSessions: { allUsers: true } }");
 
-            return _mongoClient
+            return await _mongoClient                
                 .GetDatabase("config")
                 .WithReadConcern(ReadConcern.Local)
                 .Aggregate(pipeline)

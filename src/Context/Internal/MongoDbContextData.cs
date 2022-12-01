@@ -37,9 +37,13 @@ namespace MongoDB.Extensions.Context
             {
                 lock (_lockObject)
                 {
+                    configuredCollection =
+                        _mongoCollections.TryGetCollection<TDocument>();
+
                     if (configuredCollection == null)
                     {
-                        return AddDefaultCollection<TDocument>();
+                        configuredCollection =
+                            AddDefaultCollection<TDocument>();
                     }
                 }
             }

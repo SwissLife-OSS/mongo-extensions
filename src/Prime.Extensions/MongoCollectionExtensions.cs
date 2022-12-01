@@ -62,6 +62,23 @@ namespace MongoDB.Prime.Extensions
                 FilterDefinition<TDocument>.Empty, options, cancellationToken);
         }
 
+        /// <summary>
+        /// Reads all entries of a collection and returns a list of it.
+        /// </summary>
+        /// <typeparam name="TDocument">The type of the document.</typeparam>
+        /// <param name="collection">The collection to dump.</param>
+        public static IEnumerable<TDocument> Dump<TDocument>(
+            this IMongoCollection<TDocument> collection)
+        {
+            SortDefinition<TDocument> sortDefinition =
+                Builders<TDocument>.Sort.Ascending("_id");
+
+            return collection
+                .Find(FilterDefinition<TDocument>.Empty)
+                .Sort(sortDefinition)
+                .ToList();
+        }
+
         public static Task InsertOneAsync<TDocument>(
             this IMongoCollection<TDocument> collection,
             TDocument document,

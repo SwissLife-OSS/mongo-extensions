@@ -143,8 +143,6 @@ public static class MongoDatabaseExtensions
                     name, dumpedCollection));
         }
 
-        dumpedCollections.OrderBy(entry => entry.Key);
-
-        return dumpedCollections;
+        return dumpedCollections.OrderBy(entry => entry.Key);        
     }
 }

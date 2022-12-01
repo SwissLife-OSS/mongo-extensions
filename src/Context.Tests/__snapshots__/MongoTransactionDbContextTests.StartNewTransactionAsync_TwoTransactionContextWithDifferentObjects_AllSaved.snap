@@ -8,7 +8,7 @@
           "Value": 1
         },
         {
-          "Name": "fooName",
+          "Name": "FooName",
           "Value": "Foo1a"
         }
       ],
@@ -18,7 +18,7 @@
           "Value": 544656454
         },
         {
-          "Name": "fooName",
+          "Name": "FooName",
           "Value": "Foo1b"
         }
       ]

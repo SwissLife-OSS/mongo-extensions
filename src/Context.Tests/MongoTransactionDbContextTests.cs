@@ -259,24 +259,6 @@ namespace MongoDB.Extensions.Context.Tests
 
             protected override void OnConfiguring(IMongoDatabaseBuilder mongoDatabaseBuilder)
             {
-                mongoDatabaseBuilder
-                    .RegisterCamelCaseConventionPack()
-                    .RegisterSerializer<DateTimeOffset>(new DateTimeOffsetSerializer(BsonType.String))
-                    .ConfigureConnection(setting => setting.ConnectionMode = ConnectionMode.Automatic)
-                    .ConfigureCollection(new FooCollectionConfiguration());
-            }
-
-            private class FooCollectionConfiguration : IMongoCollectionConfiguration<Foo>
-            {
-                public void OnConfiguring(IMongoCollectionBuilder<Foo> mongoCollectionBuilder)
-                {
-                    mongoCollectionBuilder
-                        .AddBsonClassMap<Foo>(cm =>
-                        {
-                            cm.AutoMap();
-                            cm.MapIdMember(c => c.Id);
-                        });
-                }
             }
         }
 

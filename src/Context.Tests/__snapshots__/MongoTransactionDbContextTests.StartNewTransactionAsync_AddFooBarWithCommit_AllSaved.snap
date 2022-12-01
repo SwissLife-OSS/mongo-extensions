@@ -8,7 +8,7 @@
           "Value": 1
         },
         {
-          "Name": "BarName",
+          "Name": "barName",
           "Value": "Bar1"
         }
       ]
@@ -23,7 +23,7 @@
           "Value": 1
         },
         {
-          "Name": "FooName",
+          "Name": "fooName",
           "Value": "Foo1"
         }
       ]

@@ -1,0 +1,23 @@
+﻿{
+  "MaxCommitTime": "00:05:00",
+  "ReadConcern": {
+    "IsServerDefault": false,
+    "Level": "Local"
+  },
+  "ReadPreference": {
+    "Hedge": null,
+    "MaxStaleness": null,
+    "ReadPreferenceMode": "Secondary",
+    "TagSets": []
+  },
+  "WriteConcern": {
+    "FSync": null,
+    "IsAcknowledged": true,
+    "IsServerDefault": false,
+    "Journal": false,
+    "W": {
+      "Value": 3
+    },
+    "WTimeout": null
+  }
+}

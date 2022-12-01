@@ -42,4 +42,8 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="2.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Transactions\Transactions.csproj" />
+  </ItemGroup>
+
 </Project>

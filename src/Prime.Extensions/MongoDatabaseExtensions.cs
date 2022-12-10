@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
@@ -91,16 +93,23 @@ public static class MongoDatabaseExtensions
     /// </summary>
     /// <param name="mongoDatabase">The database to clean the collections.</param>
     public static void CleanAllCollections(
-        this IMongoDatabase mongoDatabase)
+        this IMongoDatabase mongoDatabase,
+        params string[] ignoreCollectionNames)
     {
-        foreach (var name in mongoDatabase.ListCollectionNames().ToList())
+        foreach (string collectionName in mongoDatabase.ListCollectionNames().ToList())
         {
+            if (IgnoreCollection(collectionName, ignoreCollectionNames))
+            {
+                continue;
+            }
+
             IMongoCollection<BsonDocument> collection =
-                mongoDatabase.GetCollection<BsonDocument>(name);
+                mongoDatabase.GetCollection<BsonDocument>(collectionName);
 
             collection.CleanCollection();
         }
     }
+
 
     /// <summary>
     /// Deletes all entries of every collection of the mongo database.
@@ -108,16 +117,22 @@ public static class MongoDatabaseExtensions
     /// </summary>
     /// <param name="mongoDatabase">The database to clean the collections.</param>
     public static async Task CleanAllCollectionsAsync(
-        this IMongoDatabase mongoDatabase,
-        CancellationToken cancellationToken = default)
+        this IMongoDatabase mongoDatabase,        
+        CancellationToken cancellationToken = default,
+        params string[] ignoreCollectionNames)
     {
         IAsyncCursor<string> cursor = await mongoDatabase
             .ListCollectionNamesAsync(cancellationToken: cancellationToken);
 
-        foreach (var name in await cursor.ToListAsync(cancellationToken))
+        foreach (var collectionName in await cursor.ToListAsync(cancellationToken))
         {
+            if (IgnoreCollection(collectionName, ignoreCollectionNames))
+            {
+                continue;
+            }
+
             IMongoCollection<BsonDocument> collection =
-                mongoDatabase.GetCollection<BsonDocument>(name);
+                mongoDatabase.GetCollection<BsonDocument>(collectionName);
 
             await collection.CleanCollectionAsync(cancellationToken);
         }
@@ -144,5 +159,19 @@ public static class MongoDatabaseExtensions
         }
 
         return dumpedCollections.OrderBy(entry => entry.Key);        
+    }
+    
+    private static bool IgnoreCollection(
+        string collectionName,
+        string[] ignoreCollectionNames)
+    {
+        bool isIgnoredCollection = ignoreCollectionNames
+            .Any(ignoredCollectionName => ignoredCollectionName
+            .Equals(collectionName, StringComparison.OrdinalIgnoreCase));
+
+        bool isSystemCollection = collectionName
+            .StartsWith("system", StringComparison.OrdinalIgnoreCase);
+
+        return isSystemCollection || isIgnoredCollection;        
     }
 }

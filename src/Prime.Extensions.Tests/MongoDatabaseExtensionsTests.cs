@@ -247,6 +247,46 @@ namespace MongoDB.Prime.Extensions.Tests
         }
 
         [Fact]
+        public async Task CleanAllCollections_IgnoreOneCollectionToClean_SuccessfullyIgnored()
+        {
+            // Arrange
+            IMongoCollection<Bar> barCollection = _mongoDatabase.GetCollection<Bar>();
+            IMongoCollection<Foo> fooCollection = _mongoDatabase.GetCollection<Foo>();
+
+            var arrangedBars = new List<Bar> {
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903041"), "Bar1", "Value1"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903042"), "Bar2", "Value2"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903043"), "Bar3", "Value3"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903044"), "Bar3", "Value4"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903045"), "Bar5", "Value5"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903046"), "Bar6", "Value6"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903047"), "Bar7", "Value7"),
+            };
+
+            var arrangedFoo = new List<Foo> {
+               new Foo("Foo1", "Value1"),
+               new Foo("Foo2", "Value2"),
+               new Foo("Foo3", "Value3"),
+               new Foo("Foo4", "Value4"),
+               new Foo("Foo5", "Value5")
+            };
+
+            await barCollection.InsertManyAsync(arrangedBars);
+            await fooCollection.InsertManyAsync(arrangedFoo);
+
+            Assert.Equal(7, barCollection.CountDocuments());
+            Assert.Equal(5, fooCollection.CountDocuments());
+
+            // Act
+            _mongoDatabase.CleanAllCollections(
+                barCollection.CollectionNamespace.CollectionName);
+
+            // Assert
+            Assert.Equal(7, barCollection.CountDocuments());
+            Assert.Equal(0, fooCollection.CountDocuments());
+        }
+
+        [Fact]
         public async Task CleanAllCollectionsAsync_CleanAllDocumentsOfAllCollections_AllCollectionsEmpty()
         {
             // Arrange
@@ -283,6 +323,46 @@ namespace MongoDB.Prime.Extensions.Tests
             // Assert
             Assert.Equal(0, barCollection.CountDocuments());
             Assert.Equal(0, fooCollection.CountDocuments());
+        }
+
+        [Fact]
+        public async Task CleanAllCollectionsAsync_IgnoreOneCollectionToClean_SuccessfullyIgnored()
+        {
+            // Arrange
+            IMongoCollection<Bar> barCollection = _mongoDatabase.GetCollection<Bar>();
+            IMongoCollection<Foo> fooCollection = _mongoDatabase.GetCollection<Foo>();
+
+            var arrangedBars = new List<Bar> {
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903041"), "Bar1", "Value1"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903042"), "Bar2", "Value2"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903043"), "Bar3", "Value3"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903044"), "Bar3", "Value4"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903045"), "Bar5", "Value5"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903046"), "Bar6", "Value6"),
+               new Bar(Guid.Parse("A1C9E3E8-B448-42DA-A684-716932903047"), "Bar7", "Value7"),
+            };
+
+            var arrangedFoo = new List<Foo> {
+               new Foo("Foo1", "Value1"),
+               new Foo("Foo2", "Value2"),
+               new Foo("Foo3", "Value3"),
+               new Foo("Foo4", "Value4"),
+               new Foo("Foo5", "Value5")
+            };
+
+            await barCollection.InsertManyAsync(arrangedBars);
+            await fooCollection.InsertManyAsync(arrangedFoo);
+
+            Assert.Equal(7, barCollection.CountDocuments());
+            Assert.Equal(5, fooCollection.CountDocuments());
+
+            // Act
+            await _mongoDatabase.CleanAllCollectionsAsync(
+                ignoreCollectionNames: fooCollection.CollectionNamespace.CollectionName);
+
+            // Assert
+            Assert.Equal(0, barCollection.CountDocuments());
+            Assert.Equal(5, fooCollection.CountDocuments());
         }
 
         #endregion CleanAllCollections Tests        

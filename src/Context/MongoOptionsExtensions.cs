@@ -8,7 +8,7 @@ public static class MongoOptionsExtensions
         this MongoOptions<TMongoDBContext>? mongoOptions)
         where TMongoDBContext : IMongoDbContext
     {
-        mongoOptions.Validate();
+        Validate(mongoOptions as MongoOptions);
 
         return mongoOptions!;
     }

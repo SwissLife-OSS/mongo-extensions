@@ -72,9 +72,6 @@ namespace MongoDB.Extensions.Context
                     IMongoCollection<TDocument> configuredCollection =
                         collectionBuilder.Build();
 
-                    // TODO: check if is the right place
-                    CustomObjectSerializer.AddType<TDocument>();
-
                     mongoCollectionBuilders.Add(configuredCollection);
                 };
 

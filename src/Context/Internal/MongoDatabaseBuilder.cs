@@ -36,6 +36,7 @@ namespace MongoDB.Extensions.Context
             _mongoClientSettingsActions = new List<Action<MongoClientSettings>>();
             _databaseConfigurationActions = new List<Action<IMongoDatabase>>();
             _collectionActions = new List<Action<IMongoDatabase, IMongoCollections>>();
+            RegisterSerializer(new CustomObjectSerializer());
         }
 
         public IMongoDatabaseBuilder ConfigureConnection(
@@ -70,6 +71,9 @@ namespace MongoDB.Extensions.Context
 
                     IMongoCollection<TDocument> configuredCollection =
                         collectionBuilder.Build();
+
+                    // TODO: check if is the right place
+                    CustomObjectSerializer.AddType<TDocument>();
 
                     mongoCollectionBuilders.Add(configuredCollection);
                 };

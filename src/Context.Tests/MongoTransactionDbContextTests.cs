@@ -1,8 +1,5 @@
 using System;
-using System.Reflection.Metadata;
 using System.Threading.Tasks;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using MongoDB.Prime.Extensions;
 using Snapshooter.Xunit;

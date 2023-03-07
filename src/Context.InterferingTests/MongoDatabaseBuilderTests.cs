@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using FluentAssertions;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using MongoDB.Extensions.Context.InterferingTests.Helpers;
 using Snapshooter.Xunit;
@@ -393,6 +395,22 @@ namespace MongoDB.Extensions.Context.Tests
 
             // Assert
             Assert.Throws<ArgumentNullException>(registerSerializers);
+        }
+
+        [Fact]
+        public void RegisterSerializer_RegisterObjectSerializerByDefault_ObjectSerializerRegistered()
+        {
+            // Arrange
+            var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
+
+            // Act
+            mongoDatabaseBuilder.Build();
+
+            // Assert
+            IBsonSerializer<object> registeredSerializer =
+                BsonSerializer.LookupSerializer<object>();
+
+            Assert.True(registeredSerializer is CustomObjectSerializer);
         }
 
         #endregion

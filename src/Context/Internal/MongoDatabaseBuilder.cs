@@ -36,7 +36,6 @@ namespace MongoDB.Extensions.Context
             _mongoClientSettingsActions = new List<Action<MongoClientSettings>>();
             _databaseConfigurationActions = new List<Action<IMongoDatabase>>();
             _collectionActions = new List<Action<IMongoDatabase, IMongoCollections>>();
-            RegisterSerializer(new CustomObjectSerializer());
         }
 
         public IMongoDatabaseBuilder ConfigureConnection(
@@ -159,6 +158,9 @@ namespace MongoDB.Extensions.Context
 
                 // register all serializers
                 _registrationSerializerActions.ForEach(registration => registration());
+
+                // add object serializer if not exists
+                TryRegisterObjectSerializer();
             }
 
             // create mongo client settings
@@ -206,6 +208,14 @@ namespace MongoDB.Extensions.Context
             return mongoClientSettings;
         }
 
+        private void TryRegisterObjectSerializer()
+        {
+            if (!_registeredSerializers.ContainsKey(typeof(object).ToString()))
+            {
+                RegisterBsonSerializer<object>(new CustomObjectSerializer());
+            }
+        }
+
         private void RegisterBsonSerializer<T>(IBsonSerializer<T> serializer)
         {
             string typeName = typeof(T).ToString();
@@ -230,8 +240,7 @@ namespace MongoDB.Extensions.Context
 
         private void RegisterConventions(string name, IConventionPack conventionPack, Func<Type, bool> filter)
         {
-            if (_registeredConventionPacks
-                                .TryGetValue(name, out IConventionPack registeredConventionPack))
+            if (_registeredConventionPacks.TryGetValue(name, out IConventionPack registeredConventionPack))
             {
                 IEnumerable<string> registeredNames = registeredConventionPack
                     .Conventions.Select(rcp => rcp.Name);

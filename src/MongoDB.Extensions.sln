@@ -30,6 +30,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".SolutionFiles", ".Solution
 		TestProject.props = TestProject.props
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Context.Overlap.Tests", "Context.Overlap.Tests\Context.Overlap.Tests.csproj", "{F82EF1BD-8BFB-4D4D-A90F-58CB698EE1F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,7 +81,11 @@ Global
 		{A7D17D8A-99BC-40AC-92B4-996790F7F26E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A7D17D8A-99BC-40AC-92B4-996790F7F26E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7D17D8A-99BC-40AC-92B4-996790F7F26E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A7D17D8A-99BC-40AC-92B4-996790F7F26E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7D17D8A-99BC-40AC-92B4-996790F7F26E}.Release|Any CPU.Build.0 = Release|Any CPU		
+		{F82EF1BD-8BFB-4D4D-A90F-58CB698EE1F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F82EF1BD-8BFB-4D4D-A90F-58CB698EE1F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F82EF1BD-8BFB-4D4D-A90F-58CB698EE1F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F82EF1BD-8BFB-4D4D-A90F-58CB698EE1F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

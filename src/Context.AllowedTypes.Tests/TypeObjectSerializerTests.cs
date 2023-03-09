@@ -1,11 +1,12 @@
+using System.Linq;
 using MongoDB.Extensions.Context.Internal;
 using Snapshooter.Xunit;
 using Xunit;
-using Xunit.Priority;
+
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
 
 namespace MongoDB.Extensions.Context.AllowedTypes.Tests;
 
-[TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
 public class TypeObjectSerializerTests
 {
     [Fact]
@@ -51,20 +52,98 @@ public class TypeObjectSerializerTests
 
         // Assert
         Snapshot.Match(new {
+            AllowedTypes = TypeObjectSerializer.AllowedTypes.OrderBy(k => k.Key.FullName),
+            TypeObjectSerializer.AllowedTypesByNamespaces,
+            TypeObjectSerializer.AllowedTypesByDependencies });
+    }
+
+    [Fact]
+    public void IsTypeAllowed_InAllowedTypes_True()
+    {
+        // Arrange
+        TypeObjectSerializer.Clear();
+        TypeObjectSerializer.AddAllowedTypes(typeof(Foo));
+
+        // Act
+        bool isAllowed = TypeObjectSerializer.IsTypeAllowed(typeof(Foo));
+
+        // Assert
+        Assert.True(isAllowed);
+        Snapshot.Match(new {
             TypeObjectSerializer.AllowedTypes,
             TypeObjectSerializer.AllowedTypesByNamespaces,
             TypeObjectSerializer.AllowedTypesByDependencies });
     }
 
-    public class Bar
+    [Fact]
+    public void IsTypeAllowed_InAllowedTypes_False()
     {
-        public int Id { get; set; }
-        public string? BarName { get; set; }
+        // Arrange
+        TypeObjectSerializer.Clear();
+        TypeObjectSerializer.AddAllowedTypes(typeof(Foo));
+
+        // Act
+        bool isAllowed = TypeObjectSerializer.IsTypeAllowed(typeof(Bar));
+
+        // Assert
+        Assert.False(isAllowed);
+        Snapshot.Match(new {
+            AllowedTypes = TypeObjectSerializer.AllowedTypes.OrderBy(k => k.Key.FullName),
+            TypeObjectSerializer.AllowedTypesByNamespaces,
+            TypeObjectSerializer.AllowedTypesByDependencies });
     }
 
-    public class Foo
+    [Fact]
+    public void IsTypeAllowed_InAllowedNamespaces_True()
     {
-        public int Id { get; set; }
-        public string? FooName { get; set; }
+        // Arrange
+        TypeObjectSerializer.Clear();
+        TypeObjectSerializer.AddAllowedTypes("MongoDB.Extensions.Context.AllowedTypes.Tests");
+
+        // Act
+        bool isAllowed = TypeObjectSerializer.IsTypeAllowed(typeof(Foo));
+
+        // Assert
+        Assert.True(isAllowed);
+        Snapshot.Match(new {
+            TypeObjectSerializer.AllowedTypes,
+            TypeObjectSerializer.AllowedTypesByNamespaces,
+            TypeObjectSerializer.AllowedTypesByDependencies });
+    }
+
+    [Fact]
+    public void IsTypeAllowed_InAllowedNamespaces_False()
+    {
+        // Arrange
+        TypeObjectSerializer.Clear();
+        TypeObjectSerializer.AddAllowedTypes("MongoDB.Extensions.Context");
+
+        // Act
+        bool isAllowed = TypeObjectSerializer.IsTypeAllowed(typeof(Foo));
+
+        // Assert
+        Assert.False(isAllowed);
+        Snapshot.Match(new {
+            TypeObjectSerializer.AllowedTypes,
+            TypeObjectSerializer.AllowedTypesByNamespaces,
+            TypeObjectSerializer.AllowedTypesByDependencies });
+    }
+
+    [Fact]
+    public void IsTypeAllowed_InAllowedTypesInDependencies_True()
+    {
+        // Arrange
+        TypeObjectSerializer.Clear();
+        TypeObjectSerializer.AddAllowedTypesOfAllDependencies();
+
+        // Act
+        bool isAllowed = TypeObjectSerializer.IsTypeAllowed(typeof(Foo));
+
+        // Assert
+        Assert.True(isAllowed);
+        Snapshot.Match(new {
+            TypeObjectSerializer.AllowedTypes,
+            TypeObjectSerializer.AllowedTypesByNamespaces,
+            TypeObjectSerializer.AllowedTypesByDependencies });
     }
 }

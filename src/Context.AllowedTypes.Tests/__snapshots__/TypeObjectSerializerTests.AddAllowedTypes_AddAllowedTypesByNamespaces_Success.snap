@@ -1,5 +1,5 @@
 ﻿{
-  "AllowedTypes": [],
+  "AllowedTypes": {},
   "AllowedTypesByNamespaces": [
     "Mongo",
     "SwissLife"

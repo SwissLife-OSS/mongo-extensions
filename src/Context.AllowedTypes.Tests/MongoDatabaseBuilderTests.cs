@@ -1,17 +1,14 @@
-using System;
+using System.Linq;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
-using MongoDB.Extensions.Context.Exceptions;
 using MongoDB.Extensions.Context.Internal;
 using Snapshooter.Xunit;
 using Squadron;
 using Xunit;
-using Xunit.Priority;
 
 namespace MongoDB.Extensions.Context.AllowedTypes.Tests;
 
 [Collection(CollectionFixtureNames.MongoCollectionFixture)]
-[TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
 public class MongoDatabaseBuilderTests
 {
     private readonly MongoOptions _mongoOptions;
@@ -28,8 +25,7 @@ public class MongoDatabaseBuilderTests
     }
 
     [Fact]
-    [Priority(0)]
-    public void AddAllowedTypes_NoAllowedTypesRegisteredByDefault_ThrowsException()
+    public void AddAllowedTypes_AllowedTypesRegisteredByDefault_Success()
     {
         // Arrange
         var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
@@ -37,10 +33,10 @@ public class MongoDatabaseBuilderTests
         mongoDatabaseBuilder.ClearAllowedTypes();
 
         // Act
-        Action action = () => mongoDatabaseBuilder.Build();
+        MongoDbContextData context = mongoDatabaseBuilder.Build();
 
         // Assert
-        Assert.Throws<MissingAllowedTypesException>(action);
+        Assert.NotNull(context);
     }
 
     [Fact]
@@ -107,7 +103,7 @@ public class MongoDatabaseBuilderTests
 
         Assert.True(registeredSerializer is TypeObjectSerializer);
         Snapshot.Match(new {
-            TypeObjectSerializer.AllowedTypes,
+            AllowedTypes = TypeObjectSerializer.AllowedTypes.OrderBy(k => k.Key.FullName),
             TypeObjectSerializer.AllowedTypesByNamespaces,
             TypeObjectSerializer.AllowedTypesByDependencies });
     }

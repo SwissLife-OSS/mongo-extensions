@@ -292,18 +292,6 @@ internal class MongoDatabaseBuilder : IMongoDatabaseBuilder
     {
         if (!_registeredSerializers.ContainsKey(typeof(object).ToString()))
         {
-            if(TypeObjectSerializer.AllowedTypes.Count == 0 &&
-               TypeObjectSerializer.AllowedTypesByNamespaces.Count == 0 &&
-               TypeObjectSerializer.AllowedTypesByDependencies.Count == 0)
-            {
-                throw new MissingAllowedTypesException(
-                    $"The AllowedTypes for MongoDB must be set at the {nameof(MongoDatabaseBuilder)} class. " +
-                    $"Use the .AddAllowTypes(...) of the {nameof(MongoDatabaseBuilder)} and add all " +
-                    $"Types or Namespaces for classes/records used together with MongoDB. " +
-                    $"If you use .AddAllowTypes() without any parameter, " +
-                    $"then all the types of your dependent assemblies are automatically allowed by default.");
-            }
-
             RegisterBsonSerializer<object>(new TypeObjectSerializer());
         }
     }

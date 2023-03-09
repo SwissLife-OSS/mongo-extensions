@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xunit.Priority" Version="1.1.6" />
+    <Folder Include="__snapshots__\__mismatch__\" />
   </ItemGroup>
 
 </Project>

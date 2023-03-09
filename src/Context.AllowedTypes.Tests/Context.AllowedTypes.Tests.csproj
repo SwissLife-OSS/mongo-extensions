@@ -2,8 +2,8 @@
   <Import Project="$(CCTestProjectProps)" Condition="Exists('$(CCTestProjectProps)')" />
 
   <PropertyGroup>
-    <AssemblyName>MongoDB.Extensions.Context.Overlap.Tests</AssemblyName>
-    <RootNamespace>MongoDB.Extensions.Context.Overlap.Tests</RootNamespace>
+    <AssemblyName>MongoDB.Extensions.Context.AllowedTypes.Tests</AssemblyName>
+    <RootNamespace>MongoDB.Extensions.Context.AllowedTypes.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -12,8 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="IsExternalInit.cs" Condition="'$(TargetFramework)' == 'net6.0'" />
-    <Compile Remove="IsExternalInit.cs" Condition="'$(TargetFramework)' == 'net7.0'" />
+    <PackageReference Include="Xunit.Priority" Version="1.1.6" />
   </ItemGroup>
 
 </Project>

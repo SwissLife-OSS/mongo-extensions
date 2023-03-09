@@ -397,22 +397,6 @@ namespace MongoDB.Extensions.Context.Tests
             Assert.Throws<ArgumentNullException>(registerSerializers);
         }
 
-        [Fact]
-        public void RegisterSerializer_RegisterObjectSerializerByDefault_ObjectSerializerRegistered()
-        {
-            // Arrange
-            var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
-
-            // Act
-            mongoDatabaseBuilder.Build();
-
-            // Assert
-            IBsonSerializer<object> registeredSerializer =
-                BsonSerializer.LookupSerializer<object>();
-
-            Assert.True(registeredSerializer is CustomObjectSerializer);
-        }
-
         #endregion
 
         #region DisableTableScan Tests

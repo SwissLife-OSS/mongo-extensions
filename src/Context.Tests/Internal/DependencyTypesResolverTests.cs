@@ -5,18 +5,17 @@ using Xunit;
 
 namespace MongoDB.Extensions.Context.Tests.Internal;
 
-public class CustomObjectSerializerTests
+public class DependencyTypesResolverTests
 {
     [Fact]
-    public void Constructor_RegisterAllKnownNamespaces_InitializeSuccessful()
+    public void GetAllowedTypesByDependencies_All_Successful()
     {
         // Arrange
-        var customObjectSerializer = new CustomObjectSerializer();
 
         // Act
         IEnumerable<string> knownNamespaces =
-            customObjectSerializer.KnownNamespaces;
-                
+            DependencyTypesResolver.GetAllowedTypesByDependencies();
+
         // Assert
         Snapshot.Match(knownNamespaces.OrderBy(x => x));
     }

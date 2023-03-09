@@ -1,0 +1,27 @@
+{
+  "AllowedTypes": {},
+  "AllowedTypesByNamespaces": [],
+  "AllowedTypesByDependencies": [
+    "Newtonsoft",
+    "Internal",
+    "Xunit",
+    "NuGet",
+    "MongoDB",
+    "Squadron",
+    "ThirdParty",
+    "AWSSDK",
+    "Amazon",
+    "Castle",
+    "DnsClient",
+    "Docker",
+    "FluentAssertions",
+    "SharpCompress",
+    "TypeNameFormatter",
+    "Moq",
+    "Polly",
+    "ICSharpCode",
+    "Snappier",
+    "Snapshooter",
+    "ZstdSharp"
+  ]
+}

@@ -27,5 +27,13 @@ namespace MongoDB.Extensions.Context
             Action<MongoClientSettings> mongoClientSettingsAction);
 
         IMongoDatabaseBuilder ConfigureDatabase(Action<IMongoDatabase> configureDatabase);
+
+        IMongoDatabaseBuilder AddAllowedType<T>();
+
+        IMongoDatabaseBuilder AddAllowedTypes(params Type[] allowedTypes);
+
+        IMongoDatabaseBuilder AddAllowedTypes(params string[] allowedNamespaces);
+
+        IMongoDatabaseBuilder AddAllowedTypesOfAllDependencies();
     }
 }

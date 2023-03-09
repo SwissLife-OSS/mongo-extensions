@@ -1,0 +1,29 @@
+﻿{
+  "AllowedTypes": {
+    "MongoDB.Extensions.Context.AllowedTypes.Tests.Foo, MongoDB.Extensions.Context.AllowedTypes.Tests, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null": true
+  },
+  "AllowedTypesByNamespaces": [],
+  "AllowedTypesByDependencies": [
+    "Newtonsoft",
+    "Internal",
+    "Xunit",
+    "NuGet",
+    "MongoDB",
+    "Squadron",
+    "ThirdParty",
+    "AWSSDK",
+    "Amazon",
+    "Castle",
+    "DnsClient",
+    "Docker",
+    "FluentAssertions",
+    "SharpCompress",
+    "TypeNameFormatter",
+    "Moq",
+    "Polly",
+    "ICSharpCode",
+    "Snappier",
+    "Snapshooter",
+    "ZstdSharp"
+  ]
+}

@@ -1,0 +1,14 @@
+﻿{
+  "AllowedTypes": [
+    {
+      "Key": "MongoDB.Extensions.Context.AllowedTypes.Tests.MongoDatabaseBuilderTests+Bar, MongoDB.Extensions.Context.AllowedTypes.Tests, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Value": true
+    },
+    {
+      "Key": "MongoDB.Extensions.Context.AllowedTypes.Tests.MongoDatabaseBuilderTests+Foo, MongoDB.Extensions.Context.AllowedTypes.Tests, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Value": true
+    }
+  ],
+  "AllowedTypesByNamespaces": [],
+  "AllowedTypesByDependencies": []
+}

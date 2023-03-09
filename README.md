@@ -50,6 +50,7 @@ protected override void OnConfiguring(IMongoDatabaseBuilder mongoDatabaseBuilder
     mongoDatabaseBuilder
         .RegisterCamelCaseConventionPack()
         .RegisterSerializer(new DateTimeOffsetSerializer())
+        .AddAllowedTypes("Namspace.Project")
         .ConfigureConnection(con => con.ReadConcern = ReadConcern.Majority)
         .ConfigureConnection(con => con.WriteConcern = WriteConcern.WMajority)
         .ConfigureConnection(con => con.ReadPreference = ReadPreference.Primary)

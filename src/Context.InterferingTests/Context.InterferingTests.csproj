@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="$(CCTestProjectProps)" Condition="Exists('$(CCTestProjectProps)')" />
-  
+
   <PropertyGroup>
     <AssemblyName>MongoDB.Extensions.Context.InterferingTests</AssemblyName>
     <RootNamespace>MongoDB.Extensions.Context.InterferingTests</RootNamespace>
@@ -9,9 +9,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Context\Context.csproj" />
   </ItemGroup>
-  
-  <ItemGroup>    
-    <PackageReference Include="Xunit.Priority" Version="1.1.6" />
+
+  <ItemGroup>
+    <PackageReference Include="Xunit.Priority"  />
   </ItemGroup>
 
 </Project>

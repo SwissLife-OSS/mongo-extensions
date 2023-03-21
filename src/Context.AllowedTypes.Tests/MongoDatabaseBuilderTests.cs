@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Linq;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using MongoDB.Extensions.Context.AllowedTypes.Tests.Helpers;
 using MongoDB.Extensions.Context.Internal;
 using Snapshooter.Xunit;
 using Squadron;
@@ -56,10 +58,7 @@ public class MongoDatabaseBuilderTests
             BsonSerializer.LookupSerializer<object>();
 
         Assert.True(registeredSerializer is TypeObjectSerializer);
-        Snapshot.Match(new {
-            TypeObjectSerializer.AllowedTypes,
-            TypeObjectSerializer.AllowedTypesByNamespaces,
-            TypeObjectSerializer.AllowedTypesByDependencies });
+        Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent());
     }
 
     [Fact]
@@ -79,10 +78,7 @@ public class MongoDatabaseBuilderTests
             BsonSerializer.LookupSerializer<object>();
 
         Assert.True(registeredSerializer is TypeObjectSerializer);
-        Snapshot.Match(new {
-            TypeObjectSerializer.AllowedTypes,
-            TypeObjectSerializer.AllowedTypesByNamespaces,
-            TypeObjectSerializer.AllowedTypesByDependencies });
+        Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent());
     }
 
     [Fact]
@@ -102,10 +98,7 @@ public class MongoDatabaseBuilderTests
             BsonSerializer.LookupSerializer<object>();
 
         Assert.True(registeredSerializer is TypeObjectSerializer);
-        Snapshot.Match(new {
-            AllowedTypes = TypeObjectSerializer.AllowedTypes.OrderBy(k => k.Key.FullName),
-            TypeObjectSerializer.AllowedTypesByNamespaces,
-            TypeObjectSerializer.AllowedTypesByDependencies });
+        Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent());
     }
 
     public class Bar

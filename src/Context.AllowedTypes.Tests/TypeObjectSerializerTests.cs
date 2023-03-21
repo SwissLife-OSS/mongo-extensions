@@ -1,4 +1,4 @@
-using System.Linq;
+using MongoDB.Extensions.Context.AllowedTypes.Tests.Helpers;
 using MongoDB.Extensions.Context.Internal;
 using Snapshooter.Xunit;
 using Xunit;
@@ -19,10 +19,7 @@ public class TypeObjectSerializerTests
         TypeObjectSerializer.AddAllowedTypesOfAllDependencies();
 
         // Assert
-        Snapshot.Match(new {
-            TypeObjectSerializer.AllowedTypes,
-            TypeObjectSerializer.AllowedTypesByNamespaces,
-            TypeObjectSerializer.AllowedTypesByDependencies });
+        Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent());
     }
 
     [Fact]
@@ -35,10 +32,7 @@ public class TypeObjectSerializerTests
         TypeObjectSerializer.AddAllowedTypes("Mongo", "SwissLife");
 
         // Assert
-        Snapshot.Match(new {
-            TypeObjectSerializer.AllowedTypes,
-            TypeObjectSerializer.AllowedTypesByNamespaces,
-            TypeObjectSerializer.AllowedTypesByDependencies });
+        Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent());
     }
 
     [Fact]
@@ -51,10 +45,7 @@ public class TypeObjectSerializerTests
         TypeObjectSerializer.AddAllowedTypes(typeof(Foo), typeof(Bar));
 
         // Assert
-        Snapshot.Match(new {
-            AllowedTypes = TypeObjectSerializer.AllowedTypes.OrderBy(k => k.Key.FullName),
-            TypeObjectSerializer.AllowedTypesByNamespaces,
-            TypeObjectSerializer.AllowedTypesByDependencies });
+        Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent());
     }
 
     [Fact]
@@ -69,10 +60,7 @@ public class TypeObjectSerializerTests
 
         // Assert
         Assert.True(isAllowed);
-        Snapshot.Match(new {
-            TypeObjectSerializer.AllowedTypes,
-            TypeObjectSerializer.AllowedTypesByNamespaces,
-            TypeObjectSerializer.AllowedTypesByDependencies });
+        Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent());
     }
 
     [Fact]
@@ -87,10 +75,7 @@ public class TypeObjectSerializerTests
 
         // Assert
         Assert.False(isAllowed);
-        Snapshot.Match(new {
-            AllowedTypes = TypeObjectSerializer.AllowedTypes.OrderBy(k => k.Key.FullName),
-            TypeObjectSerializer.AllowedTypesByNamespaces,
-            TypeObjectSerializer.AllowedTypesByDependencies });
+        Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent());
     }
 
     [Fact]
@@ -105,10 +90,7 @@ public class TypeObjectSerializerTests
 
         // Assert
         Assert.True(isAllowed);
-        Snapshot.Match(new {
-            TypeObjectSerializer.AllowedTypes,
-            TypeObjectSerializer.AllowedTypesByNamespaces,
-            TypeObjectSerializer.AllowedTypesByDependencies });
+        Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent());
     }
 
     [Fact]
@@ -123,10 +105,7 @@ public class TypeObjectSerializerTests
 
         // Assert
         Assert.False(isAllowed);
-        Snapshot.Match(new {
-            TypeObjectSerializer.AllowedTypes,
-            TypeObjectSerializer.AllowedTypesByNamespaces,
-            TypeObjectSerializer.AllowedTypesByDependencies });
+        Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent());
     }
 
     [Fact]
@@ -141,9 +120,6 @@ public class TypeObjectSerializerTests
 
         // Assert
         Assert.True(isAllowed);
-        Snapshot.Match(new {
-            TypeObjectSerializer.AllowedTypes,
-            TypeObjectSerializer.AllowedTypesByNamespaces,
-            TypeObjectSerializer.AllowedTypesByDependencies });
+        Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent());
     }
 }

@@ -11,8 +11,8 @@
     <PackageTags>MongoDB Extensions DbContext Context Boostrap Mongo .Net</PackageTags>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageIconUrl>https://github.com/SwissLife-OSS/mongo-extensions-docs/raw/master/logo.png</PackageIconUrl>
-	<IsPackable>false</IsPackable> 
-	<LangVersion>10.0</LangVersion>	
+	<IsPackable>false</IsPackable>
+	<LangVersion>10.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -26,7 +26,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All"/>
   </ItemGroup>
 
 </Project>

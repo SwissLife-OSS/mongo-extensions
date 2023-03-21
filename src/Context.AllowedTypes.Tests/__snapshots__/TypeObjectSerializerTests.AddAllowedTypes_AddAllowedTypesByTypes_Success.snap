@@ -1,11 +1,11 @@
 ﻿{
   "AllowedTypes": [
     {
-      "Key": "MongoDB.Extensions.Context.AllowedTypes.Tests.Bar, MongoDB.Extensions.Context.AllowedTypes.Tests, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Key": "MongoDB.Extensions.Context.AllowedTypes.Tests.Bar",
       "Value": true
     },
     {
-      "Key": "MongoDB.Extensions.Context.AllowedTypes.Tests.Foo, MongoDB.Extensions.Context.AllowedTypes.Tests, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null",
+      "Key": "MongoDB.Extensions.Context.AllowedTypes.Tests.Foo",
       "Value": true
     }
   ],

@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(CCTestProjectProps)" Condition="Exists('$(CCTestProjectProps)')" />
+
+  <PropertyGroup>
+    <AssemblyName>MongoDB.Extensions.Outbox.Tests</AssemblyName>
+    <RootNamespace>MongoDB.Extensions.Outbox.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Outbox\Outbox.csproj" />
+  </ItemGroup>
+
+</Project>

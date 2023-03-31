@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(CCResourceProjectProps)" Condition="Exists('$(CCResourceProjectProps)')" />
+  
+  <PropertyGroup>
+    <AssemblyName>MongoDB.Extensions.Outbox</AssemblyName>
+    <RootNamespace>MongoDB.Extensions.Outbox</RootNamespace>
+    <PackageId>MongoDB.Extensions.Outbox</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Driver" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Context\Context.csproj" />
+  </ItemGroup>
+
+</Project>

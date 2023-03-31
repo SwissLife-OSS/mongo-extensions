@@ -27,10 +27,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Migration.Tests", "Migratio
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".SolutionFiles", ".SolutionFiles", "{A21A1FF3-25C1-4FE1-994E-E16CDF98BB99}"
 	ProjectSection(SolutionItems) = preProject
+		..\Directory.Packages.props = ..\Directory.Packages.props
 		TestProject.props = TestProject.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Context.AllowedTypes.Tests", "Context.AllowedTypes.Tests\Context.AllowedTypes.Tests.csproj", "{C59B2068-C3F4-4900-A1CB-7BFD63F94095}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Outbox", "Outbox\Outbox.csproj", "{DA61731E-A164-4EFC-B40C-CFADA88EDF20}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Outbox.Tests", "Outbox.Tests\Outbox.Tests.csproj", "{47201075-0A32-474D-ABD6-5C7D2DEB30EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -86,6 +91,14 @@ Global
 		{C59B2068-C3F4-4900-A1CB-7BFD63F94095}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C59B2068-C3F4-4900-A1CB-7BFD63F94095}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C59B2068-C3F4-4900-A1CB-7BFD63F94095}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA61731E-A164-4EFC-B40C-CFADA88EDF20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA61731E-A164-4EFC-B40C-CFADA88EDF20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA61731E-A164-4EFC-B40C-CFADA88EDF20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA61731E-A164-4EFC-B40C-CFADA88EDF20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47201075-0A32-474D-ABD6-5C7D2DEB30EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47201075-0A32-474D-ABD6-5C7D2DEB30EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47201075-0A32-474D-ABD6-5C7D2DEB30EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47201075-0A32-474D-ABD6-5C7D2DEB30EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

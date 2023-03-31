@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SwissLife.MongoDB.Extensions.Outbox.Core
+namespace MongoDB.Extensions.Outbox.Core
 {
     public interface IOutboxService
     {

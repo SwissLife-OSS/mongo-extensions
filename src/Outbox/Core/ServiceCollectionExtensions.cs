@@ -1,5 +1,5 @@
-using SwissLife.MongoDB.Extensions.Outbox.Core;
-using SwissLife.MongoDB.Extensions.Outbox.Core.Pipeline;
+using MongoDB.Extensions.Outbox.Core;
+using MongoDB.Extensions.Outbox.Core.Pipeline;
 
 namespace Microsoft.Extensions.DependencyInjection
 {

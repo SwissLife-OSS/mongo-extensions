@@ -1,11 +1,9 @@
 using MongoDB.Bson.Serialization.Conventions;
 using System;
-using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
-using System.Text.Json.Nodes;
 
-namespace SwissLife.MongoDB.Extensions.Outbox.Persistence.Serialization
+namespace MongoDB.Extensions.Outbox.Persistence.Serialization
 {
     public class AssemblyQualifiedDiscriminatorConvention : IDiscriminatorConvention
     {

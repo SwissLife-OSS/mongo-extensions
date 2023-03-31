@@ -1,4 +1,4 @@
-namespace SwissLife.MongoDB.Extensions.Outbox.Persistence
+namespace MongoDB.Extensions.Outbox.Persistence
 {
     public class DatabaseOptions
     {

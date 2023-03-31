@@ -2,9 +2,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
-using SwissLife.MongoDB.Extensions.Outbox.Core;
+using MongoDB.Extensions.Outbox.Core;
 
-namespace SwissLife.MongoDB.Extensions.Outbox.Persistence
+namespace MongoDB.Extensions.Outbox.Persistence
 {
     public class MongoTransactionSession : ITransactionSession
     {

@@ -6,9 +6,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
-using SwissLife.MongoDB.Extensions.Outbox.Core;
+using MongoDB.Extensions.Outbox.Core;
 
-namespace SwissLife.MongoDB.Extensions.Outbox.Persistence.Serialization
+namespace MongoDB.Extensions.Outbox.Persistence.Serialization
 {
     /// <summary>
     /// From https://github.com/danielgerlag/workflow-core/
@@ -110,7 +110,7 @@ namespace SwissLife.MongoDB.Extensions.Outbox.Persistence.Serialization
 
         private void AddTypeInformation(IEnumerable<BsonValue> elements, object value, string xPath)
         {
-            //foreach (var element in elements) 
+            //foreach (var element in elements)
             for (var i = 0; i < elements.Count(); i++)
             {
                 BsonValue element = elements.ElementAt(i);

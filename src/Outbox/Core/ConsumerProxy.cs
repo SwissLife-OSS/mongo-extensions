@@ -1,8 +1,8 @@
 using System.Threading;
 using System.Threading.Tasks;
-using SwissLife.MongoDB.Extensions.Outbox.Core.Exceptions;
+using MongoDB.Extensions.Outbox.Core.Exceptions;
 
-namespace SwissLife.MongoDB.Extensions.Outbox.Core
+namespace MongoDB.Extensions.Outbox.Core
 {
     public class ConsumerProxy<TMessage> : IConsumerProxy<TMessage>
         where TMessage : class

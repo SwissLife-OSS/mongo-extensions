@@ -3,18 +3,18 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
-using SwissLife.MongoDB.Extensions.Outbox.Core;
-using SwissLife.MongoDB.Extensions.Outbox.Core.Exceptions;
+using MongoDB.Extensions.Outbox.Core;
+using MongoDB.Extensions.Outbox.Core.Exceptions;
 using Xunit;
 
-namespace SwissLife.MongoDB.Extensions.Outbox.Tests.Core
+namespace MongoDB.Extensions.Outbox.Tests.Core
 {
     public class ConsumerProxyTests
     {
         [Fact]
         public async Task ConsumeAsync_WithValidMessageType_ShouldAcceptConsumption()
         {
-            //Arrange 
+            //Arrange
             var message = new DummyMessage();
             CancellationToken token = new CancellationTokenSource().Token;
 
@@ -35,7 +35,7 @@ namespace SwissLife.MongoDB.Extensions.Outbox.Tests.Core
         [Fact]
         public async Task ConsumeAsync_WithUnsupportedMessageType_ShouldThrowException()
         {
-            //Arrange 
+            //Arrange
             var message = new object();
             CancellationToken token = new CancellationTokenSource().Token;
 

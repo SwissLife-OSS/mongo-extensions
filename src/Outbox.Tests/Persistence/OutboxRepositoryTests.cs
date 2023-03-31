@@ -6,11 +6,11 @@ using FluentAssertions;
 using MongoDB.Driver;
 using MongoDB.Extensions.Context;
 using Squadron;
-using SwissLife.MongoDB.Extensions.Outbox.Core;
-using SwissLife.MongoDB.Extensions.Outbox.Persistence;
+using MongoDB.Extensions.Outbox.Core;
+using MongoDB.Extensions.Outbox.Persistence;
 using Xunit;
 
-namespace SwissLife.MongoDB.Extensions.Outbox.Tests.Persistence
+namespace MongoDB.Extensions.Outbox.Tests.Persistence
 {
     public class OutboxRepositoryTests : IClassFixture<MongoReplicaSetResource>
     {

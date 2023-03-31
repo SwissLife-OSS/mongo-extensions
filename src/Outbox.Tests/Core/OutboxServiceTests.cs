@@ -4,10 +4,10 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
-using SwissLife.MongoDB.Extensions.Outbox.Core;
+using MongoDB.Extensions.Outbox.Core;
 using Xunit;
 
-namespace SwissLife.MongoDB.Extensions.Outbox.Tests.Core
+namespace MongoDB.Extensions.Outbox.Tests.Core
 {
     public class OutboxServiceTests
     {

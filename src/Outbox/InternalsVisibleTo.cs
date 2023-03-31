@@ -1,3 +1,3 @@
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("SwissLife.MongoDB.Extensions.Outbox.Tests")]
+[assembly: InternalsVisibleTo("MongoDB.Extensions.Outbox.Tests")]

@@ -1,6 +1,6 @@
 using System;
 
-namespace SwissLife.MongoDB.Extensions.Outbox.Core
+namespace MongoDB.Extensions.Outbox.Core
 {
     public class OutboxOptions
     {

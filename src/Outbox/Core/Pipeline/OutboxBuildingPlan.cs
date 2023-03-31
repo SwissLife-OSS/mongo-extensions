@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace SwissLife.MongoDB.Extensions.Outbox.Core.Pipeline
+namespace MongoDB.Extensions.Outbox.Core.Pipeline
 {
     public class OutboxBuildingPlan
     {

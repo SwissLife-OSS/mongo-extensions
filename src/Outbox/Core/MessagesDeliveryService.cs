@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace SwissLife.MongoDB.Extensions.Outbox.Core
+namespace MongoDB.Extensions.Outbox.Core
 {
     internal class MessagesDeliveryService : BackgroundService
     {

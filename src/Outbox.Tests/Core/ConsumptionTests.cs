@@ -1,17 +1,17 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
-using SwissLife.MongoDB.Extensions.Outbox.Core;
+using MongoDB.Extensions.Outbox.Core;
 using Xunit;
 
-namespace SwissLife.MongoDB.Extensions.Outbox.Tests.Core
+namespace MongoDB.Extensions.Outbox.Tests.Core
 {
     public class ConsumptionTests
     {
         [Fact]
         public async Task ConsumeAsync_WithMessage_ShouldForwardToProxy()
         {
-            //Arrange 
+            //Arrange
             var message = new DummyMessage();
             CancellationToken token = new CancellationTokenSource().Token;
 

@@ -1,8 +1,8 @@
 using System;
 using MongoDB.Driver;
-using SwissLife.MongoDB.Extensions.Outbox.Core;
+using MongoDB.Extensions.Outbox.Core;
 
-namespace SwissLife.MongoDB.Extensions.Outbox.Persistence
+namespace MongoDB.Extensions.Outbox.Persistence
 {
     public static class TransactionSessionExtensions
     {

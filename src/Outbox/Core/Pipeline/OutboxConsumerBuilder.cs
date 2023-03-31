@@ -1,6 +1,6 @@
 using System;
 
-namespace SwissLife.MongoDB.Extensions.Outbox.Core.Pipeline
+namespace MongoDB.Extensions.Outbox.Core.Pipeline
 {
     public class OutboxConsumerBuilder: OutboxBuilder
     {

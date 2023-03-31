@@ -1,9 +1,9 @@
 using MongoDB.Driver;
 using MongoDB.Extensions.Context;
-using SwissLife.MongoDB.Extensions.Outbox.Core;
-using SwissLife.MongoDB.Extensions.Outbox.Persistence.Serialization;
+using MongoDB.Extensions.Outbox.Core;
+using MongoDB.Extensions.Outbox.Persistence.Serialization;
 
-namespace SwissLife.MongoDB.Extensions.Outbox.Persistence
+namespace MongoDB.Extensions.Outbox.Persistence
 {
     public class OutboxMessageConfiguration
         : IMongoCollectionConfiguration<OutboxMessage>

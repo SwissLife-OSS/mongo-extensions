@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SwissLife.MongoDB.Extensions.Outbox.Core
+namespace MongoDB.Extensions.Outbox.Core
 {
     public class OutboxService : IOutboxService
     {

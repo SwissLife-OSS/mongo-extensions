@@ -1,7 +1,7 @@
 using MongoDB.Extensions.Context;
-using SwissLife.MongoDB.Extensions.Outbox.Core;
+using MongoDB.Extensions.Outbox.Core;
 
-namespace SwissLife.MongoDB.Extensions.Outbox.Persistence
+namespace MongoDB.Extensions.Outbox.Persistence
 {
     public class OutboxDbContext : MongoDbContext, IOutboxDbContext
     {
@@ -20,7 +20,8 @@ namespace SwissLife.MongoDB.Extensions.Outbox.Persistence
         {
             mongoDatabaseBuilder
                 .ConfigureCollection(new OutboxMessageConfiguration())
-                .ConfigureCollection(new MessageLockConfiguration(_messageOptions.LockDuration));
+                .ConfigureCollection(new MessageLockConfiguration(_messageOptions.LockDuration))
+                .AddAllowedTypes("MongoDB.Extensions.Outbox");
         }
     }
 }

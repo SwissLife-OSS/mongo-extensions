@@ -1,6 +1,6 @@
 using System;
 
-namespace SwissLife.MongoDB.Extensions.Outbox.Core.Exceptions
+namespace MongoDB.Extensions.Outbox.Core.Exceptions
 {
     public class UnsupportedMessageTypeException: Exception
     {

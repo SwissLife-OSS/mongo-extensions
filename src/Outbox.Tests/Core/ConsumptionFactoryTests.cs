@@ -4,10 +4,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using SwissLife.MongoDB.Extensions.Outbox.Core;
+using MongoDB.Extensions.Outbox.Core;
 using Xunit;
 
-namespace SwissLife.MongoDB.Extensions.Outbox.Tests.Core
+namespace MongoDB.Extensions.Outbox.Tests.Core
 {
     public class ConsumptionFactoryTests
     {

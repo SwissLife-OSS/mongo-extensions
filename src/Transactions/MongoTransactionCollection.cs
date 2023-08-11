@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using MongoDB.Driver.Search;
 
 #pragma warning disable 618
 
@@ -1080,6 +1081,8 @@ public class MongoTransactionCollection<T> : IMongoCollection<T>
     public IBsonSerializer<T> DocumentSerializer => _collection.DocumentSerializer;
 
     public IMongoIndexManager<T> Indexes => _collection.Indexes;
+
+    public IMongoSearchIndexManager SearchIndexes => _collection.SearchIndexes;
 
     public MongoCollectionSettings Settings => _collection.Settings;
 

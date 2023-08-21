@@ -33,23 +33,6 @@
     },
     "keysExamined": 0,
     "docsExamined": 1,
-    "planSummary": "COLLSCAN",
-    "execStats": {
-      "stage": "COLLSCAN",
-      "filter": {
-        "Name": {
-          "$eq": "foo1"
-        }
-      },
-      "nReturned": 0,
-      "executionTimeMillisEstimate": 0,
-      "advanced": 0,
-      "needYield": 0,
-      "saveState": 0,
-      "restoreState": 0,
-      "isEOF": 1,
-      "direction": "forward",
-      "docsExamined": 1
-    }
+    "planSummary": "COLLSCAN"
   }
 ]

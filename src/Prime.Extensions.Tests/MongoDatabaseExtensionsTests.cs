@@ -197,11 +197,9 @@ namespace MongoDB.Prime.Extensions.Tests
                     .IncludeField("**.keysExamined")
                     .IncludeField("**.docsExamined")
                     .IncludeField("**.planSummary")
-                    .IncludeField("**.execStats")
-                    .ExcludeField("**.works")
-                    .ExcludeField("**.needTime")
                     .ExcludeField("**.$db")
                     .ExcludeField("**.lsid")
+                    .ExcludeField("execStats")
                 );
         }
 

@@ -33,9 +33,6 @@
     },
     "keysExamined": 0,
     "docsExamined": 1,
-    "planSummary": "COLLSCAN",
-    "execStats": {
-      "docsExamined": 1
-    }
+    "planSummary": "COLLSCAN"
   }
 ]

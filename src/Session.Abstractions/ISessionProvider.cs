@@ -2,7 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Extensions.Context;
 
-namespace MongoDB.Extensions.Session;
+namespace MongoDB.Extensions.Session.Abstractions;
 
 public interface ISessionProvider<TContext>
     where TContext : IMongoDbContext

@@ -1,4 +1,4 @@
-## [![Nuget](https://img.shields.io/nuget/v/MongoDB.Extensions.Context.svg?style=flat)](https://www.nuget.org/packages/MongoDB.Extensions.Context) [![GitHub Release](https://img.shields.io/github/release/SwissLife-OSS/mongo-extensions.svg?style=flat)](https://github.com/SwissLife-OSS/Mongo-extensions/releases/latest) [![Build Status](https://dev.azure.com/swisslife-oss/swisslife-oss/_apis/build/status/MongoDB.Extensions.Release?branchName=master)](https://dev.azure.com/swisslife-oss/swisslife-oss/_build/latest?definitionId=11&branchName=master) 
+## [![Nuget](https://img.shields.io/nuget/v/MongoDB.Extensions.Context.svg?style=flat)](https://www.nuget.org/packages/MongoDB.Extensions.Context) [![GitHub Release](https://img.shields.io/github/release/SwissLife-OSS/mongo-extensions.svg?style=flat)](https://github.com/SwissLife-OSS/Mongo-extensions/releases/latest) [![Build Status](https://github.com/SwissLife-OSS/mongo-extensions/actions/workflows/release.yml/badge.svg)](https://github.com/SwissLife-OSS/mongo-extensions/actions/workflows/release.yml) 
 
 **MongoDB.Extensions provides a set of utility libraries for MongoDB.**
 

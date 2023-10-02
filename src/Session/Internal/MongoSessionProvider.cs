@@ -6,7 +6,7 @@ using MongoDB.Extensions.Context;
 
 namespace MongoDB.Extensions.Session;
 
-internal class MongoSessionProvider<TContext, TScope> : ISessionProvider<TScope>
+public class MongoSessionProvider<TContext, TScope> : ISessionProvider<TScope>
     where TContext : IMongoDbContext
 {
     private readonly IMongoClient _mongoClient;

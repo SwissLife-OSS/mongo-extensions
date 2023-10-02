@@ -8,7 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MongoDB.Driver" Version="2.18.0" />
+    <ProjectReference Include="..\Context\Context.csproj" />
+    <ProjectReference Include="..\Session.Abstractions\Session.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

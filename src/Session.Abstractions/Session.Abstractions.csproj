@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(CCResourceProjectProps)" Condition="Exists('$(CCResourceProjectProps)')" />
+
+  <PropertyGroup>
+    <AssemblyName>MongoDB.Extensions.Session.Abstractions</AssemblyName>
+    <RootNamespace>MongoDB.Extensions.Session.Abstractions</RootNamespace>
+    <PackageId>MongoDB.Extensions.Session.Abstractions</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Context\Context.csproj" />
+  </ItemGroup>
+
+</Project>

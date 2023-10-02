@@ -13,8 +13,8 @@ internal static class TestHelpers
             AllowedTypes = TypeObjectSerializer.AllowedTypes
                 .Select(pair => new KeyValuePair<string?, bool>(pair.Key.FullName, pair.Value))
                 .OrderBy(pair => pair.Key),
-            TypeObjectSerializer.AllowedTypesByNamespaces,
-            TypeObjectSerializer.AllowedTypesByDependencies
+            AllowedTypesByNamespaces = TypeObjectSerializer.AllowedTypesByNamespaces.OrderBy(x => x),
+            AllowedTypesByDependencies = TypeObjectSerializer.AllowedTypesByDependencies.OrderBy(x => x)
         };
     }
 }

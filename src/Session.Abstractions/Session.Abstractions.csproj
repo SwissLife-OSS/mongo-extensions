@@ -3,7 +3,7 @@
 
   <PropertyGroup>
     <AssemblyName>MongoDB.Extensions.Session.Abstractions</AssemblyName>
-    <RootNamespace>MongoDB.Extensions.Session.Abstractions</RootNamespace>
+    <RootNamespace>MongoDB.Extensions.Session</RootNamespace>
     <PackageId>MongoDB.Extensions.Session.Abstractions</PackageId>
   </PropertyGroup>
 

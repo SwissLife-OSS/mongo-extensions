@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace MongoDB.Extensions.Session.Abstractions;
+namespace MongoDB.Extensions.Session;
 
 public interface ITransactionSession : IDisposable
 {

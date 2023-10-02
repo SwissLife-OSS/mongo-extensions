@@ -16,8 +16,8 @@ internal static class TestHelpers
             AllowedTypesByNamespaces = TypeObjectSerializer.AllowedTypesByNamespaces
                 .OrderBy(x => x),
             AllowedTypesByDependencies = TypeObjectSerializer.AllowedTypesByDependencies
-                .OrderBy(x => x)
                 .Except(new[] { "Coverlet" })
+                .OrderBy(x => x)
         };
     }
 }

@@ -25,7 +25,7 @@ public class MongoSessionProviderTests : IClassFixture<MongoReplicaSetResource>
 
         _serviceProvider = new ServiceCollection()
             .AddSingleton(mongoOptions)
-            .AddMongoSessionProvider<TestDbContext>()
+            .AddMongoSessionProvider<TestDbContext, ITestScope>()
             .BuildServiceProvider();
     }
 
@@ -33,8 +33,8 @@ public class MongoSessionProviderTests : IClassFixture<MongoReplicaSetResource>
     public async Task BeginTransactionAsync_ShouldBeginTransaction()
     {
         // Arrange
-        ISessionProvider<TestDbContext> sessionProvider = _serviceProvider
-            .GetRequiredService<ISessionProvider<TestDbContext>>();
+        ISessionProvider<ITestScope> sessionProvider = _serviceProvider
+            .GetRequiredService<ISessionProvider<ITestScope>>();
 
         // Act
         ITransactionSession transactionSession = await sessionProvider
@@ -51,8 +51,8 @@ public class MongoSessionProviderTests : IClassFixture<MongoReplicaSetResource>
     public async Task StartSessionAsync_ShouldStartSession()
     {
         // Arrange
-        ISessionProvider<TestDbContext> sessionProvider = _serviceProvider
-            .GetRequiredService<ISessionProvider<TestDbContext>>();
+        ISessionProvider<ITestScope> sessionProvider = _serviceProvider
+            .GetRequiredService<ISessionProvider<ITestScope>>();
 
         // Act
         ISession session = await sessionProvider
@@ -69,8 +69,8 @@ public class MongoSessionProviderTests : IClassFixture<MongoReplicaSetResource>
     public async Task MongoSession_Dispose_ShouldDisposeSession()
     {
         // Arrange
-        ISessionProvider<TestDbContext> sessionProvider = _serviceProvider
-            .GetRequiredService<ISessionProvider<TestDbContext>>();
+        ISessionProvider<ITestScope> sessionProvider = _serviceProvider
+            .GetRequiredService<ISessionProvider<ITestScope>>();
 
         ISession session = await sessionProvider
             .StartSessionAsync(CancellationToken.None);
@@ -87,8 +87,8 @@ public class MongoSessionProviderTests : IClassFixture<MongoReplicaSetResource>
     public async Task MongoTransactionSession_Dispose_ShouldDisposeSession()
     {
         // Arrange
-        ISessionProvider<TestDbContext> sessionProvider = _serviceProvider
-            .GetRequiredService<ISessionProvider<TestDbContext>>();
+        ISessionProvider<ITestScope> sessionProvider = _serviceProvider
+            .GetRequiredService<ISessionProvider<ITestScope>>();
 
         ITransactionSession transactionSession = await sessionProvider
             .BeginTransactionAsync(CancellationToken.None);
@@ -105,8 +105,8 @@ public class MongoSessionProviderTests : IClassFixture<MongoReplicaSetResource>
     public async Task MongoTransactionSession_NotCommitting_ShouldNotAffectDatabase()
     {
         // Arrange
-        ISessionProvider<TestDbContext> sessionProvider = _serviceProvider
-            .GetRequiredService<ISessionProvider<TestDbContext>>();
+        ISessionProvider<ITestScope> sessionProvider = _serviceProvider
+            .GetRequiredService<ISessionProvider<ITestScope>>();
 
         ITransactionSession transactionSession = await sessionProvider
             .BeginTransactionAsync(CancellationToken.None);
@@ -134,5 +134,9 @@ public class MongoSessionProviderTests : IClassFixture<MongoReplicaSetResource>
         protected override void OnConfiguring(IMongoDatabaseBuilder mongoDatabaseBuilder)
         {
         }
+    }
+
+    private interface ITestScope
+    {
     }
 }

@@ -1,15 +1,17 @@
 using System.Threading;
 using System.Threading.Tasks;
-using MongoDB.Extensions.Context;
 
 namespace MongoDB.Extensions.Session;
 
-public interface ISessionProvider<TContext>
-    where TContext : IMongoDbContext
+public interface ISessionProvider
 {
     Task<ITransactionSession> BeginTransactionAsync(
         CancellationToken cancellationToken);
 
     Task<ISession> StartSessionAsync(
         CancellationToken cancellationToken);
+}
+
+public interface ISessionProvider<TScope> : ISessionProvider
+{
 }

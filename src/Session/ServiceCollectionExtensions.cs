@@ -6,12 +6,12 @@ namespace MongoDB.Extensions.Session;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddMongoSessionProvider<TContext>(
+    public static IServiceCollection AddMongoSessionProvider<TContext, TScope>(
         this IServiceCollection services)
         where TContext : class, IMongoDbContext
     {
         services.TryAddSingleton<TContext>();
-        services.TryAddSingleton<ISessionProvider<TContext>, MongoSessionProvider<TContext>>();
+        services.TryAddSingleton<ISessionProvider<TScope>, MongoSessionProvider<TContext, TScope>>();
 
         return services;
     }

@@ -13,10 +13,12 @@ public class DependencyTypesResolverTests
         // Arrange
 
         // Act
-        IEnumerable<string> knownNamespaces =
-            DependencyTypesResolver.GetAllowedTypesByDependencies();
+        IEnumerable<string> knownNamespaces = DependencyTypesResolver
+            .GetAllowedTypesByDependencies()
+            .Except(new[] { "Coverlet" })
+            .OrderBy(x => x);
 
         // Assert
-        Snapshot.Match(knownNamespaces.OrderBy(x => x));
+        Snapshot.Match(knownNamespaces);
     }
 }

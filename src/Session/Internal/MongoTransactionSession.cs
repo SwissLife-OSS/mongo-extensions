@@ -7,7 +7,6 @@ namespace MongoDB.Extensions.Session;
 
 internal class MongoTransactionSession : ITransactionSession
 {
-    private readonly IClientSessionHandle _session;
     private readonly CancellationToken _cancellationToken;
     private bool _disposed;
 
@@ -15,13 +14,15 @@ internal class MongoTransactionSession : ITransactionSession
         IClientSessionHandle clientSession,
         CancellationToken cancellationToken)
     {
-        _session = clientSession;
+        Session = clientSession;
         _cancellationToken = cancellationToken;
     }
 
+    public IClientSessionHandle Session { get; }
+
     public async Task CommitAsync()
     {
-        await _session.CommitTransactionAsync(_cancellationToken);
+        await Session.CommitTransactionAsync(_cancellationToken);
     }
 
     protected virtual void Dispose(bool disposing)
@@ -30,7 +31,7 @@ internal class MongoTransactionSession : ITransactionSession
         {
             if (disposing)
             {
-                _session.Dispose();
+                Session.Dispose();
             }
 
             _disposed = true;

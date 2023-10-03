@@ -5,7 +5,7 @@ using MongoDB.Driver;
 
 namespace MongoDB.Extensions.Session;
 
-internal class MongoTransactionSession : ITransactionSession
+internal sealed class MongoTransactionSession : ITransactionSession
 {
     private readonly CancellationToken _cancellationToken;
     private bool _disposed;
@@ -25,7 +25,7 @@ internal class MongoTransactionSession : ITransactionSession
         await Session.CommitTransactionAsync(_cancellationToken);
     }
 
-    protected virtual void Dispose(bool disposing)
+    private void Dispose(bool disposing)
     {
         if (!_disposed)
         {

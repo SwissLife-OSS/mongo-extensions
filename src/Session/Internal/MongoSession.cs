@@ -7,16 +7,14 @@ namespace MongoDB.Extensions.Session;
 
 internal sealed class MongoSession : ISession
 {
+    private readonly TransactionOptions _transactionOptions;
     private bool _disposed;
 
-    private static TransactionOptions TransactionOptions { get; } = new(
-        ReadConcern.Majority,
-        ReadPreference.Primary,
-        WriteConcern.WMajority.With(journal: true),
-        TimeSpan.FromSeconds(180));
-
-    public MongoSession(IClientSessionHandle clientSession)
+    public MongoSession(
+        IClientSessionHandle clientSession,
+        TransactionOptions transactionOptions)
     {
+        _transactionOptions = transactionOptions;
         Session = clientSession;
     }
 
@@ -27,9 +25,15 @@ internal sealed class MongoSession : ISession
         CancellationToken cancellationToken)
     {
         return Session.WithTransactionAsync<T>(
-            (_, ct) => action(this, ct),
-            TransactionOptions,
-            cancellationToken);
+            (_, ct) => action(this, ct), _transactionOptions, cancellationToken);
+    }
+
+    public ITransactionSession StartTransaction(
+        CancellationToken cancellationToken)
+    {
+        Session.StartTransaction(_transactionOptions);
+
+        return new MongoTransactionSession(Session, cancellationToken);
     }
 
     private void Dispose(bool disposing)

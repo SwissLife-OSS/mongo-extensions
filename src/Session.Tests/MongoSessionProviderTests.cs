@@ -60,6 +60,26 @@ public class MongoSessionProviderTests : IClassFixture<MongoReplicaSetResource>
     }
 
     [Fact]
+    public async Task StartTransaction_ShouldBeginTransaction()
+    {
+        // Arrange
+        var dbContext = new TestDbContext(_mongoOptions);
+        ITestSessionProvider sessionProvider = new TestSessionProvider(dbContext);
+        ISession session = await sessionProvider
+            .StartSessionAsync(CancellationToken.None);
+
+        // Act
+        ITransactionSession transactionSession = session
+            .StartTransaction(CancellationToken.None);
+
+        // Assert
+        transactionSession.Should().NotBeNull();
+        IClientSessionHandle clientSessionHandle = transactionSession.GetSessionHandle();
+        clientSessionHandle.ServerSession.Id["id"].AsGuid.Should().NotBeEmpty();
+        clientSessionHandle.IsInTransaction.Should().BeTrue();
+    }
+
+    [Fact]
     public async Task MongoSession_Dispose_ShouldDisposeSession()
     {
         // Arrange

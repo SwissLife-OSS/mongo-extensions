@@ -10,9 +10,5 @@
     <ProjectReference Include="..\Context\Context.csproj" />
     <ProjectReference Include="..\Prime.Extensions\Prime.Extensions.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="__snapshots__\__mismatch__\" />
-  </ItemGroup>
-
+  
 </Project>

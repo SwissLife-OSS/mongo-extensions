@@ -6,7 +6,7 @@
     }
   ],
   "AllowedTypesByNamespaces": [
-    "MongoDB.Extensions.Context"
+    "MongoDBs.Context"
   ],
   "AllowedTypesByDependencies": []
 }

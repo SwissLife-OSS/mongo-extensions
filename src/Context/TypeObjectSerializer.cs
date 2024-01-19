@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Extensions.Context.Extensions;
+#nullable enable
 
 namespace MongoDB.Extensions.Context.Internal;
 
@@ -70,20 +70,38 @@ public class TypeObjectSerializer : ObjectSerializer
 
     private static bool IsInAllowedNamespaces(Type type)
     {
-        if(type.Namespace is null)
+        if (type.Namespace is null)
         {
             return false;
         }
 
-        bool isInAllowedNamespaces = _allowedTypesByNamespaces
-            .Contains(type.Namespace);
+        var isInAllowedNamespaces = IsAllowedNameSpacePart(type);
 
-        if(isInAllowedNamespaces)
+        if (isInAllowedNamespaces)
         {
             _allowedTypes.TryAdd(type, true);
         }
 
         return isInAllowedNamespaces;
+    }
+
+    private static bool IsAllowedNameSpacePart(Type type)
+    {
+        foreach (string allowedNamespace in _allowedTypesByNamespaces)
+        {
+            if(string.IsNullOrEmpty(type.Namespace))
+            {
+                return false;
+            }
+
+            if (type.Namespace.StartsWith(allowedNamespace,
+                StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static bool IsInAllowedDependencyTypes(Type type)

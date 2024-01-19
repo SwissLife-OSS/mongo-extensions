@@ -94,11 +94,41 @@ public class TypeObjectSerializerTests
     }
 
     [Fact]
-    public void IsTypeAllowed_InAllowedNamespaces_False()
+    public void IsTypeAllowed_PartIsInAllowedNamespaces_True()
     {
         // Arrange
         TypeObjectSerializer.Clear();
         TypeObjectSerializer.AddAllowedTypes("MongoDB.Extensions.Context");
+
+        // Act
+        bool isAllowed = TypeObjectSerializer.IsTypeAllowed(typeof(Foo));
+
+        // Assert
+        Assert.True(isAllowed);
+        Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent());
+    }
+
+    [Fact]
+    public void IsTypeAllowed_PartIsInAllowedNamespacesCaseInsensitive_True()
+    {
+        // Arrange
+        TypeObjectSerializer.Clear();
+        TypeObjectSerializer.AddAllowedTypes("MONGODB.EXTENSIONS");
+
+        // Act
+        bool isAllowed = TypeObjectSerializer.IsTypeAllowed(typeof(Foo));
+
+        // Assert
+        Assert.True(isAllowed);
+        Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent());
+    }
+
+    [Fact]
+    public void IsTypeAllowed_PartIsNotInAllowedNamespaces_False()
+    {
+        // Arrange
+        TypeObjectSerializer.Clear();
+        TypeObjectSerializer.AddAllowedTypes("MongoDBs.Context");
 
         // Act
         bool isAllowed = TypeObjectSerializer.IsTypeAllowed(typeof(Foo));

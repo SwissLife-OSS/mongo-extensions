@@ -199,7 +199,7 @@ namespace MongoDB.Prime.Extensions.Tests
                     .IncludeField("**.planSummary")
                     .ExcludeField("**.$db")
                     .ExcludeField("**.lsid")
-                    .ExcludeField("execStats")
+                    .ExcludeField("**.execStats")
                 );
         }
 

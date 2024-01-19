@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Extensions.Context.Extensions;
+#nullable enable
 
 namespace MongoDB.Extensions.Context.Internal;
 
@@ -89,6 +89,11 @@ public class TypeObjectSerializer : ObjectSerializer
     {
         foreach (string allowedNamespace in _allowedTypesByNamespaces)
         {
+            if(string.IsNullOrEmpty(type.Namespace))
+            {
+                return false;
+            }
+
             if (type.Namespace.StartsWith(allowedNamespace,
                 StringComparison.OrdinalIgnoreCase))
             {

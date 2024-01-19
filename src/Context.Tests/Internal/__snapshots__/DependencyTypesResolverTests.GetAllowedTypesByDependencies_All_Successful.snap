@@ -1,0 +1,23 @@
+﻿[
+  "Amazon",
+  "AWSSDK",
+  "Castle",
+  "DnsClient",
+  "Docker",
+  "FluentAssertions",
+  "ICSharpCode",
+  "Internal",
+  "MongoDB",
+  "Moq",
+  "Newtonsoft",
+  "NuGet",
+  "Polly",
+  "SharpCompress",
+  "Snappier",
+  "Snapshooter",
+  "Squadron",
+  "ThirdParty",
+  "TypeNameFormatter",
+  "Xunit",
+  "ZstdSharp"
+]

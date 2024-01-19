@@ -1,0 +1,34 @@
+﻿[
+  {
+    "Key": "Bar3",
+    "Value": {
+      "Id": "a1c9e3e8-b448-42da-a684-716932903043",
+      "Name": "Bar3",
+      "Value": "Value3"
+    }
+  },
+  {
+    "Key": "Bar4",
+    "Value": {
+      "Id": "a1c9e3e8-b448-42da-a684-716932903044",
+      "Name": "Bar4",
+      "Value": "Value4"
+    }
+  },
+  {
+    "Key": "Bar5",
+    "Value": {
+      "Id": "a1c9e3e8-b448-42da-a684-716932903045",
+      "Name": "Bar5",
+      "Value": "Value5"
+    }
+  },
+  {
+    "Key": "Bar6",
+    "Value": {
+      "Id": "a1c9e3e8-b448-42da-a684-716932903046",
+      "Name": "Bar6",
+      "Value": "Value6"
+    }
+  }
+]

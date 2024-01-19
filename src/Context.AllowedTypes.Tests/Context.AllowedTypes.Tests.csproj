@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(CCTestProjectProps)" Condition="Exists('$(CCTestProjectProps)')" />
+
+  <PropertyGroup>
+    <AssemblyName>MongoDB.Extensions.Context.AllowedTypes.Tests</AssemblyName>
+    <RootNamespace>MongoDB.Extensions.Context.AllowedTypes.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Context\Context.csproj" />
+    <ProjectReference Include="..\Prime.Extensions\Prime.Extensions.csproj" />
+  </ItemGroup>
+  
+</Project>

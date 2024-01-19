@@ -1,15 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using FluentAssertions;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
+using MongoDB.Extensions.Context.InterferingTests.Helpers;
+using Snapshooter.Xunit;
 using Squadron;
 using Xunit;
+using Xunit.Priority;
 
 namespace MongoDB.Extensions.Context.Tests
 {
+    [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
     public class MongoDatabaseBuilderTests : IClassFixture<MongoResource>
     {
         private readonly MongoOptions _mongoOptions;
@@ -211,6 +218,7 @@ namespace MongoDB.Extensions.Context.Tests
         }
 
         [Fact]
+        [Priority(0)]
         public void RegisterConventionPack_ConventionPackNotRegistered_ConventionPacksNotRegistered()
         {
             // Arrange
@@ -409,6 +417,60 @@ namespace MongoDB.Extensions.Context.Tests
 
         #endregion
 
+        #region ConfigureCollection Tests
+
+        [Fact]
+        public void ConfigureCollection_SetDifferentSettingsToCollection_CollectionConfiguredSuccessfully()
+        {
+            // Arrange
+            var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
+
+            // Act
+            mongoDatabaseBuilder.ConfigureCollection(new FooCollectionConfiguration());
+            MongoDbContextData result = mongoDatabaseBuilder.Build();
+
+            // Assert
+            IMongoCollection<Foo> collection = result.GetCollection<Foo>();
+
+            IEnumerable<BsonClassMap> classMaps = BsonClassMap.GetRegisteredClassMaps();
+                
+            Snapshot.Match(new
+            {
+                CollectionName = collection.CollectionNamespace.CollectionName,
+                Settings = collection.Settings,
+                Indexes = collection.Indexes.List().ToList(),
+                ClassMaps = classMaps.Select(map => new {
+                    Name = map.Discriminator,
+                    IdMemberMap = new {
+                        map.IdMemberMap?.ElementName,
+                        map.IdMemberMap?.MemberName },
+                    AllMemberMaps = map.AllMemberMaps.Select(amm =>
+                        new { amm.ElementName, amm.MemberName }),
+                    IgnoreExtraElements = map.IgnoreExtraElements
+                })
+            });
+        }
+
+        #endregion
+
+        #region AddInstrumentation Tests
+
+        [Fact]
+        public void AddInstrumentation_Command_ActivityCreated()
+        {
+            // Arrange
+            var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
+            mongoDatabaseBuilder.AddInstrumentation();
+
+            // Act
+            MongoDbContextData result = mongoDatabaseBuilder.Build();
+
+            // Assert
+            result.Client.Settings.ClusterConfigurator.Should().NotBeNull();
+        }
+
+        #endregion
+
         #region Private Helpers
 
         private class DuplicateTestConvention1 : ConventionBase
@@ -532,6 +594,6 @@ namespace MongoDB.Extensions.Context.Tests
             }
         }
 
-        #endregion
+        #endregion  
     }
 }

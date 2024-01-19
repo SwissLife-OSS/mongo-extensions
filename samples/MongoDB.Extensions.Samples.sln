@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29519.87
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "Context\DataAccess\DataAccess.csproj", "{B08692DA-8E74-4F3D-9B8E-66C5962BD7D1}"
 EndProject
@@ -19,7 +19,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3_DataAccess", "3_DataAcces
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SimpleBlog", "SimpleBlog", "{1B6D9C2E-9D39-49E2-8522-29049C3D4821}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host", "Context\Host\Host.csproj", "{0CCED088-DBB6-4DA2-8DFC-D9968EEBB9FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Host", "Context\Host\Host.csproj", "{0CCED088-DBB6-4DA2-8DFC-D9968EEBB9FA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Migration", "Migration\Migration.csproj", "{8226313B-FAC9-4D0F-AEE8-424DD310BBFB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".root", ".root", "{5366F688-8087-42D7-BBB3-3D8E6391AD44}"
+	ProjectSection(SolutionItems) = preProject
+		..\Directory.Packages.props = ..\Directory.Packages.props
+		..\global.json = ..\global.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{ED7512B7-0598-4815-9DE5-B3BE0F55C1D2}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Packages.props = Directory.Packages.props
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +56,10 @@ Global
 		{0CCED088-DBB6-4DA2-8DFC-D9968EEBB9FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CCED088-DBB6-4DA2-8DFC-D9968EEBB9FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CCED088-DBB6-4DA2-8DFC-D9968EEBB9FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8226313B-FAC9-4D0F-AEE8-424DD310BBFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8226313B-FAC9-4D0F-AEE8-424DD310BBFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8226313B-FAC9-4D0F-AEE8-424DD310BBFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8226313B-FAC9-4D0F-AEE8-424DD310BBFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,8 +71,10 @@ Global
 		{C4DEA4A3-B50A-4ACD-9017-4919576CE069} = {1B6D9C2E-9D39-49E2-8522-29049C3D4821}
 		{229E6D6C-AB33-4095-A09B-647434079280} = {1B6D9C2E-9D39-49E2-8522-29049C3D4821}
 		{A880C40E-8DAF-4EFF-AE50-B8983AF424D3} = {1B6D9C2E-9D39-49E2-8522-29049C3D4821}
-		{1B6D9C2E-9D39-49E2-8522-29049C3D4821} = {27E20B8D-3948-41A2-9271-69D850357C35}
+		{1B6D9C2E-9D39-49E2-8522-29049C3D4821} = {ED7512B7-0598-4815-9DE5-B3BE0F55C1D2}
 		{0CCED088-DBB6-4DA2-8DFC-D9968EEBB9FA} = {C4DEA4A3-B50A-4ACD-9017-4919576CE069}
+		{8226313B-FAC9-4D0F-AEE8-424DD310BBFB} = {ED7512B7-0598-4815-9DE5-B3BE0F55C1D2}
+		{ED7512B7-0598-4815-9DE5-B3BE0F55C1D2} = {5366F688-8087-42D7-BBB3-3D8E6391AD44}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E28A6DDE-2575-483D-8C8B-7929357BA44A}

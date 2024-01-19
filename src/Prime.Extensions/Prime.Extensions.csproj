@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(CCResourceProjectProps)" Condition="Exists('$(CCResourceProjectProps)')" />
+
+  <PropertyGroup>
+    <AssemblyName>MongoDB.Prime.Extensions</AssemblyName>
+    <RootNamespace>MongoDB.Prime.Extensions</RootNamespace>
+    <PackageId>MongoDB.Prime.Extensions</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Driver"  />
+    <PackageReference Include="System.Text.Json"  />
+    <PackageReference Include="Microsoft.Extensions.Configuration"  />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,12 @@
+﻿{
+  "AllowedTypes": [
+    {
+      "Key": "MongoDB.Extensions.Context.AllowedTypes.Tests.Foo",
+      "Value": false
+    }
+  ],
+  "AllowedTypesByNamespaces": [
+    "MongoDBs.Context"
+  ],
+  "AllowedTypesByDependencies": []
+}

@@ -1,32 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.0;netcoreapp3.1</TargetFrameworks>
+  <Import Project="$(CCTestProjectProps)" Condition="Exists('$(CCTestProjectProps)')" />
+  
+  <PropertyGroup>    
     <AssemblyName>MongoDB.Extensions.Context.Tests</AssemblyName>
     <RootNamespace>MongoDB.Extensions.Context.Tests</RootNamespace>
-    <IsPackable>false</IsPackable>
-    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Snapshooter.Xunit" Version="0.5.1" />
-    <PackageReference Include="DnsClient" Version="1.3.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
-    <PackageReference Include="Squadron.Mongo" Version="0.5.0" />
-    <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
-    <PackageReference Include="coverlet.msbuild" Version="2.8.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Context\Context.csproj" />
+    <ProjectReference Include="..\Prime.Extensions\Prime.Extensions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="__snapshots__\" />
+    <Compile Remove="IsExternalInit.cs" Condition="'$(TargetFramework)' == 'net6.0'" />
+    <Compile Remove="IsExternalInit.cs" Condition="'$(TargetFramework)' == 'net7.0'" />
   </ItemGroup>
 
 </Project>

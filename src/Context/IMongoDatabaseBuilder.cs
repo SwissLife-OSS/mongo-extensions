@@ -17,7 +17,9 @@ namespace MongoDB.Extensions.Context
         IMongoDatabaseBuilder RegisterDefaultConventionPack();
 
         IMongoDatabaseBuilder RegisterCamelCaseConventionPack();
-        
+
+        IMongoDatabaseBuilder RegisterIgnoreIfNullConventionPack();
+
         IMongoDatabaseBuilder ConfigureCollection<TDocument>(
             IMongoCollectionConfiguration<TDocument> configuration) where TDocument : class;
 
@@ -25,5 +27,13 @@ namespace MongoDB.Extensions.Context
             Action<MongoClientSettings> mongoClientSettingsAction);
 
         IMongoDatabaseBuilder ConfigureDatabase(Action<IMongoDatabase> configureDatabase);
+
+        IMongoDatabaseBuilder AddAllowedType<T>();
+
+        IMongoDatabaseBuilder AddAllowedTypes(params Type[] allowedTypes);
+
+        IMongoDatabaseBuilder AddAllowedTypes(params string[] allowedNamespaces);
+
+        IMongoDatabaseBuilder AddAllowedTypesOfAllDependencies();
     }
 }

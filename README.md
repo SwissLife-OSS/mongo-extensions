@@ -1,4 +1,4 @@
-## [![Nuget](https://img.shields.io/nuget/v/MongoDB.Extensions.Context.svg?style=flat)](https://www.nuget.org/packages/MongoDB.Extensions.Context) [![GitHub Release](https://img.shields.io/github/release/SwissLife-OSS/mongo-extensions.svg?style=flat)](https://github.com/SwissLife-OSS/Mongo-extensions/releases/latest) [![Build Status](https://dev.azure.com/swisslife-oss/swisslife-oss/_apis/build/status/MongoDB.Extensions.Release?branchName=master)](https://dev.azure.com/swisslife-oss/swisslife-oss/_build/latest?definitionId=11&branchName=master) 
+## [![Nuget](https://img.shields.io/nuget/v/MongoDB.Extensions.Context.svg?style=flat)](https://www.nuget.org/packages/MongoDB.Extensions.Context) [![GitHub Release](https://img.shields.io/github/release/SwissLife-OSS/mongo-extensions.svg?style=flat)](https://github.com/SwissLife-OSS/Mongo-extensions/releases/latest) [![Build Status](https://github.com/SwissLife-OSS/mongo-extensions/actions/workflows/release.yml/badge.svg)](https://github.com/SwissLife-OSS/mongo-extensions/actions/workflows/release.yml) 
 
 **MongoDB.Extensions provides a set of utility libraries for MongoDB.**
 
@@ -30,15 +30,14 @@ Create a new class and inherit from the MongoDbContext (abstract) class. Add the
 ```csharp
 public class SimpleBlogDbContext : MongoDbContext
 {
-    public SimpleBlogDbContext(MongoOptions mongoOptions) : base(mongoOptions)
+    public SimpleBlogDbContext(MongoOptions mongoOptions)
+        : base(mongoOptions)
     {
     }
 
     protected override void OnConfiguring(IMongoDatabaseBuilder mongoDatabaseBuilder)
     {
-        .
-        .
-        .
+        ...
     }
 }
 ```
@@ -51,6 +50,7 @@ protected override void OnConfiguring(IMongoDatabaseBuilder mongoDatabaseBuilder
     mongoDatabaseBuilder
         .RegisterCamelCaseConventionPack()
         .RegisterSerializer(new DateTimeOffsetSerializer())
+        .AddAllowedTypes("Namspace.Project")
         .ConfigureConnection(con => con.ReadConcern = ReadConcern.Majority)
         .ConfigureConnection(con => con.WriteConcern = WriteConcern.WMajority)
         .ConfigureConnection(con => con.ReadPreference = ReadPreference.Primary)
@@ -67,25 +67,25 @@ public class TagCollectionConfiguration : IMongoCollectionConfiguration<Tag>
     public void OnConfiguring(IMongoCollectionBuilder<Tag> mongoCollectionBuilder)
     {
         mongoCollectionBuilder
-                .AddBsonClassMap<Tag>(cm => 
-                {
-                    cm.AutoMap();
-                    cm.SetIgnoreExtraElements(true);
-                })
-                .WithCollectionSettings(setting =>
-                {
-                    setting.ReadPreference = ReadPreference.Nearest;
-                    setting.ReadConcern = ReadConcern.Available;
-                    setting.WriteConcern = WriteConcern.Acknowledged;
-                })
-                .WithCollectionConfiguration(collection =>
-                {
-                    var timestampIndex = new CreateIndexModel<Tag>(
-                        Builders<Tag>.IndexKeys.Ascending(tag => tag.Name),
-                        new CreateIndexOptions { Unique = true });
+            .AddBsonClassMap<Tag>(cm => 
+            {
+                cm.AutoMap();
+                cm.SetIgnoreExtraElements(true);
+            })
+            .WithCollectionSettings(setting =>
+            {
+                setting.ReadPreference = ReadPreference.Nearest;
+                setting.ReadConcern = ReadConcern.Available;
+                setting.WriteConcern = WriteConcern.Acknowledged;
+            })
+            .WithCollectionConfiguration(collection =>
+            {
+                var timestampIndex = new CreateIndexModel<Tag>(
+                    Builders<Tag>.IndexKeys.Ascending(tag => tag.Name),
+                    new CreateIndexOptions { Unique = true });
 
-                    collection.Indexes.CreateOne(timestampIndex);
-                });
+                collection.Indexes.CreateOne(timestampIndex);
+            });
     }
 }
 ```
@@ -96,17 +96,17 @@ To use your MongoDB bootstrapping context, register it in your DI-Container.
 Example:
 
 ```csharp
- public static IServiceCollection AddDatabase(
-        this IServiceCollection services, IConfiguration configuration)
-        {
-            MongoOptions blogDbOptions = configuration
-                .GetMongoOptions("SimpleBlog:Database");
+public static IServiceCollection AddDatabase(
+    this IServiceCollection services, IConfiguration configuration)
+{
+    MongoOptions blogDbOptions = configuration
+        .GetMongoOptions("SimpleBlog:Database");
 
-            services.AddSingleton(blogDbOptions);
-            services.AddSingleton<SimpleBlogDbContext>();
+    services.AddSingleton(blogDbOptions);
+    services.AddSingleton<SimpleBlogDbContext>();
 
-            return services;
-        }
+    return services;
+}
 ```
 
 When the MongoDBContext is used the first time, then the connection, database and collections, serializers, classMaps, convention packs etc. will be initialized and configured according your configuration.
@@ -116,50 +116,43 @@ The MongoDbContext contains the configured MongoDB client, database and collecti
 
 ```csharp
 public abstract class MongoDbContext : IMongoDbContext
-    {
-        .
-        .
-        .
-        public IMongoClient Client { get; }
-        public IMongoDatabase Database { get; }
-        public MongoOptions MongoOptions { get; }
+{
+    ...
+    public IMongoClient Client { get; }
+    public IMongoDatabase Database { get; }
+    public MongoOptions MongoOptions { get; }
 
-        public IMongoCollection<TDocument> CreateCollection<TDocument>() where TDocument : class;
-        .
-        .
-        .
-    }
+    public IMongoCollection<TDocument> CreateCollection<TDocument>() where TDocument : class;
+    ...
+}
 ```
 
 In the following Repository class example, we use the MongoDbContext to get the configured MongoDB collection.
 
 ```csharp
 public class TagRepository : ITagRepository
+{
+    private IMongoCollection<Tag> _mongoCollection;
+
+    public TagRepository(ISimpleBlogDbContext simpleBlogDbContext)
     {
-        private IMongoCollection<Tag> _mongoCollection;
+        if (simpleBlogDbContext == null)
+            throw new ArgumentNullException(nameof(simpleBlogDbContext));
 
-        public TagRepository(ISimpleBlogDbContext simpleBlogDbContext)
-        {
-            if (simpleBlogDbContext == null)
-                throw new ArgumentNullException(nameof(simpleBlogDbContext));
+        _mongoCollection = simpleBlogDbContext.CreateCollection<Tag>();
+    }
 
-            _mongoCollection = simpleBlogDbContext.CreateCollection<Tag>();
-        }
+    public async Task<IEnumerable<Tag>> GetTagsAsync(
+        CancellationToken cancellationToken = default)
+    {
+        var findOptions = new FindOptions<Tag>();
 
-        public async Task<IEnumerable<Tag>> GetTagsAsync(
-            CancellationToken cancellationToken = default)
-        {
-            var findOptions = new FindOptions<Tag>();
+        IAsyncCursor<Tag> result = await _mongoCollection.FindAsync<Tag>(
+            Builders<Tag>.Filter.Empty, findOptions, cancellationToken);
 
-            IAsyncCursor<Tag> result = await _mongoCollection.FindAsync<Tag>(
-                Builders<Tag>.Filter.Empty, findOptions, cancellationToken);
-
-            return await result.ToListAsync();
-        }
-        .
-        .
-        .
-        .
+        return await result.ToListAsync();
+    }
+    ...
 ```
 
 A full MongoDB bootstrapping example can be found in our [SimpleBlog](https://swisslife-oss.github.io/mongo-extensions/samples/) web-application.

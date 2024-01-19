@@ -1,4 +1,6 @@
-﻿using MongoDB.Driver;
+using System;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using Squadron;
 using Xunit;
 
@@ -22,10 +24,10 @@ namespace MongoDB.Extensions.Context.Tests
         #region Constructor Tests
 
         [Fact]
-        public void Constructor_AutoInitializeDefault_InitializationExecuted()
+        public void Constructor_AutoInitialize_InitializationExecuted()
         {
             // Arrange
-            
+
             // Act
             var testMongoDbContext = new TestMongoDbContext(_mongoOptions);
 
@@ -34,19 +36,7 @@ namespace MongoDB.Extensions.Context.Tests
         }
 
         [Fact]
-        public void Constructor_AutoInitializeManual_InitializationExecuted()
-        {
-            // Arrange
-            
-            // Act
-            var testMongoDbContext = new TestMongoDbContext(_mongoOptions, true);
-
-            // Assert
-            Assert.True(testMongoDbContext.IsInitialized);
-        }
-
-        [Fact]
-        public void Constructor_NoInitializeManual_InitializationExecuted()
+        public void Constructor_NoInitialize_InitializationNotExecuted()
         {
             // Arrange
 
@@ -55,6 +45,55 @@ namespace MongoDB.Extensions.Context.Tests
 
             // Assert
             Assert.False(testMongoDbContext.IsInitialized);
+        }
+
+        [Fact]
+        public void Constructor_Database_ThrowsWhenNoInitialize()
+        {
+            // Arrange
+            var testMongoDbContext = new TestMongoDbContext(_mongoOptions, false);
+
+            // Act
+            // Assert
+            Assert.Throws<InvalidOperationException>(
+                () => _ = testMongoDbContext.Database);
+        }
+
+        [Fact]
+        public void Constructor_CreateCollection_ThrowsWhenNotInitialize()
+        {
+            // Arrange
+            var testMongoDbContext = new TestMongoDbContext(_mongoOptions, false);
+
+            // Act
+            // Assert
+            Assert.Throws<InvalidOperationException>(
+                () => _ = testMongoDbContext.CreateCollection<BsonDocument>());
+        }
+
+        [Fact]
+        public void Constructor_Client_ThrowsWhenNoInitialize()
+        {
+            // Arrange
+            var testMongoDbContext = new TestMongoDbContext(_mongoOptions, false);
+
+            // Act
+            // Assert
+            Assert.Throws<InvalidOperationException>(
+                () => _ = testMongoDbContext.Client);
+        }
+
+        [Fact]
+        public void Constructor_MongoOptions_CanAccessWhenNotInitialize()
+        {
+            // Arrange
+            var testMongoDbContext = new TestMongoDbContext(_mongoOptions, false);
+
+            // Act
+            MongoOptions mongoOptions = testMongoDbContext.MongoOptions;
+
+            // Assert
+            Assert.NotNull(mongoOptions);
         }
 
         #endregion
@@ -67,7 +106,7 @@ namespace MongoDB.Extensions.Context.Tests
             {
             }
 
-            public TestMongoDbContext(MongoOptions mongoOptions, bool enableAutoInit) 
+            public TestMongoDbContext(MongoOptions mongoOptions, bool enableAutoInit)
                 : base(mongoOptions, enableAutoInit)
             {
             }

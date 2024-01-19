@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,14 +18,9 @@ namespace SimpleBlog.Domain
             IUserRepository userRepository,
             ITagRepository tagRepository)
         {
-            _blogRepository = blogRepository ??
-                throw new ArgumentNullException(nameof(blogRepository));
-
-            _userRepository = userRepository ??
-                throw new ArgumentNullException(nameof(userRepository));
-
-            _tagRepository = tagRepository ??
-                throw new ArgumentNullException(nameof(tagRepository));
+            _blogRepository = blogRepository;
+            _userRepository = userRepository;
+            _tagRepository = tagRepository;
         }
 
         public async Task PostBlogAsync(BlogPost blogPost, CancellationToken cancellationToken)

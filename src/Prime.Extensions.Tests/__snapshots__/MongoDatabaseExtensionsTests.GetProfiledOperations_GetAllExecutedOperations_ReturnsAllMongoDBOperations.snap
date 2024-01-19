@@ -1,0 +1,38 @@
+﻿[
+  {
+    "command": {
+      "create": "Bar"
+    }
+  },
+  {
+    "command": {
+      "create": "Foo"
+    }
+  },
+  {
+    "command": {
+      "insert": "Bar",
+      "ordered": true
+    }
+  },
+  {
+    "command": {
+      "insert": "Foo",
+      "ordered": true
+    }
+  },
+  {
+    "command": {
+      "find": "Foo",
+      "filter": {
+        "Name": "foo1"
+      },
+      "readConcern": {
+        "level": "majority"
+      }
+    },
+    "keysExamined": 0,
+    "docsExamined": 1,
+    "planSummary": "COLLSCAN"
+  }
+]

@@ -1,0 +1,1 @@
+﻿find({ "$or" : [{ "Name" : "Bar1" }, { "Value" : "1234" }] }).limit(5)

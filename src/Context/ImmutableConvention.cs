@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -11,6 +12,10 @@ namespace MongoDB.Extensions.Context
         , IClassMapConvention
     {
         private readonly BindingFlags _bindingFlags;
+        private readonly string _externalInitTypeName =
+            "System.Runtime.CompilerServices.IsExternalInit";
+        private readonly string _nullableAttributeFullName =
+            "System.Runtime.CompilerServices.NullableAttribute";
 
         public ImmutableConvention()
             : this(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
@@ -27,15 +32,20 @@ namespace MongoDB.Extensions.Context
             var properties = classMap.ClassType
                 .GetTypeInfo()
                 .GetProperties(_bindingFlags)
+                .Where(p => p.PropertyType != typeof(Type))
                 .ToList();
 
             var mappingProperties = properties
-                .Where(p => IsReadOnlyProperty(classMap, p))
+                .Where(p => IsReadOnlyProperty(classMap, p) || IsInitOnlyProperty(p))
                 .ToList();
 
             foreach (PropertyInfo property in mappingProperties)
             {
-                classMap.MapMember(property);
+                BsonMemberMap member = classMap.MapMember(property);
+                if (IsNullableProperty(property))
+                {
+                    member.SetDefaultValue((object?)null);
+                }
             }
 
             if (!classMap.ClassType.IsAbstract)
@@ -57,6 +67,13 @@ namespace MongoDB.Extensions.Context
             }
         }
 
+        private bool IsNullableProperty(PropertyInfo propertyInfo)
+        {
+            return Nullable.GetUnderlyingType(propertyInfo.PropertyType) != null ||
+                   propertyInfo.CustomAttributes.Any(a =>
+                       a.AttributeType.FullName == _nullableAttributeFullName);
+        }
+
         private static List<PropertyInfo> GetMatchingProperties(
             ConstructorInfo constructor,
             List<PropertyInfo> properties)
@@ -66,7 +83,7 @@ namespace MongoDB.Extensions.Context
             ParameterInfo[] ctorParameters = constructor.GetParameters();
             foreach (ParameterInfo ctorParameter in ctorParameters)
             {
-                PropertyInfo matchProperty = properties
+                PropertyInfo? matchProperty = properties
                     .FirstOrDefault(p => ParameterMatchProperty(ctorParameter, p));
 
                 if (matchProperty == null)
@@ -88,7 +105,7 @@ namespace MongoDB.Extensions.Context
             return string.Equals(
                        property.Name,
                        parameter.Name,
-                       System.StringComparison.InvariantCultureIgnoreCase) &&
+                       StringComparison.InvariantCultureIgnoreCase) &&
                    parameter.ParameterType == property.PropertyType;
         }
 
@@ -123,12 +140,32 @@ namespace MongoDB.Extensions.Context
             return true;
         }
 
-        private static bool IsBaseTypeProperty(BsonClassMap classMap, MethodInfo getMethodInfo)
+        private bool IsInitOnlyProperty(PropertyInfo property)
+        {
+            if (!property.CanWrite)
+            {
+                return false;
+            }
+
+            Type[]? setModifiers =
+                property.SetMethod?.ReturnParameter?.GetRequiredCustomModifiers();
+
+            var containsInit = setModifiers?.Any(m =>
+                m.FullName == _externalInitTypeName);
+
+            return containsInit ?? false;
+        }
+
+        private static bool IsBaseTypeProperty(
+            BsonClassMap classMap,
+            MethodInfo getMethodInfo)
         {
             return getMethodInfo.GetBaseDefinition().DeclaringType != classMap.ClassType;
         }
 
-        private static bool IsOverrideProperty(BsonClassMap classMap, MethodInfo getMethodInfo)
+        private static bool IsOverrideProperty(
+            BsonClassMap classMap,
+            MethodInfo getMethodInfo)
         {
             return getMethodInfo.DeclaringType == classMap.ClassType;
         }

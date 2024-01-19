@@ -1,0 +1,14 @@
+﻿{
+  "AllowedTypes": [
+    {
+      "Key": "MongoDB.Extensions.Context.AllowedTypes.Tests.Bar",
+      "Value": false
+    },
+    {
+      "Key": "MongoDB.Extensions.Context.AllowedTypes.Tests.Foo",
+      "Value": true
+    }
+  ],
+  "AllowedTypesByNamespaces": [],
+  "AllowedTypesByDependencies": []
+}

@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Session.Abstractions\Session.Abstractions.csproj" />
+    <ProjectReference Include="..\Context\Context.csproj" />
   </ItemGroup>
 
 </Project>

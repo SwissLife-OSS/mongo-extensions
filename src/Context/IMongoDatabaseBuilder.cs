@@ -34,6 +34,6 @@ namespace MongoDB.Extensions.Context
 
         IMongoDatabaseBuilder AddAllowedTypes(params string[] allowedNamespaces);
 
-        IMongoDatabaseBuilder AddAllowedTypesOfAllDependencies();
+        IMongoDatabaseBuilder AddAllowedTypesOfAllDependencies(params string[] excludeNamespaces);
     }
 }

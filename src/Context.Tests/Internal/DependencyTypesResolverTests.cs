@@ -14,8 +14,7 @@ public class DependencyTypesResolverTests
 
         // Act
         IEnumerable<string> knownNamespaces = DependencyTypesResolver
-            .GetAllowedTypesByDependencies()
-            .Except(new[] { "Coverlet" })
+            .GetAllowedTypesByDependencies(new[] { "Coverlet" })
             .OrderBy(x => x);
 
         // Assert

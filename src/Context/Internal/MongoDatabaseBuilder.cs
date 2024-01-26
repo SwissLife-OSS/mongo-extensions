@@ -71,9 +71,9 @@ internal class MongoDatabaseBuilder : IMongoDatabaseBuilder
         return this;
     }
 
-    public IMongoDatabaseBuilder AddAllowedTypesOfAllDependencies()
+    public IMongoDatabaseBuilder AddAllowedTypesOfAllDependencies(params string[] excludeNamespaces)
     {
-        TypeObjectSerializer.AddAllowedTypesOfAllDependencies();
+        TypeObjectSerializer.AddAllowedTypesOfAllDependencies(excludeNamespaces);
         return this;
     }
 

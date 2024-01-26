@@ -55,10 +55,10 @@ public class TypeObjectSerializer : ObjectSerializer
         }
     }
 
-    public static void AddAllowedTypesOfAllDependencies()
+    public static void AddAllowedTypesOfAllDependencies(params string[] excludeNamespaces)
     {
         _allowedTypesByDependencies
-            .UnionWith(DependencyTypesResolver.GetAllowedTypesByDependencies());
+            .UnionWith(DependencyTypesResolver.GetAllowedTypesByDependencies(excludeNamespaces));
     }
 
     internal static void Clear()

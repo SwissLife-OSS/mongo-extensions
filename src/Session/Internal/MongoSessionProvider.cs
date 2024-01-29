@@ -16,26 +16,19 @@ public class MongoSessionProvider<TContext, TScope> : ISessionProvider<TScope>
         _mongoClient = context.Client;
     }
 
-    public Task<ITransactionSession> BeginTransactionAsync(
-        CancellationToken cancellationToken)
-    {
-        return BeginTransactionAsync(true, cancellationToken);
-    }
+    protected virtual TransactionOptions TransactionOptions { get; } = new(
+        ReadConcern.Majority,
+        ReadPreference.Primary,
+        WriteConcern.WMajority.With(journal: true),
+        TimeSpan.FromSeconds(180));
 
-    private async Task<ITransactionSession> BeginTransactionAsync(
-        bool safeModeEnabled,
+    public async Task<ITransactionSession> BeginTransactionAsync(
         CancellationToken cancellationToken)
     {
         IClientSessionHandle clientSession = await _mongoClient
             .StartSessionAsync(cancellationToken: cancellationToken);
 
-        var transactionOptions = new TransactionOptions(
-            ReadConcern.Majority,
-            ReadPreference.Primary,
-            WriteConcern.WMajority.With(journal: safeModeEnabled),
-            TimeSpan.FromSeconds(180));
-
-        clientSession.StartTransaction(transactionOptions);
+        clientSession.StartTransaction(TransactionOptions);
 
         return new MongoTransactionSession(clientSession, cancellationToken);
     }
@@ -46,6 +39,6 @@ public class MongoSessionProvider<TContext, TScope> : ISessionProvider<TScope>
         IClientSessionHandle clientSession = await _mongoClient
             .StartSessionAsync(cancellationToken: cancellationToken);
 
-        return new MongoSession(clientSession);
+        return new MongoSession(clientSession, TransactionOptions);
     }
 }

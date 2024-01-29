@@ -69,8 +69,8 @@ public class MongoSessionProviderTests : IClassFixture<MongoReplicaSetResource>
     public async Task StartTransaction_ShouldBeginTransaction()
     {
         // Arrange
-        var dbContext = new TestDbContext(_mongoOptions);
-        ITestSessionProvider sessionProvider = new TestSessionProvider(dbContext);
+        ISessionProvider<ITestScope> sessionProvider = _serviceProvider
+            .GetRequiredService<ISessionProvider<ITestScope>>();
         ISession session = await sessionProvider
             .StartSessionAsync(CancellationToken.None);
 

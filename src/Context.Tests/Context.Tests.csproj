@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <Import Project="$(CCTestProjectProps)" Condition="Exists('$(CCTestProjectProps)')" />
-  
-  <PropertyGroup>    
+
+  <PropertyGroup>
     <AssemblyName>MongoDB.Extensions.Context.Tests</AssemblyName>
     <RootNamespace>MongoDB.Extensions.Context.Tests</RootNamespace>
   </PropertyGroup>
@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <Compile Remove="IsExternalInit.cs" Condition="'$(TargetFramework)' == 'net6.0'" />
-    <Compile Remove="IsExternalInit.cs" Condition="'$(TargetFramework)' == 'net7.0'" />
+    <Compile Remove="IsExternalInit.cs" Condition="'$(TargetFramework)' == 'net8.0'" />
   </ItemGroup>
 
 </Project>

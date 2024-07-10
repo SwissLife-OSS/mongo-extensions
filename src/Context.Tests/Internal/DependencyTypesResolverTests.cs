@@ -14,7 +14,7 @@ public class DependencyTypesResolverTests
 
         // Act
         IEnumerable<string> knownNamespaces = DependencyTypesResolver
-            .GetAllowedTypesByDependencies(new[] { "Coverlet" })
+            .GetAllowedTypesByDependencies(new[] { "Coverlet", "Castle" })
             .OrderBy(x => x);
 
         // Assert

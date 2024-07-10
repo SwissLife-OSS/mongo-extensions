@@ -38,27 +38,17 @@ namespace MongoDB.Extensions.Context
         public IMongoCollectionBuilder<TDocument> AddBsonClassMap<TMapDocument>(
             Action<BsonClassMap<TMapDocument>> bsonClassMapAction) where TMapDocument : class
         {
-            _classMapActions.Add(() => 
+            _classMapActions.Add(() =>
                 RegisterClassMapSync<TMapDocument>(bsonClassMapAction));
 
             return this;
         }
 
-        public IMongoCollectionBuilder<TDocument> AddBsonClassMap<TMapDocument>() 
+        public IMongoCollectionBuilder<TDocument> AddBsonClassMap<TMapDocument>()
             where TMapDocument : class
         {
-            _classMapActions.Add(() => 
-                RegisterClassMapSync<TMapDocument>());
-
-            return this;
-        }
-
-        public IMongoCollectionBuilder<TDocument> AddBsonClassMap(
-            Type type,
-            Action<BsonClassMap>? bsonClassMapAction = default)
-        {
             _classMapActions.Add(() =>
-                RegisterClassMapSync(type, bsonClassMapAction));
+                RegisterClassMapSync<TMapDocument>());
 
             return this;
         }
@@ -82,7 +72,7 @@ namespace MongoDB.Extensions.Context
         internal IMongoCollection<TDocument> Build()
         {
             _classMapActions.ForEach(action => action());
-            
+
             IMongoCollection<TDocument> mongoCollection = GetMongoCollection();
 
             _collectionConfigurations.ForEach(configuration => configuration(mongoCollection));
@@ -109,21 +99,6 @@ namespace MongoDB.Extensions.Context
                 if (!BsonClassMap.IsClassMapRegistered(typeof(TMapDocument)))
                 {
                     BsonClassMap.RegisterClassMap(bsonClassMapAction);
-                }
-            }
-        }
-
-        private void RegisterClassMapSync(
-            Type type,
-            Action<BsonClassMap>? bsonClassMapAction)
-        { 
-            lock (_lockObject)
-            {
-                if (!BsonClassMap.IsClassMapRegistered(type))
-                {
-                    var classMap = new BsonClassMap(type);
-                    bsonClassMapAction?.Invoke(classMap);
-                    BsonClassMap.RegisterClassMap(classMap);
                 }
             }
         }

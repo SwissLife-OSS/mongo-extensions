@@ -126,7 +126,7 @@ namespace MongoDB.Extensions.Context.Tests
         public void AddBsonClassMap_AddNewBsonClassMapWithoutParameter_BsonClassMapIsRegistered()
         {
             // Arrange
-            var mongoCollectionBuilder = 
+            var mongoCollectionBuilder =
                 new MongoCollectionBuilder<ItemWithoutSpecificClassMap>(_mongoDatabase);
 
             // Act
@@ -136,22 +136,6 @@ namespace MongoDB.Extensions.Context.Tests
             // Assert
             Assert.NotNull(result);
             Assert.True(BsonClassMap.IsClassMapRegistered(typeof(ItemWithoutSpecificClassMap)));
-        }
-
-        [Fact]
-        public void AddBsonClassMapByType_AddNewBsonClassMap_BsonClassMapIsRegistered()
-        {
-            // Arrange
-            var mongoCollectionBuilder =
-                new MongoCollectionBuilder<Order>(_mongoDatabase);
-
-            // Act
-            mongoCollectionBuilder.AddBsonClassMap(typeof(Order));
-            IMongoCollection<Order> result = mongoCollectionBuilder.Build();
-
-            // Assert
-            Assert.NotNull(result);
-            Assert.True(BsonClassMap.IsClassMapRegistered(typeof(Order)));
         }
 
         private class ItemClassMapNotRegistered
@@ -173,7 +157,7 @@ namespace MongoDB.Extensions.Context.Tests
         {
             // Arrange
             var mongoCollectionBuilder = new MongoCollectionBuilder<Order>(_mongoDatabase);
-            
+
             // Act
             mongoCollectionBuilder.WithCollectionSettings(mongoCollectionSettings =>
             {
@@ -246,7 +230,7 @@ namespace MongoDB.Extensions.Context.Tests
 
             IMongoCollection<Order> result = mongoCollectionBuilder.Build();
 
-            // 
+            //
             List<BsonDocument> indexes = result.Indexes.List().ToList();
             Assert.Equal("_id_", indexes.First().GetElement("name").Value.ToString());
             Assert.Equal("Name_1", indexes.Last().GetElement("name").Value.ToString(), ignoreCase: true);

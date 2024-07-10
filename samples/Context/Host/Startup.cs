@@ -34,7 +34,7 @@ namespace SimpleBlog.Api
             }
 
             app.UseOpenApi();
-            app.UseSwaggerUi3();
+            app.UseSwaggerUi();
 
             app.UseHttpsRedirection();
 

@@ -36,7 +36,7 @@ namespace MongoDB.Extensions.Context
                 .ToList();
 
             var mappingProperties = properties
-                .Where(p => IsReadOnlyProperty(classMap, p) || IsInitOnlyProperty(p))
+                .Where(p => IsReadOnlyProperty(classMap, p) || IsInitOnlyProperty(classMap, p))
                 .ToList();
 
             foreach (PropertyInfo property in mappingProperties)
@@ -140,7 +140,9 @@ namespace MongoDB.Extensions.Context
             return true;
         }
 
-        private bool IsInitOnlyProperty(PropertyInfo property)
+        private bool IsInitOnlyProperty(
+            BsonClassMap classMap,
+            PropertyInfo property)
         {
             if (!property.CanWrite)
             {
@@ -153,7 +155,7 @@ namespace MongoDB.Extensions.Context
             var containsInit = setModifiers?.Any(m =>
                 m.FullName == _externalInitTypeName);
 
-            return containsInit ?? false;
+            return containsInit.GetValueOrDefault(false) && !IsBaseTypeProperty(classMap, property);
         }
 
         private static bool IsBaseTypeProperty(
@@ -161,6 +163,13 @@ namespace MongoDB.Extensions.Context
             MethodInfo getMethodInfo)
         {
             return getMethodInfo.GetBaseDefinition().DeclaringType != classMap.ClassType;
+        }
+
+        private static bool IsBaseTypeProperty(
+            BsonClassMap classMap,
+            PropertyInfo propertyInfo)
+        {
+            return propertyInfo.DeclaringType != classMap.ClassType;
         }
 
         private static bool IsOverrideProperty(

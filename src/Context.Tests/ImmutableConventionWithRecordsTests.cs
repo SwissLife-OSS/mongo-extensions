@@ -111,7 +111,30 @@ namespace MongoDB.Extensions.Context.Tests
             public record A(B Foo, string BarFoo);
 
             public record B(string Bar);
+        }
 
+        public class AbstractRecordCase : IClassFixture<MongoResource>
+        {
+            private readonly MongoDbContextData _context;
+
+            public AbstractRecordCase(MongoResource mongoResource)
+            {
+                _context = CreateContext(mongoResource);
+            }
+
+            [Fact]
+            public async Task ApplyConvention_SerializeSuccessful()
+            {
+                // Arrange, Act and Assert
+                await InsertAndFind(_context, new B("foo"));
+            }
+
+            public abstract record A(string Foo)
+            {
+                public string? Bar { get; set; }
+            }
+
+            public record B(string Foo) : A(Foo);
         }
 
         private static async Task InsertAndFind<T>(MongoDbContextData context, T input) where T : class

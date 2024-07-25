@@ -16,7 +16,7 @@ jobs:
           dotnet-version: |
             8
       - name: Dotnet Test
-        run: dotnet test
+        run: dotnet test src
 
       # - name: Build, Test and Sonar
       #   uses: swisslife-oss/actions/pull-request@main

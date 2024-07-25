@@ -14,7 +14,6 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: |
-            6
             8
       - name: Build, Test and Sonar
         uses: swisslife-oss/actions/pull-request@main

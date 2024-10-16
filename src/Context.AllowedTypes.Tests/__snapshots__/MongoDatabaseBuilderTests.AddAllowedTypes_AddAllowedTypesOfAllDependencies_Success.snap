@@ -2,9 +2,12 @@
   "AllowedTypes": [],
   "AllowedTypesByNamespaces": [],
   "AllowedTypesByDependencies": [
+    "Amazon",
     "Autofac",
+    "AWSSDK",
     "CommandLine",
     "CSharpx",
+    "DnsClient",
     "Docker",
     "JetBrains",
     "MongoDB",
@@ -13,8 +16,10 @@
     "Proxy",
     "RailwaySharp",
     "Serilog",
+    "SharpCompress",
     "Snapshooter",
     "Squadron",
+    "ThirdParty",
     "Xunit"
   ]
 }

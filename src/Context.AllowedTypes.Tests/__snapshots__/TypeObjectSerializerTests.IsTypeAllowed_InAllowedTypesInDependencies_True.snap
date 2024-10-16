@@ -8,25 +8,23 @@
   "AllowedTypesByNamespaces": [],
   "AllowedTypesByDependencies": [
     "Amazon",
+    "Autofac",
     "AWSSDK",
-    "Castle",
+    "CommandLine",
+    "CSharpx",
     "DnsClient",
     "Docker",
-    "FluentAssertions",
-    "ICSharpCode",
-    "Internal",
+    "JetBrains",
     "MongoDB",
-    "Moq",
     "Newtonsoft",
-    "NuGet",
     "Polly",
+    "Proxy",
+    "RailwaySharp",
+    "Serilog",
     "SharpCompress",
-    "Snappier",
     "Snapshooter",
     "Squadron",
     "ThirdParty",
-    "TypeNameFormatter",
-    "Xunit",
-    "ZstdSharp"
+    "Xunit"
   ]
 }

@@ -1,0 +1,25 @@
+﻿{
+  "AllowedTypes": [],
+  "AllowedTypesByNamespaces": [],
+  "AllowedTypesByDependencies": [
+    "Amazon",
+    "Autofac",
+    "AWSSDK",
+    "CommandLine",
+    "CSharpx",
+    "DnsClient",
+    "Docker",
+    "JetBrains",
+    "MongoDB",
+    "Newtonsoft",
+    "Polly",
+    "Proxy",
+    "RailwaySharp",
+    "Serilog",
+    "SharpCompress",
+    "Snapshooter",
+    "Squadron",
+    "ThirdParty",
+    "Xunit"
+  ]
+}

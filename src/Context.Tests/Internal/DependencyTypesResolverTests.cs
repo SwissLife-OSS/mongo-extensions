@@ -8,7 +8,7 @@ namespace MongoDB.Extensions.Context.Tests.Internal;
 [Collection("Sequential")]
 public class DependencyTypesResolverTests
 {
-    [Fact(Skip = "Flaky test")]
+    [Fact]
     public void GetAllowedTypesByDependencies_All_Successful()
     {
         // Arrange
@@ -19,6 +19,9 @@ public class DependencyTypesResolverTests
             .OrderBy(x => x);
 
         // Assert
-        Snapshot.Match(knownNamespaces);
+        Snapshot.Match(knownNamespaces,
+            options => options.Assert(fieldOption =>
+                Assert.Contains("MongoDB", fieldOption
+                    .Fields<string>("[*]"))));
     }
 }

@@ -27,7 +27,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Migration.Tests", "Migratio
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".SolutionFiles", ".SolutionFiles", "{A21A1FF3-25C1-4FE1-994E-E16CDF98BB99}"
 	ProjectSection(SolutionItems) = preProject
+		Dependencies.props = Dependencies.props
+		Directory.Build.props = Directory.Build.props
+		Directory.Build.targets = Directory.Build.targets
+		..\Directory.Packages.props = ..\Directory.Packages.props
+		Package.props = Package.props
+		ResourceProject.props = ResourceProject.props
 		TestProject.props = TestProject.props
+		Version.props = Version.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Context.AllowedTypes.Tests", "Context.AllowedTypes.Tests\Context.AllowedTypes.Tests.csproj", "{C59B2068-C3F4-4900-A1CB-7BFD63F94095}"

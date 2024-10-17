@@ -29,8 +29,4 @@
     <ProjectReference Include="..\Transactions\Transactions.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageVersion Update="MongoDB.Driver" Version="2.30.0" />
-  </ItemGroup>
-
 </Project>

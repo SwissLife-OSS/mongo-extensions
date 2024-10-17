@@ -7,7 +7,7 @@ namespace MongoDB.Extensions.Context.AllowedTypes.Tests;
 
 public class TypeObjectSerializerTests
 {
-    [Fact(Skip = "Flaky test")]
+    [Fact]
     public void AddAllowedTypes_AddAllowedTypesOfAllDependencies_Success()
     {
         // Arrange
@@ -17,7 +17,10 @@ public class TypeObjectSerializerTests
         TypeObjectSerializer.AddAllowedTypesOfAllDependencies();
 
         // Assert
-        Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent());
+        Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent(),
+            options => options.Assert(fieldOption =>
+                Assert.Contains("MongoDB", fieldOption
+                    .Fields<string>("AllowedTypesByDependencies[*]"))));
     }
 
     [Fact]
@@ -136,7 +139,7 @@ public class TypeObjectSerializerTests
         Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent());
     }
 
-    [Fact(Skip = "Flaky test")]
+    [Fact]
     public void IsTypeAllowed_InAllowedTypesInDependencies_True()
     {
         // Arrange
@@ -148,6 +151,9 @@ public class TypeObjectSerializerTests
 
         // Assert
         Assert.True(isAllowed);
-        Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent());
+        Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent(),
+            options => options.Assert(fieldOption =>
+                Assert.Contains("MongoDB", fieldOption
+                    .Fields<string>("AllowedTypesByDependencies[*]"))));
     }
 }

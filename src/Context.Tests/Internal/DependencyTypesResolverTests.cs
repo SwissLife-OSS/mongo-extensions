@@ -5,7 +5,6 @@ using Xunit;
 
 namespace MongoDB.Extensions.Context.Tests.Internal;
 
-[Collection("Sequential")]
 public class DependencyTypesResolverTests
 {
     [Fact]

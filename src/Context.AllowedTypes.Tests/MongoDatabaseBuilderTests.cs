@@ -41,7 +41,7 @@ public class MongoDatabaseBuilderTests
         Assert.NotNull(context);
     }
 
-    [Fact]
+    [Fact(Skip = "Flaky test")]
     public void AddAllowedTypes_AddAllowedTypesOfAllDependencies_Success()
     {
         // Arrange

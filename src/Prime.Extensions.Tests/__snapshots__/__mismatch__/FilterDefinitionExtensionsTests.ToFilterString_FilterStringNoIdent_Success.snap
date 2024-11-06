@@ -1,0 +1,1 @@
+﻿{ "$or" : [{ "$and" : [{ "_id" : HexData(3, "91217544-0be1-5a43-a0e9-62e7f13d41cd") }, { "Name" : "Walse" }, { "Name" : "Toronto" }] }] }

@@ -1,38 +1,36 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using MongoDB.Bson.Serialization.Serializers;
+using System.Linq;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Extensions.Context.Extensions;
-#nullable enable
 
 namespace MongoDB.Extensions.Context.Internal;
 
-public class TypeObjectSerializer : ObjectSerializer
+public class TypeObjectSerializer : IBsonSerializer<object>
 {
-    private static readonly ConcurrentDictionary<Type, bool> _allowedTypes = new ();
-    private static readonly HashSet<string> _allowedTypesByNamespaces = new ();
-    private static readonly HashSet<string> _allowedTypesByDependencies = new ();
+    private static readonly ConcurrentDictionary<Type, bool> _allowedTypes = new();
+    private static readonly HashSet<string> _allowedTypesByNamespaces = new();
+    private static readonly HashSet<string> _allowedTypesByDependencies = new();
 
-    public TypeObjectSerializer() : base(type => IsTypeAllowed(type))
-    {
-    }
+    public Type ValueType => typeof(object);
 
-    public static IReadOnlyDictionary<Type, bool> AllowedTypes
-        => _allowedTypes;
+    public static IReadOnlyDictionary<Type, bool> AllowedTypes => _allowedTypes;
 
-    public static IReadOnlyCollection<string> AllowedTypesByNamespaces
-        => _allowedTypesByNamespaces;
+    public static IReadOnlyCollection<string> AllowedTypesByNamespaces => _allowedTypesByNamespaces;
 
-    public static IReadOnlyCollection<string> AllowedTypesByDependencies
-        => _allowedTypesByDependencies;
+    public static IReadOnlyCollection<string> AllowedTypesByDependencies => _allowedTypesByDependencies;
 
     public static bool IsTypeAllowed(Type type)
     {
         return DefaultAllowedTypes(type) ||
-            _allowedTypes.ContainsKey(type) ||
-            IsInAllowedNamespaces(type) ||
-            IsInAllowedDependencyTypes(type);
+               _allowedTypes.ContainsKey(type) ||
+               IsInAllowedNamespaces(type) ||
+               IsInAllowedDependencyTypes(type);
     }
+
+    public static Func<Type, bool> DefaultAllowedTypes => DefaultFrameworkAllowedTypes.AllowedTypes;
 
     public static void AddAllowedType<T>()
     {
@@ -89,13 +87,12 @@ public class TypeObjectSerializer : ObjectSerializer
     {
         foreach (string allowedNamespace in _allowedTypesByNamespaces)
         {
-            if(string.IsNullOrEmpty(type.Namespace))
+            if (string.IsNullOrEmpty(type.Namespace))
             {
                 return false;
             }
 
-            if (type.Namespace.StartsWith(allowedNamespace,
-                StringComparison.OrdinalIgnoreCase))
+            if (type.Namespace.StartsWith(allowedNamespace, StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
@@ -106,11 +103,30 @@ public class TypeObjectSerializer : ObjectSerializer
 
     private static bool IsInAllowedDependencyTypes(Type type)
     {
-        bool isInDependencyTypes = _allowedTypesByDependencies
-            .Contains(type.GetRootNamespace());
+        bool isInDependencyTypes = _allowedTypesByDependencies.Contains(type.GetRootNamespace());
 
         _allowedTypes.TryAdd(type, isInDependencyTypes);
 
         return isInDependencyTypes;
+    }
+
+    public void Serialize(BsonSerializationContext context, BsonSerializationArgs args, object value)
+    {
+        var serializer = BsonSerializer.LookupSerializer(value.GetType());
+        serializer.Serialize(context, args, value);
+    }
+
+    public object Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
+    {
+        var bsonType = context.Reader.GetCurrentBsonType();
+        if (bsonType == MongoDB.Bson.BsonType.Null)
+        {
+            context.Reader.ReadNull();
+            return null!;
+        }
+
+        var type = args.NominalType;
+        var serializer = BsonSerializer.LookupSerializer(type);
+        return serializer.Deserialize(context, args);
     }
 }

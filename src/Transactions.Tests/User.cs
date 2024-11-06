@@ -1,4 +1,6 @@
 using System;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace MongoDB.Extensions.Transactions.Tests
 {
@@ -10,6 +12,7 @@ namespace MongoDB.Extensions.Transactions.Tests
             Name = name;
         }
 
+        [BsonGuidRepresentation(GuidRepresentation.CSharpLegacy)]
         public Guid Id { get; }
 
         public string Name { get; }

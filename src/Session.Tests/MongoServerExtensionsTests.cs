@@ -97,6 +97,7 @@ namespace MongoDB.Extensions.Session.Tests
         {
             [BsonId]
             [BsonElement("id")]
+            [BsonGuidRepresentation(GuidRepresentation.Standard)]
             public Guid Id { get; set; }
 
             public static implicit operator Guid(ServerSessionId serverSessionId)

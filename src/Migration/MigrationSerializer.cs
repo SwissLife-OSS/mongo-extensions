@@ -17,6 +17,11 @@ class MigrationSerializer<T> : IBsonSerializer<T> where T : IVersioned
         _context = context;
         _migrationRunner = new MigrationRunner<T>(context);
         _baseSerializer = BsonSerializer.LookupSerializer<T>();
+
+        if (_baseSerializer is MigrationSerializer<T>)
+        {
+            throw new InvalidOperationException("The base serializer cannot be an instance of MigrationSerializer<T> to prevent recursion.");
+        }
     }
 
     object IBsonSerializer.Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)

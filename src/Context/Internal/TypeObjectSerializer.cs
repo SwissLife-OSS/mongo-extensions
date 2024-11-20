@@ -34,7 +34,7 @@ internal class TypeObjectSerializer : ClassSerializerBase<object>, IHasDiscrimin
 
     public static bool IsTypeAllowed(Type type)
     {
-        return DefaultFrameworkAllowedTypes.AllowedTypes(type) ||
+        return ObjectSerializer.DefaultAllowedTypes.Invoke(type) ||
                _allowedTypes.ContainsKey(type) ||
                IsInAllowedNamespaces(type) ||
                IsInAllowedDependencyTypes(type);

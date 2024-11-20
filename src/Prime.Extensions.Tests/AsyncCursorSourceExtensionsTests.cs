@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using Snapshooter.Xunit;
 using Squadron;
@@ -187,6 +189,7 @@ namespace MongoDB.Prime.Extensions.Tests
                 Name = name;
             }
 
+            [BsonGuidRepresentation(GuidRepresentation.Standard)]
             public Guid Id { get; }
 
             public string Name { get; }

@@ -2,7 +2,6 @@
   "CollectionName": "TheArtOfFoo",
   "Settings": {
     "AssignIdOnInsert": true,
-    "GuidRepresentation": "CSharpLegacy",
     "IsFrozen": true,
     "ReadConcern": {
       "IsServerDefault": false,

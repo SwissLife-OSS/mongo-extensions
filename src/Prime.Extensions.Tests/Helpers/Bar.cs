@@ -1,4 +1,6 @@
 using System;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace MongoDB.Prime.Extensions.Tests;
 
@@ -11,6 +13,7 @@ public class Bar
         Value = value;
     }
 
+    [BsonGuidRepresentation(GuidRepresentation.CSharpLegacy)]
     public Guid Id { get; }
 
     public string Name { get; }

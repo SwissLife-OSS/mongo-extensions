@@ -35,6 +35,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".SolutionFiles", ".Solution
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Context.AllowedTypes.Tests", "Context.AllowedTypes.Tests\Context.AllowedTypes.Tests.csproj", "{C59B2068-C3F4-4900-A1CB-7BFD63F94095}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migration", "Migration\Migration.csproj", "{07804939-0794-47A5-8DD4-832394E90CA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migration.Tests", "Migration.Tests\Migration.Tests.csproj", "{D8F246AC-65CC-4EF0-B058-08970D269B61}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +85,14 @@ Global
 		{C59B2068-C3F4-4900-A1CB-7BFD63F94095}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C59B2068-C3F4-4900-A1CB-7BFD63F94095}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C59B2068-C3F4-4900-A1CB-7BFD63F94095}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07804939-0794-47A5-8DD4-832394E90CA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07804939-0794-47A5-8DD4-832394E90CA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07804939-0794-47A5-8DD4-832394E90CA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07804939-0794-47A5-8DD4-832394E90CA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8F246AC-65CC-4EF0-B058-08970D269B61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8F246AC-65CC-4EF0-B058-08970D269B61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8F246AC-65CC-4EF0-B058-08970D269B61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8F246AC-65CC-4EF0-B058-08970D269B61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

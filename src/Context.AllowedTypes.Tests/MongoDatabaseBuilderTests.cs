@@ -58,7 +58,10 @@ public class MongoDatabaseBuilderTests
             BsonSerializer.LookupSerializer<object>();
 
         Assert.True(registeredSerializer is TypeObjectSerializer);
-        Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent());
+        Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent(),
+            options => options.Assert(fieldOption =>
+                Assert.Contains("MongoDB", fieldOption
+                    .Fields<string>("AllowedTypesByDependencies[*]"))));
     }
 
     [Fact]

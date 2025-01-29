@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Bson;
@@ -22,6 +23,42 @@ public class MongoTransactionClient : IMongoClient
     {
         _client = client;
         _clientSessionHandle = clientSessionHandle;
+    }
+
+    public ClientBulkWriteResult BulkWrite(
+        IReadOnlyList<BulkWriteModel> models, 
+        ClientBulkWriteOptions? options = null,
+        CancellationToken cancellationToken = new())
+    {
+        if (TryGetSession(out IClientSessionHandle? session))
+        {
+            return _client.BulkWrite(session, models, options, cancellationToken);
+        }
+
+        return _client.BulkWrite(models, options, cancellationToken);
+    }
+
+    public ClientBulkWriteResult BulkWrite(IClientSessionHandle session, IReadOnlyList<BulkWriteModel> models,
+        ClientBulkWriteOptions options = null, CancellationToken cancellationToken = new CancellationToken())
+    {
+        return _client.BulkWrite(session, models, options, cancellationToken);
+    }
+
+    public Task<ClientBulkWriteResult> BulkWriteAsync(IReadOnlyList<BulkWriteModel> models, ClientBulkWriteOptions options = null,
+        CancellationToken cancellationToken = new CancellationToken())
+    {
+        if (TryGetSession(out IClientSessionHandle? session))
+        {
+            return _client.BulkWriteAsync(session, models, options, cancellationToken);
+        }
+
+        return _client.BulkWriteAsync(models, options, cancellationToken);
+    }
+
+    public Task<ClientBulkWriteResult> BulkWriteAsync(IClientSessionHandle session, IReadOnlyList<BulkWriteModel> models, ClientBulkWriteOptions options = null,
+        CancellationToken cancellationToken = new CancellationToken())
+    {
+        return _client.BulkWriteAsync(session, models, options, cancellationToken);
     }
 
     public void DropDatabase(
@@ -303,5 +340,11 @@ public class MongoTransactionClient : IMongoClient
 
         return TransactionStore.TryGetSession(
             _client, out sessionHandle);
-    }            
+    }
+
+    public void Dispose()
+    {
+        _clientSessionHandle?.Dispose();
+        _client.Dispose();
+    }
 }

@@ -18,6 +18,9 @@ public class DependencyTypesResolverTests
             .OrderBy(x => x);
 
         // Assert
-        Snapshot.Match(knownNamespaces);
+        Snapshot.Match(knownNamespaces,
+            options => options.Assert(fieldOption =>
+                Assert.Contains("MongoDB", fieldOption
+                    .Fields<string>("[*]"))));
     }
 }

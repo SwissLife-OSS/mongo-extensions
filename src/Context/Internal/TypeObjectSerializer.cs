@@ -1,20 +1,26 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Extensions.Context.Extensions;
+
 #nullable enable
 
 namespace MongoDB.Extensions.Context.Internal;
 
-public class TypeObjectSerializer : ObjectSerializer
+internal class TypeObjectSerializer : ClassSerializerBase<object>, IHasDiscriminatorConvention
 {
-    private static readonly ConcurrentDictionary<Type, bool> _allowedTypes = new ();
-    private static readonly HashSet<string> _allowedTypesByNamespaces = new ();
-    private static readonly HashSet<string> _allowedTypesByDependencies = new ();
+    private readonly ObjectSerializer _objectSerializer;
+    private static readonly ConcurrentDictionary<Type, bool> _allowedTypes = new();
+    private static readonly HashSet<string> _allowedTypesByNamespaces = new();
+    private static readonly HashSet<string> _allowedTypesByDependencies = new();
 
-    public TypeObjectSerializer() : base(type => IsTypeAllowed(type))
+    public TypeObjectSerializer()
     {
+        _objectSerializer = new ObjectSerializer(type => IsTypeAllowed(type));
+        DiscriminatorConvention = _objectSerializer.GetDiscriminatorConvention();
     }
 
     public static IReadOnlyDictionary<Type, bool> AllowedTypes
@@ -28,10 +34,10 @@ public class TypeObjectSerializer : ObjectSerializer
 
     public static bool IsTypeAllowed(Type type)
     {
-        return DefaultAllowedTypes(type) ||
-            _allowedTypes.ContainsKey(type) ||
-            IsInAllowedNamespaces(type) ||
-            IsInAllowedDependencyTypes(type);
+        return ObjectSerializer.DefaultAllowedTypes.Invoke(type) ||
+               _allowedTypes.ContainsKey(type) ||
+               IsInAllowedNamespaces(type) ||
+               IsInAllowedDependencyTypes(type);
     }
 
     public static void AddAllowedType<T>()
@@ -89,13 +95,13 @@ public class TypeObjectSerializer : ObjectSerializer
     {
         foreach (string allowedNamespace in _allowedTypesByNamespaces)
         {
-            if(string.IsNullOrEmpty(type.Namespace))
+            if (string.IsNullOrEmpty(type.Namespace))
             {
                 return false;
             }
 
             if (type.Namespace.StartsWith(allowedNamespace,
-                StringComparison.OrdinalIgnoreCase))
+                    StringComparison.OrdinalIgnoreCase))
             {
                 return true;
             }
@@ -112,5 +118,27 @@ public class TypeObjectSerializer : ObjectSerializer
         _allowedTypes.TryAdd(type, isInDependencyTypes);
 
         return isInDependencyTypes;
+    }
+
+    public IDiscriminatorConvention DiscriminatorConvention { get; }
+
+    public override object Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
+    {
+        return _objectSerializer.Deserialize(context, args);
+    }
+
+    public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, object value)
+    {
+        _objectSerializer.Serialize(context, args, value);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        return _objectSerializer.Equals(obj);
+    }
+
+    public override int GetHashCode()
+    {
+        return _objectSerializer.GetHashCode();
     }
 }

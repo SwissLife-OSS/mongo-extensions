@@ -112,34 +112,31 @@ namespace MongoDB.Prime.Extensions
             return collection.InsertManyAsync(
                 documents, options, cancellationToken);
         }
-
-        public static string? Explain<T>(
-            this IMongoCollection<T> collection,
-            FilterDefinition<T> filter)
-        {
-            var options = new FindOptions
-            {
-                Modifiers = new BsonDocument("$explain", true)
-            };
-
-            return Explain(collection, filter, options);
-        }
-
+        
         public static string? Explain<T>(
             this IMongoCollection<T> collection,
             FilterDefinition<T> filter,
-            FindOptions findOptions)
+            FindOptions? findOptions = null)
         {
-            findOptions.Modifiers =
-                new BsonDocument("$explain", true);
+            var command = new BsonDocument
+            {
+                {
+                    "explain",
+                    new BsonDocument
+                    {
+                        { "find", collection.CollectionNamespace.CollectionName },
+                        { "filter", filter.ToBsonDocument() }
+                    }
+                }
+            };
 
-            string? explain = collection
-                .Find(filter, findOptions)
-                .Project(new BsonDocument())
-                .FirstOrDefault()
-                ?.ToJson();
+            if (findOptions?.Collation != null)
+            {
+                command["explain"]["collation"] = findOptions.Collation.ToBsonDocument();
+            }
 
-            return explain;
+            var result = collection.Database.RunCommand<BsonDocument>(command);
+            return result?.ToJson();
         }
     }
 }

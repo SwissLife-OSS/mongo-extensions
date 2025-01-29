@@ -43,13 +43,13 @@ namespace MongoDB.Extensions.Context.Tests
             // Act
             mongoDatabaseBuilder
                 .ConfigureConnection(settings => settings.ApplicationName = "Test")
-                .ConfigureConnection(settings => settings.ConnectionMode = ConnectionMode.Direct)
+                .ConfigureConnection(settings => settings.DirectConnection = true)
                 .ConfigureConnection(settings => settings.WriteConcern = WriteConcern.W3);
             MongoDbContextData result = mongoDatabaseBuilder.Build();
 
             // Assert
             Assert.Equal("Test", result.Client.Settings.ApplicationName);
-            Assert.Equal(ConnectionMode.Direct, result.Client.Settings.ConnectionMode);
+            Assert.True(result.Client.Settings.DirectConnection);
             Assert.Equal(WriteConcern.W3, result.Client.Settings.WriteConcern);
         }
 

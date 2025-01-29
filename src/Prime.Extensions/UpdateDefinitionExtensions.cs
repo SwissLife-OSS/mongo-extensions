@@ -29,8 +29,8 @@ namespace MongoDB.Prime.Extensions
             IBsonSerializerRegistry serializerRegistry =
                 BsonSerializer.SerializerRegistry;
 
-            return filter.Render(serializerRegistry
-                .GetSerializer<T>(), serializerRegistry);
+            return filter.Render(new RenderArgs<T>(serializerRegistry
+                .GetSerializer<T>(), serializerRegistry));
         }
     }
 }

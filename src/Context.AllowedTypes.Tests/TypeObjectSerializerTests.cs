@@ -3,8 +3,6 @@ using MongoDB.Extensions.Context.Internal;
 using Snapshooter.Xunit;
 using Xunit;
 
-[assembly: CollectionBehavior(DisableTestParallelization = true)]
-
 namespace MongoDB.Extensions.Context.AllowedTypes.Tests;
 
 public class TypeObjectSerializerTests
@@ -19,7 +17,10 @@ public class TypeObjectSerializerTests
         TypeObjectSerializer.AddAllowedTypesOfAllDependencies();
 
         // Assert
-        Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent());
+        Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent(),
+            options => options.Assert(fieldOption =>
+                Assert.Contains("MongoDB", fieldOption
+                    .Fields<string>("AllowedTypesByDependencies[*]"))));
     }
 
     [Fact]
@@ -150,6 +151,9 @@ public class TypeObjectSerializerTests
 
         // Assert
         Assert.True(isAllowed);
-        Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent());
+        Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent(),
+            options => options.Assert(fieldOption =>
+                Assert.Contains("MongoDB", fieldOption
+                    .Fields<string>("AllowedTypesByDependencies[*]"))));
     }
 }

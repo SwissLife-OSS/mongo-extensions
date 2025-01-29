@@ -16,6 +16,7 @@ public class TransactionCollectionTests : IClassFixture<MongoReplicaSetResource>
 
     public TransactionCollectionTests(MongoReplicaSetResource mongoResource)
     {
+        
         _mongoResource = mongoResource;
     }
 

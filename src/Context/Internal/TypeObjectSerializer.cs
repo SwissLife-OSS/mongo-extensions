@@ -13,9 +13,10 @@ namespace MongoDB.Extensions.Context.Internal;
 internal class TypeObjectSerializer : ClassSerializerBase<object>, IHasDiscriminatorConvention
 {
     private readonly ObjectSerializer _objectSerializer;
-    private static readonly ConcurrentDictionary<Type, bool> _allowedTypes = new();
+    private static readonly Dictionary<Type, bool> _allowedTypes = new();
     private static readonly HashSet<string> _allowedTypesByNamespaces = new();
     private static readonly HashSet<string> _allowedTypesByDependencies = new();
+    private static readonly object _lock = new();
 
     public TypeObjectSerializer()
     {
@@ -34,44 +35,62 @@ internal class TypeObjectSerializer : ClassSerializerBase<object>, IHasDiscrimin
 
     public static bool IsTypeAllowed(Type type)
     {
-        return ObjectSerializer.DefaultAllowedTypes.Invoke(type) ||
-               _allowedTypes.ContainsKey(type) ||
-               IsInAllowedNamespaces(type) ||
-               IsInAllowedDependencyTypes(type);
+        lock (_lock)
+        {
+            return ObjectSerializer.DefaultAllowedTypes.Invoke(type) ||
+                   _allowedTypes.ContainsKey(type) ||
+                   IsInAllowedNamespaces(type) ||
+                   IsInAllowedDependencyTypes(type);
+        }
     }
 
     public static void AddAllowedType<T>()
     {
-        _allowedTypes.TryAdd(typeof(T), true);
+        lock (_lock)
+        {        
+            _allowedTypes.Add(typeof(T), true);
+        }
     }
 
     public static void AddAllowedTypes(params Type[] allowedTypes)
     {
-        foreach (Type allowedType in allowedTypes)
+        lock (_lock)
         {
-            _allowedTypes.TryAdd(allowedType, true);
+            foreach (Type allowedType in allowedTypes)
+            {
+                _allowedTypes.Add(allowedType, true);
+            }
         }
     }
 
     public static void AddAllowedTypes(params string[] allowedNamespaces)
     {
-        foreach (string allowedNamespace in allowedNamespaces)
+        lock (_lock)
         {
-            _allowedTypesByNamespaces.Add(allowedNamespace);
+            foreach (string allowedNamespace in allowedNamespaces)
+            {
+                _allowedTypesByNamespaces.Add(allowedNamespace);
+            }
         }
     }
 
     public static void AddAllowedTypesOfAllDependencies(params string[] excludeNamespaces)
     {
-        _allowedTypesByDependencies
-            .UnionWith(DependencyTypesResolver.GetAllowedTypesByDependencies(excludeNamespaces));
+        lock (_lock)
+        {
+            _allowedTypesByDependencies
+                .UnionWith(DependencyTypesResolver.GetAllowedTypesByDependencies(excludeNamespaces));
+        }
     }
 
     internal static void Clear()
     {
-        _allowedTypes.Clear();
-        _allowedTypesByNamespaces.Clear();
-        _allowedTypesByDependencies.Clear();
+        lock (_lock)
+        {
+            _allowedTypes.Clear();
+            _allowedTypesByNamespaces.Clear();
+            _allowedTypesByDependencies.Clear();
+        }
     }
 
     private static bool IsInAllowedNamespaces(Type type)
@@ -85,7 +104,7 @@ internal class TypeObjectSerializer : ClassSerializerBase<object>, IHasDiscrimin
 
         if (isInAllowedNamespaces)
         {
-            _allowedTypes.TryAdd(type, true);
+            _allowedTypes.Add(type, true);
         }
 
         return isInAllowedNamespaces;
@@ -115,7 +134,7 @@ internal class TypeObjectSerializer : ClassSerializerBase<object>, IHasDiscrimin
         bool isInDependencyTypes = _allowedTypesByDependencies
             .Contains(type.GetRootNamespace());
 
-        _allowedTypes.TryAdd(type, isInDependencyTypes);
+        _allowedTypes.Add(type, isInDependencyTypes);
 
         return isInDependencyTypes;
     }

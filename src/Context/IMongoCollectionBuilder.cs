@@ -15,6 +15,10 @@ namespace MongoDB.Extensions.Context
             Action<BsonClassMap<TMapDocument>> bsonClassMapAction)
             where TMapDocument : class;
 
+        IMongoCollectionBuilder<TDocument> AddBsonClassMap(
+            Type type,
+            Action<BsonClassMap>? bsonClassMapAction = default);
+
         IMongoCollectionBuilder<TDocument> WithCollectionSettings(
             Action<MongoCollectionSettings> collectionSettings);
 

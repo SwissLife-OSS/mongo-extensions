@@ -19,7 +19,7 @@
   <ItemGroup>
     <PackageVersion Include="MongoDB.Driver" Version="3.0.0" />
     <PackageVersion Include="MongoDB.Driver.Core.Extensions.DiagnosticSources" Version="2.0.0" />
-    <PackageVersion Include="System.Text.Json" Version="7.0.0" />
+    <PackageVersion Include="System.Text.Json" Version="8.0.4" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0'">
     <PackageVersion Include="Microsoft.Extensions.Configuration" Version="8.0.0" />

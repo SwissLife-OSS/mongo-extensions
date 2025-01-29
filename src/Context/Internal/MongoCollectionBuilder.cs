@@ -53,6 +53,16 @@ namespace MongoDB.Extensions.Context
             return this;
         }
 
+        public IMongoCollectionBuilder<TDocument> AddBsonClassMap(
+            Type type,
+            Action<BsonClassMap>? bsonClassMapAction = default)
+        {
+            _classMapActions.Add(() =>
+                RegisterClassMapSync(type, bsonClassMapAction));
+
+            return this;
+        }
+
         public IMongoCollectionBuilder<TDocument> WithCollectionSettings(
             Action<MongoCollectionSettings> collectionSettings)
         {
@@ -99,6 +109,21 @@ namespace MongoDB.Extensions.Context
                 if (!BsonClassMap.IsClassMapRegistered(typeof(TMapDocument)))
                 {
                     BsonClassMap.RegisterClassMap(bsonClassMapAction);
+                }
+            }
+        }
+
+        private void RegisterClassMapSync(
+            Type type,
+            Action<BsonClassMap>? bsonClassMapAction)
+        { 
+            lock (_lockObject)
+            {
+                if (!BsonClassMap.IsClassMapRegistered(type))
+                {
+                    var classMap = new BsonClassMap(type);
+                    bsonClassMapAction?.Invoke(classMap);
+                    BsonClassMap.RegisterClassMap(classMap);
                 }
             }
         }

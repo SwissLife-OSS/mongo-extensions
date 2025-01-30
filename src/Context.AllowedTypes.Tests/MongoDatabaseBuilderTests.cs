@@ -3,7 +3,6 @@ using System.Linq;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Extensions.Context.AllowedTypes.Tests.Helpers;
-using MongoDB.Extensions.Context.Internal;
 using Snapshooter.Xunit;
 using Squadron;
 using Xunit;

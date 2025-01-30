@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Bson.Serialization.Serializers;
@@ -8,9 +8,9 @@ using MongoDB.Extensions.Context.Extensions;
 
 #nullable enable
 
-namespace MongoDB.Extensions.Context.Internal;
+namespace MongoDB.Extensions.Context;
 
-internal class TypeObjectSerializer : ClassSerializerBase<object>, IHasDiscriminatorConvention
+public class TypeObjectSerializer : ClassSerializerBase<object>, IHasDiscriminatorConvention
 {
     private readonly ObjectSerializer _objectSerializer;
     private static readonly Dictionary<Type, bool> _allowedTypes = new();
@@ -18,9 +18,10 @@ internal class TypeObjectSerializer : ClassSerializerBase<object>, IHasDiscrimin
     private static readonly HashSet<string> _allowedTypesByDependencies = new();
     private static readonly object _lock = new();
 
-    public TypeObjectSerializer()
+    public TypeObjectSerializer(ObjectSerializer? objectSerializer = null)
     {
-        _objectSerializer = new ObjectSerializer(type => IsTypeAllowed(type));
+        _objectSerializer = objectSerializer ?? CreateObjectSerializer();
+
         DiscriminatorConvention = _objectSerializer.GetDiscriminatorConvention();
     }
 
@@ -47,7 +48,7 @@ internal class TypeObjectSerializer : ClassSerializerBase<object>, IHasDiscrimin
     public static void AddAllowedType<T>()
     {
         lock (_lock)
-        {        
+        {
             _allowedTypes.Add(typeof(T), true);
         }
     }
@@ -67,7 +68,7 @@ internal class TypeObjectSerializer : ClassSerializerBase<object>, IHasDiscrimin
     {
         lock (_lock)
         {
-            foreach (string allowedNamespace in allowedNamespaces)
+            foreach (var allowedNamespace in allowedNamespaces)
             {
                 _allowedTypesByNamespaces.Add(allowedNamespace);
             }
@@ -159,5 +160,25 @@ internal class TypeObjectSerializer : ClassSerializerBase<object>, IHasDiscrimin
     public override int GetHashCode()
     {
         return _objectSerializer.GetHashCode();
+    }
+
+    private ObjectSerializer CreateObjectSerializer()
+    {
+        IDiscriminatorConvention objectDiscriminatorConvention =
+            BsonSerializer.LookupDiscriminatorConvention(typeof(object));
+
+        var serializer =
+            BsonSerializer.LookupSerializer(typeof(Guid)) as GuidSerializer;
+
+        GuidRepresentation guidRepresentation =
+            serializer?.GuidRepresentation ?? GuidRepresentation.Unspecified;
+
+        var objectSerializer =
+            new ObjectSerializer(
+                objectDiscriminatorConvention,
+                guidRepresentation,
+                type => IsTypeAllowed(type));
+
+        return objectSerializer;
     }
 }

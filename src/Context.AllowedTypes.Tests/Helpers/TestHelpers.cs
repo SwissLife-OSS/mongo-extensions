@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using MongoDB.Extensions.Context.Internal;
 
 namespace MongoDB.Extensions.Context.AllowedTypes.Tests.Helpers;
 

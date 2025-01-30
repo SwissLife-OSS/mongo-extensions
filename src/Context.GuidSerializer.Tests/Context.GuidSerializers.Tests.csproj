@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="$(CCTestProjectProps)" Condition="Exists('$(CCTestProjectProps)')" />
+
+  <PropertyGroup>
+    <AssemblyName>MongoDB.Extensions.Context.GuidSerializers.Tests</AssemblyName>
+    <RootNamespace>MongoDB.Extensions.Context.GuidSerializers.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Context\Context.csproj" />
+    <ProjectReference Include="..\Prime.Extensions\Prime.Extensions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Xunit.Priority" />
+  </ItemGroup>
+
+</Project>

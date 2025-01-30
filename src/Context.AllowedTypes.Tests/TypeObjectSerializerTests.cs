@@ -1,5 +1,4 @@
 using MongoDB.Extensions.Context.AllowedTypes.Tests.Helpers;
-using MongoDB.Extensions.Context.Internal;
 using Snapshooter.Xunit;
 using Xunit;
 

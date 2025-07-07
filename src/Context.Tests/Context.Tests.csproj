@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="IsExternalInit.cs" Condition="'$(TargetFramework)' == 'net6.0'" />
     <Compile Remove="IsExternalInit.cs" Condition="'$(TargetFramework)' == 'net8.0'" />
   </ItemGroup>
 

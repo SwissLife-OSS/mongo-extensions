@@ -5,7 +5,7 @@
     <AssemblyName>MongoDB.Extensions.Migration</AssemblyName>
     <RootNamespace>MongoDB.Extensions.Migration</RootNamespace>
     <PackageId>MongoDB.Extensions.Migration</PackageId>
-    <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>

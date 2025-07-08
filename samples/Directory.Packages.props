@@ -1,7 +1,7 @@
 <Project>
   <Import Project="$([MSBuild]::GetPathOfFileAbove(Directory.Packages.props, $(MSBuildThisFileDirectory)..))" />
   <ItemGroup>
-    <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
-    <PackageVersion Include="NSwag.AspNetCore" Version="14.0.8" />
+    <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+    <PackageVersion Include="NSwag.AspNetCore" Version="14.3.0" />
   </ItemGroup>
 </Project>

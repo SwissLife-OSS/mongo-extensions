@@ -12,7 +12,6 @@ namespace MongoDB.Extensions.Context;
 
 public class TypeObjectSerializer : ClassSerializerBase<object>, IHasDiscriminatorConvention
 {
-    private readonly ObjectSerializer _objectSerializer;
     private static readonly Dictionary<Type, bool> _allowedTypes = new();
     private static readonly HashSet<string> _allowedTypesByNamespaces = new();
     private static readonly HashSet<string> _allowedTypesByDependencies = new();
@@ -20,9 +19,9 @@ public class TypeObjectSerializer : ClassSerializerBase<object>, IHasDiscriminat
 
     public TypeObjectSerializer(ObjectSerializer? objectSerializer = null)
     {
-        _objectSerializer = objectSerializer ?? CreateObjectSerializer();
+        ObjectSerializer = objectSerializer ?? CreateObjectSerializer();
 
-        DiscriminatorConvention = _objectSerializer.GetDiscriminatorConvention();
+        DiscriminatorConvention = ObjectSerializer.GetDiscriminatorConvention();
     }
 
     public static IReadOnlyDictionary<Type, bool> AllowedTypes
@@ -142,24 +141,26 @@ public class TypeObjectSerializer : ClassSerializerBase<object>, IHasDiscriminat
 
     public IDiscriminatorConvention DiscriminatorConvention { get; }
 
+    public ObjectSerializer ObjectSerializer  { get; }
+
     public override object Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
     {
-        return _objectSerializer.Deserialize(context, args);
+        return ObjectSerializer.Deserialize(context, args);
     }
 
     public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, object value)
     {
-        _objectSerializer.Serialize(context, args, value);
+        ObjectSerializer.Serialize(context, args, value);
     }
 
     public override bool Equals(object? obj)
     {
-        return _objectSerializer.Equals(obj);
+        return ObjectSerializer.Equals(obj);
     }
 
     public override int GetHashCode()
     {
-        return _objectSerializer.GetHashCode();
+        return ObjectSerializer.GetHashCode();
     }
 
     private ObjectSerializer CreateObjectSerializer()

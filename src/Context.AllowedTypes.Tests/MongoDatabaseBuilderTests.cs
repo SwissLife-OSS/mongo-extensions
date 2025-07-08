@@ -1,6 +1,5 @@
-using System.Collections.Generic;
-using System.Linq;
 using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using MongoDB.Extensions.Context.AllowedTypes.Tests.Helpers;
 using Snapshooter.Xunit;
@@ -56,7 +55,7 @@ public class MongoDatabaseBuilderTests
         IBsonSerializer<object> registeredSerializer =
             BsonSerializer.LookupSerializer<object>();
 
-        Assert.True(registeredSerializer is TypeObjectSerializer);
+        Assert.True(registeredSerializer is ObjectSerializer);
         Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent(),
             options => options.Assert(fieldOption =>
                 Assert.Contains("MongoDB", fieldOption
@@ -79,7 +78,7 @@ public class MongoDatabaseBuilderTests
         IBsonSerializer<object> registeredSerializer =
             BsonSerializer.LookupSerializer<object>();
 
-        Assert.True(registeredSerializer is TypeObjectSerializer);
+        Assert.True(registeredSerializer is ObjectSerializer);
         Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent());
     }
 
@@ -99,7 +98,7 @@ public class MongoDatabaseBuilderTests
         IBsonSerializer<object> registeredSerializer =
             BsonSerializer.LookupSerializer<object>();
 
-        Assert.True(registeredSerializer is TypeObjectSerializer);
+        Assert.True(registeredSerializer is ObjectSerializer);
         Snapshot.Match(TestHelpers.GetTypeObjectSerializerContent());
     }
 

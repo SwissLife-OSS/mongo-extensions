@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using MongoDB.Extensions.Context.Exceptions;
 using MongoDB.Extensions.Context.Internal;
@@ -266,9 +268,9 @@ internal class MongoDatabaseBuilder : IMongoDatabaseBuilder
         if (_registeredConventionPacks.TryGetValue(name, out IConventionPack registeredConventionPack))
         {
             IEnumerable<string> registeredNames = registeredConventionPack
-                .Conventions.Select(rcp => rcp.Name);
+                .Conventions.Select(rcp => rcp.Name).ToImmutableList();
             IEnumerable<string> newNames = conventionPack
-                .Conventions.Select(cp => cp.Name);
+                .Conventions.Select(cp => cp.Name).ToImmutableList();
 
             if (registeredNames.Except(newNames).Any() ||
                 newNames.Except(registeredNames).Any())
@@ -292,7 +294,9 @@ internal class MongoDatabaseBuilder : IMongoDatabaseBuilder
     {
         if (!_registeredSerializers.ContainsKey(typeof(object).ToString()))
         {
-            RegisterBsonSerializer<object>(new TypeObjectSerializer());
+            var typeObjectSerializer = new TypeObjectSerializer();
+
+            RegisterBsonSerializer<object>(typeObjectSerializer.ObjectSerializer);
         }
     }
 }

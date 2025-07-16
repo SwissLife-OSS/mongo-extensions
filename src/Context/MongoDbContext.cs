@@ -24,7 +24,33 @@ public abstract class MongoDbContext : IMongoDbContext, IMongoDbTransaction
             Initialize();
         }
     }
+
+    public MongoDbContext(IMongoClient mongoClient, string databaseName) : this(mongoClient, databaseName, true)
+    {
+    }
+
+    public MongoDbContext(IMongoClient mongoClient, string databaseName, bool enableAutoInitialize)
+    {
+        // Create a minimal MongoOptions for interface compliance
+        MongoOptions = new MongoOptions
+        {
+            ConnectionString = "", // Not used when client is provided
+            DatabaseName = databaseName
+        };
+
+        MongoClient = mongoClient ?? throw new ArgumentNullException(nameof(mongoClient));
+        DatabaseName = databaseName ?? throw new ArgumentNullException(nameof(databaseName));
+
+        if (enableAutoInitialize)
+        {
+            Initialize();
+        }
+    }
+
     public MongoOptions MongoOptions { get; }
+
+    protected IMongoClient? MongoClient { get; }
+    protected string? DatabaseName { get; }
 
     public IMongoClient Client
     {
@@ -61,7 +87,18 @@ public abstract class MongoDbContext : IMongoDbContext, IMongoDbTransaction
             {
                 if (_mongoDbContextData == null)
                 {
-                    var mongoDatabaseBuilder = new MongoDatabaseBuilder(MongoOptions);
+                    MongoDatabaseBuilder mongoDatabaseBuilder;
+
+                    if (MongoClient != null && DatabaseName != null)
+                    {
+                        // Use existing IMongoClient path
+                        mongoDatabaseBuilder = new MongoDatabaseBuilder(MongoClient, DatabaseName);
+                    }
+                    else
+                    {
+                        // Use MongoOptions path
+                        mongoDatabaseBuilder = new MongoDatabaseBuilder(MongoOptions);
+                    }
 
                     OnConfiguring(mongoDatabaseBuilder);
 

@@ -6,14 +6,22 @@ using MongoDB.Extensions.Context;
 
 namespace MongoDB.Extensions.Session;
 
-public class MongoSessionProvider<TContext, TScope> : ISessionProvider<TScope>
+public class MongoSessionProvider<TContext, TScope> : MongoSessionProvider<TScope>
     where TContext : IMongoDbContext
 {
-    private readonly IMongoClient _mongoClient;
-
-    public MongoSessionProvider(TContext context)
+    public MongoSessionProvider(TContext context) 
+        : base(new MongoClientSessionFactory(context.Client))
     {
-        _mongoClient = context.Client;
+    }
+}
+
+public class MongoSessionProvider<TScope> : ISessionProvider<TScope>
+{
+    private readonly ISessionFactory _sessionFactory;
+
+    protected MongoSessionProvider(ISessionFactory sessionFactory)
+    {
+        _sessionFactory = sessionFactory;
     }
 
     protected virtual TransactionOptions TransactionOptions { get; } = new(
@@ -25,8 +33,8 @@ public class MongoSessionProvider<TContext, TScope> : ISessionProvider<TScope>
     public async Task<ITransactionSession> BeginTransactionAsync(
         CancellationToken cancellationToken)
     {
-        IClientSessionHandle clientSession = await _mongoClient
-            .StartSessionAsync(cancellationToken: cancellationToken);
+        IClientSessionHandle clientSession = await _sessionFactory
+            .CreateSessionAsync(cancellationToken);
 
         clientSession.StartTransaction(TransactionOptions);
 
@@ -36,8 +44,8 @@ public class MongoSessionProvider<TContext, TScope> : ISessionProvider<TScope>
     public async Task<ISession> StartSessionAsync(
         CancellationToken cancellationToken)
     {
-        IClientSessionHandle clientSession = await _mongoClient
-            .StartSessionAsync(cancellationToken: cancellationToken);
+        IClientSessionHandle clientSession = await _sessionFactory
+            .CreateSessionAsync(cancellationToken);
 
         return new MongoSession(clientSession, TransactionOptions);
     }

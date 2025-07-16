@@ -98,6 +98,110 @@ namespace MongoDB.Extensions.Context.Tests
 
         #endregion
 
+        #region IMongoClient Constructor Tests
+
+        [Fact]
+        public void Constructor_WithIMongoClient_AutoInitialize_InitializationExecuted()
+        {
+            // Arrange
+            var mongoClient = new MongoClient(_mongoOptions.ConnectionString);
+            var databaseName = _mongoDatabase.DatabaseNamespace.DatabaseName;
+
+            // Act
+            var testMongoDbContext = new TestMongoDbContextWithClient(mongoClient, databaseName);
+
+            // Assert
+            Assert.True(testMongoDbContext.IsInitialized);
+            Assert.Equal(mongoClient, testMongoDbContext.Client);
+            Assert.Equal(databaseName, testMongoDbContext.Database.DatabaseNamespace.DatabaseName);
+        }
+
+        [Fact]
+        public void Constructor_WithIMongoClient_NoInitialize_InitializationNotExecuted()
+        {
+            // Arrange
+            var mongoClient = new MongoClient(_mongoOptions.ConnectionString);
+            var databaseName = _mongoDatabase.DatabaseNamespace.DatabaseName;
+
+            // Act
+            var testMongoDbContext = new TestMongoDbContextWithClient(mongoClient, databaseName, false);
+
+            // Assert
+            Assert.False(testMongoDbContext.IsInitialized);
+        }
+
+        [Fact]
+        public void Constructor_WithIMongoClient_NullClient_ThrowsArgumentNullException()
+        {
+            // Arrange
+            IMongoClient mongoClient = null!;
+            var databaseName = _mongoDatabase.DatabaseNamespace.DatabaseName;
+
+            // Act & Assert
+            Assert.Throws<ArgumentNullException>(() => new TestMongoDbContextWithClient(mongoClient, databaseName));
+        }
+
+        [Fact]
+        public void Constructor_WithIMongoClient_NullDatabaseName_ThrowsArgumentNullException()
+        {
+            // Arrange
+            var mongoClient = new MongoClient(_mongoOptions.ConnectionString);
+            string databaseName = null!;
+
+            // Act & Assert
+            Assert.Throws<ArgumentNullException>(() => new TestMongoDbContextWithClient(mongoClient, databaseName));
+        }
+
+        [Fact]
+        public void Constructor_WithIMongoClient_Database_AccessibleAfterInitialize()
+        {
+            // Arrange
+            var mongoClient = new MongoClient(_mongoOptions.ConnectionString);
+            var databaseName = _mongoDatabase.DatabaseNamespace.DatabaseName;
+            var testMongoDbContext = new TestMongoDbContextWithClient(mongoClient, databaseName, false);
+
+            // Act
+            testMongoDbContext.Initialize();
+
+            // Assert
+            Assert.NotNull(testMongoDbContext.Database);
+            Assert.Equal(databaseName, testMongoDbContext.Database.DatabaseNamespace.DatabaseName);
+        }
+
+        [Fact]
+        public void Constructor_WithIMongoClient_CreateCollection_WorksAfterInitialize()
+        {
+            // Arrange
+            var mongoClient = new MongoClient(_mongoOptions.ConnectionString);
+            var databaseName = _mongoDatabase.DatabaseNamespace.DatabaseName;
+            var testMongoDbContext = new TestMongoDbContextWithClient(mongoClient, databaseName, false);
+
+            // Act
+            testMongoDbContext.Initialize();
+            var collection = testMongoDbContext.CreateCollection<BsonDocument>();
+
+            // Assert
+            Assert.NotNull(collection);
+        }
+
+        [Fact]
+        public void Constructor_WithIMongoClient_MongoOptions_IsConfiguredCorrectly()
+        {
+            // Arrange
+            var mongoClient = new MongoClient(_mongoOptions.ConnectionString);
+            var databaseName = _mongoDatabase.DatabaseNamespace.DatabaseName;
+
+            // Act
+            var testMongoDbContext = new TestMongoDbContextWithClient(mongoClient, databaseName);
+
+            // Assert
+            Assert.NotNull(testMongoDbContext.MongoOptions);
+            Assert.Equal(databaseName, testMongoDbContext.MongoOptions.DatabaseName);
+            Assert.Equal("", testMongoDbContext.MongoOptions.ConnectionString); // Empty for IMongoClient path
+        }
+
+        #endregion
+
         #region Private Helpers
 
         private class TestMongoDbContext : MongoDbContext
@@ -108,6 +212,26 @@ namespace MongoDB.Extensions.Context.Tests
 
             public TestMongoDbContext(MongoOptions mongoOptions, bool enableAutoInit)
                 : base(mongoOptions, enableAutoInit)
+            {
+            }
+
+            protected override void OnConfiguring(IMongoDatabaseBuilder mongoDatabaseBuilder)
+            {
+                IsInitialized = true;
+            }
+
+            public bool IsInitialized { get; private set; }
+        }
+
+        private class TestMongoDbContextWithClient : MongoDbContext
+        {
+            public TestMongoDbContextWithClient(IMongoClient mongoClient, string databaseName) 
+                : base(mongoClient, databaseName)
+            {
+            }
+
+            public TestMongoDbContextWithClient(IMongoClient mongoClient, string databaseName, bool enableAutoInit)
+                : base(mongoClient, databaseName, enableAutoInit)
             {
             }
 

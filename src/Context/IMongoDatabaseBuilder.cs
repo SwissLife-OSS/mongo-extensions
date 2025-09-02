@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
@@ -25,6 +26,8 @@ namespace MongoDB.Extensions.Context
 
         IMongoDatabaseBuilder ConfigureConnection(
             Action<MongoClientSettings> mongoClientSettingsAction);
+
+        IMongoDatabaseBuilder ConfigureOidcAuthentication(List<string> scopes);
 
         IMongoDatabaseBuilder ConfigureDatabase(Action<IMongoDatabase> configureDatabase);
 

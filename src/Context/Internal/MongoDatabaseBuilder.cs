@@ -7,6 +7,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
+using MongoDB.Extensions.Context.Callbacks;
 using MongoDB.Extensions.Context.Exceptions;
 using MongoDB.Extensions.Context.Internal;
 
@@ -20,6 +21,8 @@ internal class MongoDatabaseBuilder : IMongoDatabaseBuilder
     private readonly List<Action<MongoClientSettings>> _mongoClientSettingsActions;
     private readonly List<Action<IMongoDatabase>> _databaseConfigurationActions;
     private readonly List<Action<IMongoDatabase, IMongoCollections>> _collectionActions;
+
+    private List<string> _oidcScopes = new();
 
     private static readonly object _lockObject = new object();
     private static readonly Dictionary<string, Type> _registeredSerializers;
@@ -45,6 +48,12 @@ internal class MongoDatabaseBuilder : IMongoDatabaseBuilder
         Action<MongoClientSettings> mongoClientSettingsAction)
     {
         _mongoClientSettingsActions.Add(mongoClientSettingsAction);
+        return this;
+    }
+
+    public IMongoDatabaseBuilder ConfigureOidcAuthentication(List<string> scopes)
+    {
+        _oidcScopes.AddRange(scopes);
         return this;
     }
 
@@ -207,7 +216,12 @@ internal class MongoDatabaseBuilder : IMongoDatabaseBuilder
         // set specific mongo client settings
         _mongoClientSettingsActions.ForEach(
             settings => settings(mongoClientSettings));
-        
+
+        if (_oidcScopes.Any())
+        {
+            mongoClientSettings.Credential = MongoCredential.CreateOidcCredential(new MongoOidcCallback(_oidcScopes));
+        }
+
         // create mongo client
         var mongoClient = new MongoClient(mongoClientSettings);
 

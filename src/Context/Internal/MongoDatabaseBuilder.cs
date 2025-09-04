@@ -5,7 +5,9 @@ using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
+using MongoDB.Extensions.Context.Exceptions;
 using MongoDB.Extensions.Context.Internal;
 
 namespace MongoDB.Extensions.Context;

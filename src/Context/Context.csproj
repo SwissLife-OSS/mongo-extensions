@@ -20,7 +20,7 @@
   <ItemGroup>
     <PackageReference Include="MongoDB.Driver" />
     <PackageReference Include="MongoDB.Driver.Core.Extensions.DiagnosticSources" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" />
+    <PackageReference Include="Microsoft.Extensions.Configuration"  />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
   </ItemGroup>

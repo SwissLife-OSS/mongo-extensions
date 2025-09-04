@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
@@ -25,7 +24,7 @@ namespace MongoDB.Extensions.Context
             IMongoCollectionConfiguration<TDocument> configuration) where TDocument : class;
 
         IMongoDatabaseBuilder ConfigureConnection(
-            Action<MongoClientSettings> mongoClientSettingsAction);        
+            Action<MongoClientSettings> mongoClientSettingsAction);
 
         IMongoDatabaseBuilder ConfigureDatabase(Action<IMongoDatabase> configureDatabase);
 

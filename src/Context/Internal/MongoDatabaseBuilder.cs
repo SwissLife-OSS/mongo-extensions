@@ -19,8 +19,6 @@ internal class MongoDatabaseBuilder : IMongoDatabaseBuilder
     private readonly List<Action<IMongoDatabase>> _databaseConfigurationActions;
     private readonly List<Action<IMongoDatabase, IMongoCollections>> _collectionActions;
 
-    private List<string> _oidcScopes = new();
-
     private static readonly object _lockObject = new object();
     private static readonly Dictionary<string, Type> _registeredSerializers;
     private static readonly Dictionary<string, IConventionPack> _registeredConventionPacks;

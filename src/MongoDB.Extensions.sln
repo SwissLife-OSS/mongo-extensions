@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migration.Tests", "Migratio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Context.GuidSerializers.Tests", "Context.GuidSerializer.Tests\Context.GuidSerializers.Tests.csproj", "{2E5C44AC-9F56-462F-B0B7-25F5995F5B76}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oidc", "Oidc\Oidc.csproj", "{A3740BF3-F10A-4F79-95EF-34FA870BCE7F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,10 @@ Global
 		{2E5C44AC-9F56-462F-B0B7-25F5995F5B76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E5C44AC-9F56-462F-B0B7-25F5995F5B76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E5C44AC-9F56-462F-B0B7-25F5995F5B76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3740BF3-F10A-4F79-95EF-34FA870BCE7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3740BF3-F10A-4F79-95EF-34FA870BCE7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3740BF3-F10A-4F79-95EF-34FA870BCE7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3740BF3-F10A-4F79-95EF-34FA870BCE7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

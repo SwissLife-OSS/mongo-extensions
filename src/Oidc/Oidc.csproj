@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Mongo.DB.Extensions.Context.Oidc</RootNamespace>
+    <AssemblyName>Mongo.DB.Extensions.Context.Oidc</AssemblyName>
+    <PackageId>Mongo.DB.Extensions.Context.Oidc</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Identity" />
+    <PackageReference Include="MongoDB.Driver" />
+  </ItemGroup>
+
+</Project>

@@ -25,9 +25,7 @@ namespace MongoDB.Extensions.Context
             IMongoCollectionConfiguration<TDocument> configuration) where TDocument : class;
 
         IMongoDatabaseBuilder ConfigureConnection(
-            Action<MongoClientSettings> mongoClientSettingsAction);
-
-        IMongoDatabaseBuilder ConfigureOidcAuthentication(List<string> scopes);
+            Action<MongoClientSettings> mongoClientSettingsAction);        
 
         IMongoDatabaseBuilder ConfigureDatabase(Action<IMongoDatabase> configureDatabase);
 

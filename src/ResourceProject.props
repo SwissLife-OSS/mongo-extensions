@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFrameworks>$(ResourceProjectTargetFrameworks)</TargetFrameworks>    
     <IsPackable>true</IsPackable>
-	<LangVersion>10.0</LangVersion>
-	<Nullable>enable</Nullable>
+	  <LangVersion>10.0</LangVersion>
+	  <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

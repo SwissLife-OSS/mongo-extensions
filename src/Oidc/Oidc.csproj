@@ -2,9 +2,7 @@
   <Import Project="$(CCResourceProjectProps)" Condition="Exists('$(CCResourceProjectProps)')" />
   
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
     <RootNamespace>Mongo.DB.Extensions.Context.Oidc</RootNamespace>
     <AssemblyName>Mongo.DB.Extensions.Context.Oidc</AssemblyName>
     <PackageId>Mongo.DB.Extensions.Context.Oidc</PackageId>

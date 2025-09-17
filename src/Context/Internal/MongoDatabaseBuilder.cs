@@ -14,7 +14,9 @@ namespace MongoDB.Extensions.Context;
 
 internal class MongoDatabaseBuilder : IMongoDatabaseBuilder
 {
-    private readonly MongoOptions _mongoOptions;
+    private readonly MongoOptions? _mongoOptions;
+    private readonly IMongoClient? _existingMongoClient;
+    private readonly string? _databaseName;
     private readonly List<Action> _registrationConventionActions;
     private readonly List<Action> _registrationSerializerActions;
     private readonly List<Action<MongoClientSettings>> _mongoClientSettingsActions;
@@ -34,6 +36,20 @@ internal class MongoDatabaseBuilder : IMongoDatabaseBuilder
     public MongoDatabaseBuilder(MongoOptions mongoOptions)
     {
         _mongoOptions = mongoOptions;
+        _existingMongoClient = null;
+        _databaseName = null;
+        _registrationConventionActions = new List<Action>();
+        _registrationSerializerActions = new List<Action>();
+        _mongoClientSettingsActions = new List<Action<MongoClientSettings>>();
+        _databaseConfigurationActions = new List<Action<IMongoDatabase>>();
+        _collectionActions = new List<Action<IMongoDatabase, IMongoCollections>>();
+    }
+
+    public MongoDatabaseBuilder(IMongoClient mongoClient, string databaseName)
+    {
+        _mongoOptions = null;
+        _existingMongoClient = mongoClient;
+        _databaseName = databaseName;
         _registrationConventionActions = new List<Action>();
         _registrationSerializerActions = new List<Action>();
         _mongoClientSettingsActions = new List<Action<MongoClientSettings>>();
@@ -44,6 +60,13 @@ internal class MongoDatabaseBuilder : IMongoDatabaseBuilder
     public IMongoDatabaseBuilder ConfigureConnection(
         Action<MongoClientSettings> mongoClientSettingsAction)
     {
+        if (_existingMongoClient != null)
+        {
+            // When using an existing IMongoClient, we cannot modify its settings
+            // This configuration will be ignored
+            return this;
+        }
+        
         _mongoClientSettingsActions.Add(mongoClientSettingsAction);
         return this;
     }
@@ -51,6 +74,13 @@ internal class MongoDatabaseBuilder : IMongoDatabaseBuilder
     public IMongoDatabaseBuilder ConfigureClientSettings(
         Action<MongoClientSettings> mongoClientSettingsAction)
     {
+        if (_existingMongoClient != null)
+        {
+            // When using an existing IMongoClient, we cannot modify its settings
+            // This configuration will be ignored
+            return this;
+        }
+        
         _mongoClientSettingsActions.Add(mongoClientSettingsAction);
         return this;
     }
@@ -196,24 +226,37 @@ internal class MongoDatabaseBuilder : IMongoDatabaseBuilder
             TryRegisterObjectSerializer();
         }
 
-        // create mongo client settings
-        var mongoClientSettings = MongoClientSettings
-            .FromConnectionString(_mongoOptions.ConnectionString);
+        IMongoClient mongoClient;
+        IMongoDatabase mongoDatabase;
 
-        // set default mongo client settings
-        mongoClientSettings = SetDefaultClientSettings(
-            mongoClientSettings);
+        if (_existingMongoClient != null)
+        {
+            // Use existing client path
+            mongoClient = _existingMongoClient;
+            mongoDatabase = mongoClient.GetDatabase(_databaseName!);
+        }
+        else
+        {
+            // Original MongoOptions path
+            // create mongo client settings
+            var mongoClientSettings = MongoClientSettings
+                .FromConnectionString(_mongoOptions!.ConnectionString);
 
-        // set specific mongo client settings
-        _mongoClientSettingsActions.ForEach(
-            settings => settings(mongoClientSettings));
-        
-        // create mongo client
-        var mongoClient = new MongoClient(mongoClientSettings);
+            // set default mongo client settings
+            mongoClientSettings = SetDefaultClientSettings(
+                mongoClientSettings);
 
-        // create mongo database
-        IMongoDatabase mongoDatabase = mongoClient
-            .GetDatabase(_mongoOptions.DatabaseName);
+            // set specific mongo client settings
+            _mongoClientSettingsActions.ForEach(
+                settings => settings(mongoClientSettings));
+            
+            // create mongo client
+            mongoClient = new MongoClient(mongoClientSettings);
+
+            // create mongo database
+            mongoDatabase = mongoClient
+                .GetDatabase(_mongoOptions.DatabaseName);
+        }
 
         // configure mongo database
         _databaseConfigurationActions.ForEach(

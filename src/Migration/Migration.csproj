@@ -5,6 +5,7 @@
     <AssemblyName>MongoDB.Extensions.Migration</AssemblyName>
     <RootNamespace>MongoDB.Extensions.Migration</RootNamespace>
     <PackageId>MongoDB.Extensions.Migration</PackageId>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>

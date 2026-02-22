@@ -28,12 +28,12 @@
     <Authors>Swiss Life authors and contributors</Authors>
     <Company>Swiss Life</Company>
     <Copyright>Copyright © $(Company) $([System.DateTime]::Now.Year)</Copyright>
-    <PackageLicenseUrl>https://github.com/SwissLife-OSS/mongo-extensions/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/SwissLife-OSS/mongo-extensions</PackageProjectUrl>
     <PackageReleaseNotes>Release notes: https://github.com/SwissLife-OSS/mongo-extensions/releases/$(Version)</PackageReleaseNotes>
     <PackageTags>MongoDB Extensions DbContext Context Boostrap Mongo .Net</PackageTags>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageIconUrl>https://github.com/SwissLife-OSS/mongo-extensions-docs/raw/master/logo.png</PackageIconUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <PropertyGroup>

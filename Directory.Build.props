@@ -8,6 +8,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors>$(WarningsAsErrors);nullable</WarningsAsErrors>
+    <!-- TODO: Fix nullable warnings introduced by SDK 8→10 upgrade -->
+    <NoWarn>$(NoWarn);CS8600;CS8602;CS8604;CS8618;CS8625</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

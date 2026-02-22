@@ -1,4 +1,5 @@
 name: Release
+run-name: Release 🚀 ${{ github.ref_name }}
 
 on:
   push:
@@ -8,36 +9,43 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Use .NET SDK from global.json
-        uses: actions/setup-dotnet@v3
-      - name: Build, Test and Push
-        uses: swisslife-oss/actions/release-packages@main
-        with:
-          tag: ${{ github.ref_name }}
-          nuget_api_key: ${{ secrets.NUGET_API_KEY }}
-          enable_push: 'yes'
+        uses: actions/checkout@v6
 
-  # sonar:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
-  #     - name: Setup .NET
-  #       uses: actions/setup-dotnet@v3
-  #       with:
-  #         dotnet-version: |
-  #           8
-  #     - name: Restore tools
-  #       run: dotnet tool restore
-  #     - name: Build, Test and Sonar
-  #       uses: swisslife-oss/actions/release-sonar@main
-  #       with:
-  #         tag: ${{ github.ref_name }}
-  #         sonar_token: ${{ secrets.SONAR_TOKEN }}
-  #         sonar_project_key: 'SwissLife-OSS_Mongo-Extensions'
-  #         sonar_project_name: "mongo-extensions"
-  #         sonar_exclusions: ${{ vars.SONAR_EXCLUSIONS }}
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+
+      - name: Build projects
+        shell: bash
+        run: dotnet build ./all.csproj -c Release -graph:true
+
+      - name: Extract version
+        id: extract_version
+        shell: bash
+        run: |
+          PACKAGE_VERSION="${{ github.ref_name }}"
+          ASSEMBLY_VERSION="$(echo ${{ github.ref_name }} | grep -o '^[0-9]*\.[0-9]*\.[0-9]*').0"
+          echo "package_version=$PACKAGE_VERSION" >> $GITHUB_OUTPUT
+          echo "assembly_version=$ASSEMBLY_VERSION" >> $GITHUB_OUTPUT
+          echo "Package Version: $PACKAGE_VERSION"
+          echo "Assembly Version: $ASSEMBLY_VERSION"
+
+      - name: Pack
+        shell: bash
+        run: |
+          dotnet pack ./all.csproj \
+            -c Release \
+            -o ./out \
+            --no-build  \
+            --include-symbols \
+            --include-source \
+            --verbosity Minimal \
+            /p:Version=${{ steps.extract_version.outputs.package_version }} \
+            /p:AssemblyVersion=${{ steps.extract_version.outputs.assembly_version }} \
+            /p:FileVersion=${{ steps.extract_version.outputs.assembly_version }}
+
+      - name: Push
+        shell: bash
+        run: |
+          find . -name '*.nupkg' -not -name '*.symbols.nupkg' | xargs -I {} dotnet nuget push {} --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json

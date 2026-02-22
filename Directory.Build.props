@@ -33,7 +33,6 @@
     <PackageReleaseNotes>Release notes: https://github.com/SwissLife-OSS/mongo-extensions/releases/$(Version)</PackageReleaseNotes>
     <PackageTags>MongoDB Extensions DbContext Context Boostrap Mongo .Net</PackageTags>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <PropertyGroup>

@@ -4,7 +4,6 @@
   <PropertyGroup>
     <AssemblyName>Migration.Tests</AssemblyName>
     <RootNamespace>Migration.Tests</RootNamespace>
-    <TargetFrameworks>net8.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>

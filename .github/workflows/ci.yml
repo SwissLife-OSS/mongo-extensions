@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        dotnet-version: [10]
+        dotnet-version: [8, 10]
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -29,7 +29,7 @@ jobs:
       - name: Build projects
         shell: bash
         run: dotnet build ./all.csproj -f net${{ matrix.dotnet-version }}.0 -graph:true
-        
+
       - name: Run tests
         shell: bash
         run: dotnet test ./all.csproj /p:BuildTestsOnly=true --no-build -f net${{ matrix.dotnet-version }}.0 -- RunConfiguration.MaxCpuCount=1

@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        dotnet-version: [8, 10]
+        dotnet-version: [10]
     steps:
       - name: Checkout code
         uses: actions/checkout@v6

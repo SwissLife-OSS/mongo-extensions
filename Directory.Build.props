@@ -1,18 +1,38 @@
 <Project>
 
   <PropertyGroup>
+    <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
+    <IsPackable>false</IsPackable>
+    <LangVersion>preview</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors>$(WarningsAsErrors);nullable</WarningsAsErrors>
+    <!-- TODO: Fix nullable warnings introduced by SDK 8→10 upgrade -->
+    <NoWarn>$(NoWarn);CS8600;CS8602;CS8604;CS8618;CS8625;CS8714;CS0618;CS8620</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Version Condition="$(Version) == ''">0.0.0</Version>
     <Product>MongoDB Extensions</Product>
     <Authors>Swiss Life authors and contributors</Authors>
     <Company>Swiss Life</Company>
     <Copyright>Copyright © $(Company) $([System.DateTime]::Now.Year)</Copyright>
-    <PackageLicenseUrl>https://github.com/SwissLife-OSS/mongo-extensions/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/SwissLife-OSS/mongo-extensions</PackageProjectUrl>
     <PackageReleaseNotes>Release notes: https://github.com/SwissLife-OSS/mongo-extensions/releases/$(Version)</PackageReleaseNotes>
     <PackageTags>MongoDB Extensions DbContext Context Boostrap Mongo .Net</PackageTags>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageIconUrl>https://github.com/SwissLife-OSS/mongo-extensions-docs/raw/master/logo.png</PackageIconUrl>
-	<IsPackable>false</IsPackable>
-	<LangVersion>10.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup>

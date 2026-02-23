@@ -1,11 +1,5 @@
 <Project>
 
-  <PropertyGroup>
-    <TargetFrameworks>$(TestProjectTargetFrameworks)</TargetFrameworks>
-    <IsPackable>false</IsPackable>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Moq" />
     <PackageReference Include="Snapshooter.Xunit" />

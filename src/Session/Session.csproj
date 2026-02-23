@@ -5,6 +5,7 @@
     <AssemblyName>MongoDB.Extensions.Session</AssemblyName>
     <RootNamespace>MongoDB.Extensions.Session</RootNamespace>
     <PackageId>MongoDB.Extensions.Session</PackageId>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>

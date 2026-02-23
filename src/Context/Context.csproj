@@ -5,6 +5,7 @@
     <AssemblyName>MongoDB.Extensions.Context</AssemblyName>
     <RootNamespace>MongoDB.Extensions.Context</RootNamespace>
     <PackageId>MongoDB.Extensions.Context</PackageId>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -23,6 +24,8 @@
     <PackageReference Include="Microsoft.Extensions.Configuration"  />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" />
   </ItemGroup>
 
   <ItemGroup>

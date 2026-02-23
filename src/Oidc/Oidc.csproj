@@ -6,6 +6,7 @@
     <RootNamespace>Mongo.DB.Extensions.Context.Oidc</RootNamespace>
     <AssemblyName>Mongo.DB.Extensions.Context.Oidc</AssemblyName>
     <PackageId>Mongo.DB.Extensions.Context.Oidc</PackageId>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>

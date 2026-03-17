@@ -2,12 +2,12 @@
   <Import Project="$(CCTestProjectProps)" Condition="Exists('$(CCTestProjectProps)')" />
 
   <PropertyGroup>
-    <AssemblyName>MongoDB.Extensions.Session.Tests</AssemblyName>
-    <RootNamespace>MongoDB.Extensions.Session.Tests</RootNamespace>
+    <AssemblyName>Migration.Tests</AssemblyName>
+    <RootNamespace>Migration.Tests</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Session\Session.csproj" />
+    <ProjectReference Include="..\..\src\Migration\Migration.csproj" />
   </ItemGroup>
 
 </Project>

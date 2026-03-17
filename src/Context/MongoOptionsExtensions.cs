@@ -40,6 +40,17 @@ public static class MongoOptionsExtensions
                 $"{nameof(MongoOptions.DatabaseName)} field.");
         }
 
+        if (mongoOptions.AuthType == MongoAuthType.Oidc &&
+            (mongoOptions.OidcScopes == null || mongoOptions.OidcScopes.Count == 0))
+        {
+            throw new Exception(
+                $"The OIDC scopes of the MongoDB configuration " +
+                $"must be provided when {nameof(MongoOptions.AuthType)} " +
+                $"is set to {nameof(MongoAuthType.Oidc)}. " +
+                $"Please verify that the configuration section contains the " +
+                $"{nameof(MongoOptions.OidcScopes)} field with at least one scope.");
+        }
+
         return mongoOptions;
     }
 }

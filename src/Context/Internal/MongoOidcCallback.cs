@@ -4,14 +4,9 @@ using MongoDB.Driver.Authentication.Oidc;
 
 namespace MongoDB.Extensions.Context.Internal;
 
-internal class MongoOidcCallback : IOidcCallback
+internal class MongoOidcCallback(List<string> scopes) : IOidcCallback
 {
-    private readonly List<string> _scopes;
-
-    public MongoOidcCallback(List<string> scopes)
-    {
-        _scopes = scopes;
-    }
+    private static readonly TimeSpan ExpirationBuffer = TimeSpan.FromMinutes(1);
 
     public OidcAccessToken GetOidcAccessToken(
         OidcCallbackParameters parameters,
@@ -19,10 +14,10 @@ internal class MongoOidcCallback : IOidcCallback
     {
         var credential = new DefaultAzureCredential();
 
-        var accessToken = credential
-            .GetToken(new TokenRequestContext(_scopes.ToArray()));
+        AccessToken accessToken = credential.GetToken(
+            new TokenRequestContext(scopes.ToArray()), cancellationToken);
 
-        return new(accessToken.Token, expiresIn: null);
+        return ToOidcAccessToken(accessToken);
     }
 
     public async Task<OidcAccessToken> GetOidcAccessTokenAsync(
@@ -31,9 +26,15 @@ internal class MongoOidcCallback : IOidcCallback
     {
         var credential = new DefaultAzureCredential();
 
-        var accessToken = await credential
-            .GetTokenAsync(new TokenRequestContext(_scopes.ToArray()));
+        AccessToken accessToken = await credential.GetTokenAsync(
+            new TokenRequestContext(scopes.ToArray()), cancellationToken);
 
-        return new(accessToken.Token, expiresIn: null);
+        return ToOidcAccessToken(accessToken);
+    }
+
+    private static OidcAccessToken ToOidcAccessToken(AccessToken accessToken)
+    {
+        var expiresIn = accessToken.ExpiresOn - DateTimeOffset.UtcNow - ExpirationBuffer;
+        return new(accessToken.Token, expiresIn);
     }
 }

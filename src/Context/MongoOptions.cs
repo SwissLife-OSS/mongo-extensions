@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace MongoDB.Extensions.Context
 {
@@ -11,5 +12,7 @@ namespace MongoDB.Extensions.Context
     {
         public string ConnectionString { get; set; }
         public string DatabaseName { get; set; }
+        public MongoAuthType AuthType { get; set; }
+        public List<string>? OidcScopes { get; set; }
     }
 }

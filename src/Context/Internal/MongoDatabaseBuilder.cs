@@ -7,6 +7,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
+using MongoDB.Driver.Authentication.Oidc;
 using MongoDB.Extensions.Context.Exceptions;
 using MongoDB.Extensions.Context.Internal;
 
@@ -203,6 +204,13 @@ internal class MongoDatabaseBuilder : IMongoDatabaseBuilder
         // set default mongo client settings
         mongoClientSettings = SetDefaultClientSettings(
             mongoClientSettings);
+
+        // apply OIDC authentication if configured
+        if (_mongoOptions.AuthType == MongoAuthType.Oidc)
+        {
+            mongoClientSettings.Credential = MongoCredential
+                .CreateOidcCredential(new MongoOidcCallback(_mongoOptions.OidcScopes!));
+        }
 
         // set specific mongo client settings
         _mongoClientSettingsActions.ForEach(

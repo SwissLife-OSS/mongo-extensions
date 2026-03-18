@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Context\Context.csproj" />
-    <ProjectReference Include="..\Prime.Extensions\Prime.Extensions.csproj" />
+    <ProjectReference Include="..\..\src\Context\Context.csproj" />
+    <ProjectReference Include="..\..\src\Prime.Extensions\Prime.Extensions.csproj" />
   </ItemGroup>
   
 </Project>

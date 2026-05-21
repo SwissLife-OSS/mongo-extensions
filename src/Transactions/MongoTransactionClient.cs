@@ -39,12 +39,12 @@ public class MongoTransactionClient : IMongoClient
     }
 
     public ClientBulkWriteResult BulkWrite(IClientSessionHandle session, IReadOnlyList<BulkWriteModel> models,
-        ClientBulkWriteOptions options = null, CancellationToken cancellationToken = new CancellationToken())
+        ClientBulkWriteOptions? options = null, CancellationToken cancellationToken = new CancellationToken())
     {
         return _client.BulkWrite(session, models, options, cancellationToken);
     }
 
-    public Task<ClientBulkWriteResult> BulkWriteAsync(IReadOnlyList<BulkWriteModel> models, ClientBulkWriteOptions options = null,
+    public Task<ClientBulkWriteResult> BulkWriteAsync(IReadOnlyList<BulkWriteModel> models, ClientBulkWriteOptions? options = null,
         CancellationToken cancellationToken = new CancellationToken())
     {
         if (TryGetSession(out IClientSessionHandle? session))
@@ -55,7 +55,7 @@ public class MongoTransactionClient : IMongoClient
         return _client.BulkWriteAsync(models, options, cancellationToken);
     }
 
-    public Task<ClientBulkWriteResult> BulkWriteAsync(IClientSessionHandle session, IReadOnlyList<BulkWriteModel> models, ClientBulkWriteOptions options = null,
+    public Task<ClientBulkWriteResult> BulkWriteAsync(IClientSessionHandle session, IReadOnlyList<BulkWriteModel> models, ClientBulkWriteOptions? options = null,
         CancellationToken cancellationToken = new CancellationToken())
     {
         return _client.BulkWriteAsync(session, models, options, cancellationToken);

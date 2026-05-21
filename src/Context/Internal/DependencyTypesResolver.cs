@@ -16,7 +16,7 @@ internal static class DependencyTypesResolver
         Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
         IEnumerable<Assembly> allowedAssemblies = assemblies
-            .Where(assembly => IsNamespaceAllowed(assembly.GetName().Name, excludeNamespaces));
+            .Where(assembly => IsNamespaceAllowed(assembly.GetName().Name!, excludeNamespaces));
 
         IEnumerable<string> namespaces = allowedAssemblies
             .SelectMany(a => a.GetTypes())

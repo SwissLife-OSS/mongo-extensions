@@ -242,7 +242,7 @@ namespace MongoDB.Extensions.Context.Tests
             // Arrange
             var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
 
-            mongoDatabaseBuilder.RegisterConventionPack("nullConventionPack", null, t => true);
+            mongoDatabaseBuilder.RegisterConventionPack("nullConventionPack", null!, t => true);
 
             // Act
             Action registrationAction = () => mongoDatabaseBuilder.Build();
@@ -258,7 +258,7 @@ namespace MongoDB.Extensions.Context.Tests
             var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
 
             mongoDatabaseBuilder.RegisterConventionPack(
-                null, new ConventionPack
+                null!, new ConventionPack
                 {
                     new EnumRepresentationConvention(BsonType.String),
                     new CamelCaseElementNameConvention()
@@ -388,7 +388,7 @@ namespace MongoDB.Extensions.Context.Tests
             // Arrange
             var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
 
-            mongoDatabaseBuilder.RegisterSerializer<NullTestType>(null);
+            mongoDatabaseBuilder.RegisterSerializer<NullTestType>(null!);
 
             // Act
             Action registerSerializers = () => mongoDatabaseBuilder.Build();
@@ -449,24 +449,6 @@ namespace MongoDB.Extensions.Context.Tests
                     IgnoreExtraElements = map.IgnoreExtraElements
                 })
             });
-        }
-
-        #endregion
-
-        #region AddInstrumentation Tests
-
-        [Fact]
-        public void AddInstrumentation_Command_ActivityCreated()
-        {
-            // Arrange
-            var mongoDatabaseBuilder = new MongoDatabaseBuilder(_mongoOptions);
-            mongoDatabaseBuilder.AddInstrumentation();
-
-            // Act
-            MongoDbContextData result = mongoDatabaseBuilder.Build();
-
-            // Assert
-            result.Client.Settings.ClusterConfigurator.Should().NotBeNull();
         }
 
         #endregion

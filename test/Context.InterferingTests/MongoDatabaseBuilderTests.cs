@@ -497,7 +497,7 @@ namespace MongoDB.Extensions.Context.Tests
 
         private class SimpleStringRegisteredSerializer : IBsonSerializer<SimpleString>
         {
-            public Type ValueType => typeof(string);
+            public Type ValueType => typeof(SimpleString);
 
             public SimpleString Deserialize(
                 BsonDeserializationContext context, BsonDeserializationArgs args)
@@ -524,7 +524,7 @@ namespace MongoDB.Extensions.Context.Tests
 
         private class DuplicateRegisteredSerializer : IBsonSerializer<DuplicateType>
         {
-            public Type ValueType => typeof(string);
+            public Type ValueType => typeof(DuplicateType);
 
             public DuplicateType Deserialize(
                 BsonDeserializationContext context, BsonDeserializationArgs args)
@@ -551,7 +551,7 @@ namespace MongoDB.Extensions.Context.Tests
 
         private class DifferentRegisteredSerializer : IBsonSerializer<DuplicateType>
         {
-            public Type ValueType => typeof(string);
+            public Type ValueType => typeof(DuplicateType);
 
             public DuplicateType Deserialize(
                 BsonDeserializationContext context, BsonDeserializationArgs args)

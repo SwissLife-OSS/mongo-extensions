@@ -20,6 +20,7 @@ namespace MongoDB.Prime.Extensions
             FindOptions? findOptions = null,
             int? parallelBatchSize = null,
             CancellationToken cancellationToken = default)
+            where TId : notnull
         {
             IEnumerable<TId> uniqueIds = uniqueIdsToFind.Distinct();
 
@@ -95,6 +96,7 @@ namespace MongoDB.Prime.Extensions
             int allIdsCount,
             int batchPartitionsCount,
             CancellationToken cancellationToken)
+            where TId : notnull
         {
             var concurrentDocuments =
                 new ConcurrentDictionary<TId, TDocument>(DefaultConcurrencyLevel, allIdsCount);
@@ -139,6 +141,7 @@ namespace MongoDB.Prime.Extensions
             Expression<Func<TDocument, TId>> idResultSelector,
             FindOptions? findOptions = null,
             CancellationToken cancellationToken = default)
+            where TId : notnull
         {
             FilterDefinition<TDocument> findFilter =
                     Builders<TDocument>.Filter.In(idResultSelector, idsToFind);

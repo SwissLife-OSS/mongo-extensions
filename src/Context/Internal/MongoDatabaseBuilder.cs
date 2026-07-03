@@ -252,7 +252,7 @@ internal class MongoDatabaseBuilder : IMongoDatabaseBuilder
     private void RegisterBsonSerializer<T>(IBsonSerializer<T> serializer)
     {
         string typeName = typeof(T).ToString();
-        if (_registeredSerializers.TryGetValue(typeName, out Type registeredType))
+        if (_registeredSerializers.TryGetValue(typeName, out Type? registeredType))
         {
             if (registeredType != serializer.GetType())
             {
@@ -273,7 +273,7 @@ internal class MongoDatabaseBuilder : IMongoDatabaseBuilder
 
     private void RegisterConventions(string name, IConventionPack conventionPack, Func<Type, bool> filter)
     {
-        if (_registeredConventionPacks.TryGetValue(name, out IConventionPack registeredConventionPack))
+        if (_registeredConventionPacks.TryGetValue(name, out IConventionPack? registeredConventionPack))
         {
             IEnumerable<string> registeredNames = registeredConventionPack
                 .Conventions.Select(rcp => rcp.Name).ToImmutableList();

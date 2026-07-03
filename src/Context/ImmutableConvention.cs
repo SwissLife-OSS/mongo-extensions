@@ -128,9 +128,10 @@ namespace MongoDB.Extensions.Context
                 return false;
             }
 
-            MethodInfo getMethodInfo = propertyInfo.GetMethod;
+            MethodInfo? getMethodInfo = propertyInfo.GetMethod;
 
-            if (getMethodInfo.IsAbstract ||
+            if (getMethodInfo == null ||
+                getMethodInfo.IsAbstract ||
                 IsBaseTypeProperty(classMap, getMethodInfo) &&
                 !IsOverrideProperty(classMap, getMethodInfo))
             {

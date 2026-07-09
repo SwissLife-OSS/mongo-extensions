@@ -7,7 +7,7 @@ using MongoDB.Bson.Serialization.Serializers;
 
 namespace MongoDB.Extensions.Migration;
 
-class MigrationSerializer<T> : SerializerBase<T>, IBsonIdProvider, IBsonDocumentSerializer, IBsonPolymorphicSerializer,
+class MigrationSerializer<T> : SerializerBase<T?>, IBsonIdProvider, IBsonDocumentSerializer, IBsonPolymorphicSerializer,
     IHasDiscriminatorConvention where T : IVersioned
 {
     private readonly EntityContext _context;
@@ -24,14 +24,22 @@ class MigrationSerializer<T> : SerializerBase<T>, IBsonIdProvider, IBsonDocument
     public override void Serialize(
         BsonSerializationContext context,
         BsonSerializationArgs args,
-        T value)
+        T? value)
     {
-        value.Version = _context.Option.CurrentVersion;
+        if(value is not null)
+        {
+            value.Version = _context.Option.CurrentVersion;
+        }
         _bsonClassMapSerializer.Serialize(context, args, value);
     }
 
-    public override T Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
+    public override T? Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
     {
+        if (context.Reader.GetCurrentBsonType() == BsonType.Null)
+        {
+            context.Reader.ReadNull();
+            return default;
+        }
         BsonDocument bsonDocument = BsonDocumentSerializer.Instance.Deserialize(context);
 
         _migrationRunner.Run(bsonDocument);
